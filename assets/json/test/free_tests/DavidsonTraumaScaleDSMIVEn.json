@@ -1,0 +1,143 @@
+{
+  "testTitle": "Davidson Trauma Scale - DSM-IV",
+  "payment":false,
+  "questions": [
+    {
+      "id": 1,
+      "question": "Have you experienced recurring thoughts or memories of the event?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Do you feel as though the event is happening again?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 3,
+      "question": "Do you avoid activities or situations that remind you of the event?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Do you feel emotionally numb?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 5,
+      "question": "Do you feel detached or isolated from others?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 6,
+      "question": "Do you feel unable to experience positive emotions?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Have you experienced difficulty sleeping?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Have you had difficulty concentrating?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Are you easily startled?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    },
+    {
+      "id": 10,
+      "question": "Have you experienced irritability or angry outbursts?",
+      "choices": [
+        { "score": 1, "text": "Not at all" },
+        { "score": 2, "text": "A little bit" },
+        { "score": 3, "text": "Moderately" },
+        { "score": 4, "text": "Quite a bit" },
+        { "score": 5, "text": "Extremely" }
+      ]
+    }
+  ],
+  "scoreRanges": [
+      {
+        "range": [0,20],
+        "description": "No significant trauma symptoms",
+        "color": "green",
+        "info": "You are experiencing minimal or no symptoms of trauma."
+      },
+      {
+        "range": [21,40],
+        "description": "Mild trauma symptoms",
+        "color": "yellow",
+        "info": "You may be experiencing some mild trauma symptoms. It is recommended to monitor and consider seeking support if necessary."
+      },
+      {
+        "range": [41,60],
+        "description": "Moderate trauma symptoms",
+        "color": "orange",
+        "info": "You are experiencing moderate trauma symptoms. Seeking professional help may be beneficial."
+      },
+      {
+        "range": [61,85],
+        "description": "Severe trauma symptoms",
+        "color": "red",
+        "info": "You are experiencing severe trauma symptoms. It is strongly recommended to seek professional help immediately."
+      }
+    ],
+    "MAX":85
+}
