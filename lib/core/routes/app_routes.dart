@@ -11,7 +11,6 @@ import 'package:flutter_mindmed_project/features/entertainment/daily_challenge_s
 import 'package:flutter_mindmed_project/features/entertainment/entermainment_screen.dart';
 import 'package:flutter_mindmed_project/features/entertainment/games_home.dart';
 import 'package:flutter_mindmed_project/features/entertainment/mood_tracker_screen.dart';
-import 'package:flutter_mindmed_project/features/heart_rate/heart_rate.dart';
 import 'package:flutter_mindmed_project/features/home/presentation/doctorService_book_screen.dart';
 import 'package:flutter_mindmed_project/features/more/presentation/view/country.dart';
 import 'package:flutter_mindmed_project/features/more/presentation/view/emargancy_call.dart';
@@ -154,8 +153,6 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => DailyChallengeScreen());
       case games:
         return MaterialPageRoute(builder: (_) => const GamesHome());
-      case heartRateMonitor:
-        return MaterialPageRoute(builder: (_) => HeartRateMonitor());
       case doTest:
         final Test doTest = settings.arguments as Test;
         return MaterialPageRoute(
