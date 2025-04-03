@@ -60,6 +60,7 @@ class _SplachScreenState extends State<SplachScreen>
       await _fetchUserDetails(token);
     } else {
       // If no token exists, navigate to the onboarding screen
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacementNamed(AppRoutes.onBoardingScreen);
     }
   }
@@ -81,21 +82,26 @@ class _SplachScreenState extends State<SplachScreen>
         final role = userDetails['role'];
 
         if (role == 'patient') {
+          // ignore: use_build_context_synchronously
           Navigator.of(context)
               .pushReplacementNamed(AppRoutes.mainNavigationScreen);
         } else if (role == 'doctor') {
+          // ignore: use_build_context_synchronously
           Navigator.of(context).pushReplacementNamed(AppRoutes.StaffScreen);
         } else {
           // Handle unknown role
+          // ignore: use_build_context_synchronously
           Navigator.of(context)
               .pushReplacementNamed(AppRoutes.onBoardingScreen);
         }
       } else {
         // Handle failed to fetch user details
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacementNamed(AppRoutes.onBoardingScreen);
       }
     } catch (e) {
       // Handle error
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacementNamed(AppRoutes.onBoardingScreen);
     }
   }

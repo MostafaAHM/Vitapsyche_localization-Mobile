@@ -24,8 +24,6 @@ dependencies:
   flutter_localizations:
         sdk: flutter 
   file_picker: ^8.3.5
-  firebase_core: ^3.6.0
-  fl_chart: ^0.70.2
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
@@ -36,7 +34,6 @@ dependencies:
   flutter_tts: ^4.2.0
   fluttertoast: ^8.2.8
   google_fonts: ^5.0.0
-  google_maps_flutter: ^2.10.0
   http: ^1.2.2
   image_picker: ^1.1.2
   intl: ^0.19.0
@@ -67,9 +64,7 @@ flutter:
     - assets/animation/
     - assets/articles/
     - assets/images/
-    - assets/icons/
     - assets/json/
-    - assets/human/
     - assets/LinaModel/
     - assets/json/test/free_tests/
     - assets/json/test/paid_tests/
