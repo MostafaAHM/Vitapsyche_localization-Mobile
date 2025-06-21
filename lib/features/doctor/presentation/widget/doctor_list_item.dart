@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
 import 'package:flutter_mindmed_project/features/doctor/data/doctor_model.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 
 class DoctorListItem extends StatelessWidget {
   final DoctorModel doctor;
   final VoidCallback onProfileView;
   final VoidCallback onBookView;
+  final VoidCallback onChat;
 
   const DoctorListItem({
     super.key,
     required this.doctor,
     required this.onProfileView,
     required this.onBookView,
+    required this.onChat,
   });
 
   @override
@@ -24,9 +27,9 @@ class DoctorListItem extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            _buildDoctorHeader(),
+            _buildDoctorHeader(context),
             const SizedBox(height: 10),
-            _buildDoctorInfo(),
+            _buildDoctorInfo(context),
             const SizedBox(height: 10),
             _buildActionButtons(context),
           ],
@@ -35,7 +38,7 @@ class DoctorListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDoctorHeader() {
+  Widget _buildDoctorHeader(context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -57,7 +60,7 @@ class DoctorListItem extends StatelessWidget {
         const SizedBox(width: 10),
         _buildDoctorNameAndSpecialty(),
         const Spacer(),
-        _buildDoctorStats(),
+        _buildDoctorStats(context),
       ],
     );
   }
@@ -82,18 +85,21 @@ class DoctorListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildDoctorStats() {
+  Widget _buildDoctorStats(context) {
+    final localizations = S.of(context);
     return Column(
       children: [
-        const Icon(Icons.star, color: Colors.amber),
-        const Text('Top Therapist', style: TextStyle(color: Colors.grey)),
-        Text('${doctor.doctorDetails.yearsOfExperience} Years Exp',
+        Icon(Icons.star, color: Colors.amber),
+        Text(localizations.topTherapist, style: TextStyle(color: Colors.grey)),
+        Text(
+            '${doctor.doctorDetails.yearsOfExperience} ${localizations.yearsExp}',
             style: const TextStyle(color: Colors.grey)),
       ],
     );
   }
 
-  Widget _buildDoctorInfo() {
+  Widget _buildDoctorInfo(context) {
+    final localizations = S.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -102,10 +108,14 @@ class DoctorListItem extends StatelessWidget {
           children: [
             Text(doctor.doctorDetails.clinicName),
             const SizedBox(height: 5),
-            _buildInfoRow(Icons.access_time, 'Available'),
+            _buildInfoRow(Icons.access_time, localizations.available),
             const SizedBox(height: 5),
-            _buildInfoRow(Icons.attach_money, 'Salary: \$500/hr'),
+            _buildInfoRow(Icons.attach_money, localizations.salary),
           ],
+        ),
+        IconButton(
+          icon: Icon(Icons.chat, color: mainBlueColor),
+          onPressed: onChat,
         ),
       ],
     );
@@ -122,11 +132,12 @@ class DoctorListItem extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
+    final localizations = S.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildActionButton('View Profile', onProfileView),
-        _buildActionButton('Book Now', onBookView),
+        _buildActionButton(localizations.viewProfile, onProfileView),
+        _buildActionButton2(localizations.bookNow, onBookView),
       ],
     );
   }
@@ -136,6 +147,17 @@ class DoctorListItem extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: primaryColor,
+        shape: const StadiumBorder(),
+      ),
+      child: Text(text, style: const TextStyle(color: Colors.white)),
+    );
+  }
+
+  Widget _buildActionButton2(String text, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: mainBlueColor,
         shape: const StadiumBorder(),
       ),
       child: Text(text, style: const TextStyle(color: Colors.white)),

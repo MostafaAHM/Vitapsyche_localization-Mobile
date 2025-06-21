@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../../../core/theme/colors.dart';
 
 class AddressSelectionWidget extends StatelessWidget {
@@ -16,12 +16,14 @@ class AddressSelectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context)!;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Shopping to',
-          style: TextStyle(
+        Text(
+          localizations.shippingTo,
+          style: const TextStyle(
             color: mainBlueColor,
             fontSize: 18,
             fontWeight: FontWeight.bold,

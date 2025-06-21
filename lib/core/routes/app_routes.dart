@@ -16,6 +16,7 @@ import 'package:flutter_mindmed_project/features/more/presentation/view/country.
 import 'package:flutter_mindmed_project/features/more/presentation/view/emargancy_call.dart';
 import 'package:flutter_mindmed_project/features/payment/presentation/view/payment_doctor_screen.dart';
 import 'package:flutter_mindmed_project/features/payment/presentation/view/payment_product_screen.dart';
+import 'package:flutter_mindmed_project/features/payment/presentation/view/payment_profile.dart';
 import 'package:flutter_mindmed_project/features/payment/presentation/view/payment_test_screen.dart';
 import 'package:flutter_mindmed_project/features/products/presentation/view/cart_screen.dart';
 import 'package:flutter_mindmed_project/features/products/presentation/view/product_details_screen.dart';
@@ -23,6 +24,7 @@ import 'package:flutter_mindmed_project/features/products/presentation/view/prod
 import 'package:flutter_mindmed_project/features/splash_screen/presentation/view/splash_screen.dart';
 import 'package:flutter_mindmed_project/features/test/data/test.dart';
 import 'package:flutter_mindmed_project/features/test/presentation/view/depression_scale_result.dart';
+import 'package:flutter_mindmed_project/features/test/presentation/view/personality_disorder_result.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/Doctor_home.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/Staff_main_navigation_screen.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/doctor_Profile.dart';
@@ -47,6 +49,7 @@ import '../../features/test/presentation/view/test_screen.dart';
 
 class AppRoutes {
   static const String splashScreen = '/splashScreen';
+  static const String personalityDisorderResult = '/personalityDisorderResult';
   static const String onBoardingScreen = '/onBoardingScreen';
   static const String aiServiceScreen = '/aiServiceScreen';
   static const String chatScreen = '/chatScreen';
@@ -58,6 +61,8 @@ class AppRoutes {
   static const String mainNavigationScreen = '/mainNavigationScreen';
   static const String homeScreen = '/homeScreen';
   static const String profile = '/profile';
+  static const String profileDetails = '/profileDetails';
+  static const String paymentProfile = '/paymentProfile';
   static const String doctorprofile = '/DoctorProfileScreen';
   static const String fqasScreen = '/fqasService';
   static const String blogScreen = '/blogScreen';
@@ -118,6 +123,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case profile:
         return MaterialPageRoute(builder: (_) => const Profile());
+      case paymentProfile:
+        return MaterialPageRoute(builder: (_) => const PaymentProfile());
       case doctorprofile:
         return MaterialPageRoute(builder: (_) => const DoctorProfileScreen());
       case fqasScreen:
@@ -140,9 +147,10 @@ class AppRoutes {
       case doctor:
         return MaterialPageRoute(builder: (_) => DoctorScreen());
       case doctorHomeScreen:
-        return MaterialPageRoute(builder: (_) => DoctorHomeScreen());
+        return MaterialPageRoute(builder: (_) => const DoctorHomeScreen());
       case StaffScreen:
-        return MaterialPageRoute(builder: (_) => StaffMainNavigationScreen());
+        return MaterialPageRoute(
+            builder: (_) => const StaffMainNavigationScreen());
       case testScreen:
         return MaterialPageRoute(builder: (_) => const TestScreen());
       case intertainment_Home:
@@ -175,6 +183,14 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const ProductsScreen(),
         );
+
+      case personalityDisorderResult:
+        final args = settings.arguments as Map;
+        return MaterialPageRoute(
+          builder: (_) => PersonalityDisorderResultScreen(
+            answers: args['answers'],
+          ),
+        );
       case detailsProduct:
         final dataDetailsProduct = settings.arguments as Map;
 
@@ -195,6 +211,7 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => PaymentProductScreen(
                   price: dataPrice,
+                  
                 ));
       case paymenttestScreen:
         final data = settings.arguments as Map;

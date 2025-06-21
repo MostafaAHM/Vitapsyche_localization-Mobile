@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter_mindmed_project/core/routes/app_routes.dart';
@@ -19,6 +20,7 @@ class DoTest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return BlocProvider(
       create: (_) => DoTestCubit(),
       child: Scaffold(
@@ -28,8 +30,8 @@ class DoTest extends StatelessWidget {
           backgroundColor: secoundryColor,
           elevation: 0,
           centerTitle: true,
-          title: const Text(
-            'Depression Scale',
+          title: Text(
+            localizations.depressionScale,
             style: TextStyle(
                 color: primaryColor, fontSize: 16, fontWeight: FontWeight.bold),
           ),
@@ -39,10 +41,10 @@ class DoTest extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              _buildDescription(),
+              _buildDescription(context),
               Expanded(child: _buildQuestions()),
               const SizedBox(height: 20),
-              _buildNavigationBar(),
+              _buildNavigationBar(context),
             ],
           ),
         ),
@@ -50,11 +52,12 @@ class DoTest extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription() {
-    return const Padding(
+  Widget _buildDescription(context) {
+    final localizations = S.of(context);
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Text(
-        "Please read the test items carefully and make sure that the choices apply to you in the last two weeks. There is no right or wrong answer.",
+        localizations.testInstructions,
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Colors.grey,
@@ -76,7 +79,7 @@ class DoTest extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              question,
+              question ?? 'no question',
               style: const TextStyle(
                 color: mainBlueColor,
                 fontSize: 18,
@@ -90,7 +93,8 @@ class DoTest extends StatelessWidget {
                   state.selectedAnswers[state.currentIndex] == choice.text;
               int sorce = choice.score;
 
-              return _buildChoiceButton(choice.text, isSelected, cubit, sorce);
+              return _buildChoiceButton(
+                  choice.text ?? "bad boy", isSelected, cubit, sorce);
             }),
           ],
         );
@@ -131,7 +135,8 @@ class DoTest extends StatelessWidget {
     );
   }
 
-  Widget _buildNavigationBar() {
+  Widget _buildNavigationBar(context) {
+    final localizations = S.of(context);
     return BlocBuilder<DoTestCubit, DoTestState>(
       builder: (context, state) {
         final cubit = context.read<DoTestCubit>();
@@ -142,7 +147,7 @@ class DoTest extends StatelessWidget {
                 state.currentIndex + 1, test.questions.length.toDouble()),
             FittedBox(
               child: Text(
-                'Question ${state.currentIndex + 1} of ${test.questions.length}',
+                '${localizations.question} ${state.currentIndex + 1} ${localizations.of} ${test.questions.length}',
                 style: TextStyle(fontSize: 10.sp),
               ),
             ),
@@ -158,8 +163,8 @@ class DoTest extends StatelessWidget {
                       elevation: 2,
                     ),
                     onPressed: cubit.previousQuestion,
-                    child: const Text(
-                      "Previous",
+                    child: Text(
+                      localizations.previous,
                       style: TextStyle(color: secoundryColor),
                     ),
                   ),
@@ -172,17 +177,29 @@ class DoTest extends StatelessWidget {
                     if (state.selectedAnswers.containsKey(state.currentIndex)) {
                       cubit.nextQuestion(test.questions.length);
                       if (state.isComplete) {
-                        Navigator.of(context).pushNamed(
+                        if (test.testTitle == "Personality Disorders Test") {
+                          Navigator.of(context).pushReplacementNamed(
+                            AppRoutes.personalityDisorderResult,
+                            arguments: {
+                              'answers':
+                                  state.selectedAnswers, // ← Map<int, String>
+                            },
+                          );
+                        } else {
+                          Navigator.of(context).pushReplacementNamed(
                             AppRoutes.depressionScaleResult,
-                            arguments: {'test':test,
-                             'totalScore': state.totalSorce, });
+                            arguments: {
+                              'test': test,
+                              'totalScore': state.totalSorce,
+                            },
+                          );
+                        }
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           duration: Duration(seconds: 1),
-                          content: Text(
-                              "Please select an answer before proceeding."),
+                          content: Text(localizations.selectAnswerWarning),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -190,8 +207,8 @@ class DoTest extends StatelessWidget {
                   },
                   child: Text(
                     state.currentIndex == test.questions.length - 1
-                        ? "Submit"
-                        : "Next",
+                        ? localizations.submit
+                        : localizations.next,
                     style: const TextStyle(color: secoundryColor),
                   ),
                 ),

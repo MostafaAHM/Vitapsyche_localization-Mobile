@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/theme/colors.dart';
 
 class AskDoctor extends StatefulWidget {
@@ -47,7 +49,10 @@ class _AskDoctorState extends State<AskDoctor> {
     int? maxLength,
     TextInputType inputType = TextInputType.text,
     int maxLines = 1,
+    required BuildContext context, // Added context parameter
   }) {
+    final localizations = S.of(context);
+
     return Card(
       elevation: 4,
       child: TextFormField(
@@ -57,7 +62,7 @@ class _AskDoctorState extends State<AskDoctor> {
         maxLines: maxLines,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'This field cannot be empty';
+            return localizations.fieldCannotBeEmpty;
           }
           return null;
         },
@@ -104,10 +109,11 @@ class _AskDoctorState extends State<AskDoctor> {
     );
   }
 
-  Widget _buildOptionsRow(
-      {required List<String> options,
-      required String? selectedOption,
-      required Function(String) onSelect}) {
+  Widget _buildOptionsRow({
+    required List<String> options,
+    required String? selectedOption,
+    required Function(String) onSelect,
+  }) {
     return Row(
       children: options
           .map((option) => Expanded(
@@ -124,11 +130,13 @@ class _AskDoctorState extends State<AskDoctor> {
     );
   }
 
-  Widget _script() {
+  Widget _script(BuildContext context) {
+    final localizations = S.of(context);
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 14.h),
       child: Text(
-        'The Answer Is Not Intended For Individual Diagnosis Or Treatment. Please Consult A Psychiatrist.',
+        localizations.answerDisclaimer,
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 12.sp,
@@ -141,18 +149,20 @@ class _AskDoctorState extends State<AskDoctor> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
+
     return Scaffold(
       backgroundColor: secoundryColor,
       appBar: AppBar(
-        title: const Text(
-          'Ask A Doctor',
+        title: Text(
+          localizations.askADoctor,
           style: TextStyle(color: primaryColor),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: primaryColor),
+          icon: Icon(Icons.arrow_back, color: primaryColor),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -164,46 +174,51 @@ class _AskDoctorState extends State<AskDoctor> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _headerAskDoctor('Your Question'),
+                _headerAskDoctor(localizations.yourQuestion),
                 _textInputField(
                   controller: _questionController,
-                  hint: 'example: What are the reasons?',
+                  hint: localizations.questionExample,
                   maxLength: 50,
+                  context: context,
                 ),
                 SizedBox(height: 4.h),
                 _textInputField(
                   controller: _descriptionController,
-                  hint:
-                      'Question description (explain the symptoms of the problem)',
+                  hint: localizations.questionDescriptionHint,
                   maxLength: 250,
                   maxLines: 3,
+                  context: context,
                 ),
-                _headerAskDoctor('This Question'),
+                _headerAskDoctor(localizations.thisQuestionFor),
                 _buildOptionsRow(
-                  options: ['For yourself', 'For someone else'],
+                  options: [
+                    localizations.forYourself,
+                    localizations.forSomeoneElse
+                  ],
                   selectedOption: selectedQuestionFor,
                   onSelect: (value) {
                     setState(() => selectedQuestionFor = value);
                   },
                 ),
                 SizedBox(height: 12.h),
-                _headerAskDoctor('Gender'),
+                _headerAskDoctor(localizations.gender),
                 _buildOptionsRow(
-                  options: ['male', 'female'],
+                  options: [localizations.male, localizations.female],
                   selectedOption: selectedGender,
                   onSelect: (value) {
                     setState(() => selectedGender = value);
                   },
                 ),
-                _headerAskDoctor('Age'),
+                _headerAskDoctor(localizations.age),
                 _textInputField(
                   controller: _ageController,
-                  hint: 'Enter your age',
+                  hint: localizations.enterYourAge,
                   inputType: TextInputType.number,
+                  context: context,
                 ),
                 SizedBox(height: 8.h),
-                _buttonSend(formKey: _formKey),
-                _script(),
+                _ButtonSend(formKey: _formKey),
+                _script(context),
               ],
             ),
           ),
@@ -213,8 +228,8 @@ class _AskDoctorState extends State<AskDoctor> {
   }
 }
 
-class _buttonSend extends StatelessWidget {
-  const _buttonSend({
+class _ButtonSend extends StatelessWidget {
+  const _ButtonSend({
     super.key,
     required GlobalKey<FormState> formKey,
   }) : _formKey = formKey;
@@ -223,15 +238,18 @@ class _buttonSend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     _handleSendAction() {
-      return ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+      return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(
           children: [
             const Icon(
               Icons.done_outline_rounded,
               color: greenColor,
             ),
-            SizedBox(width: 4.w,),
+            SizedBox(
+              width: 4.w,
+            ),
             const Text(
               'Your question has been sent successfully!',
               style: TextStyle(color: secoundryColor),
@@ -248,13 +266,11 @@ class _buttonSend extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
-            // Submit the form
             _handleSendAction();
             Future.delayed(
               const Duration(seconds: 1),
               () => Navigator.pop(context),
             );
-            // print('Form submitted successfully');
           }
         },
         style: ElevatedButton.styleFrom(
@@ -265,7 +281,7 @@ class _buttonSend extends StatelessWidget {
           ),
         ),
         child: Text(
-          'Send',
+          localizations.send,
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.bold,

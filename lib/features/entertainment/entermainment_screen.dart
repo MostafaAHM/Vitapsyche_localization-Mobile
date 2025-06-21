@@ -1,63 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'player_screen.dart';
 import 'music_track.dart';
 
 class Intertainment_Home extends StatelessWidget {
-  final List<MusicTrack> musicTracks = [
-    MusicTrack(
-      title: "Ocean Waves",
-      subtitle: "Relaxing sounds of the ocean",
-      icon: Icons.waves,
-      image: 'assets/entertainment/images/ocean.jpg',
-      audioPath: 'assets/entertainment/audio/rain.mp3',
-    ),
-    MusicTrack(
-      title: "Birds Waves",
-      subtitle: "Relaxing sounds of the birds",
-      icon: Icons.waves,
-      image: 'assets/entertainment/images/birds.jpeg',
-      audioPath: 'assets/entertainment/audio/birds.mp3',
-    ),
-    MusicTrack(
-      title: "Forest Waves",
-      subtitle: "Relaxing sounds of the Forest",
-      icon: Icons.waves,
-      image: 'assets/entertainment/images/Forest.jpeg',
-      audioPath: 'assets/entertainment/audio/forest-bird-harmonies-258412.mp3',
-    ),
-    MusicTrack(
-      title: "Rain Waves",
-      subtitle: "Relaxing sounds of the rain",
-      icon: Icons.waves,
-      image: 'assets/entertainment/images/rain.jpeg',
-      audioPath: 'assets/entertainment/audio/rain.mp3',
-    ),
-    MusicTrack(
-      title: "Thunderstorm Waves",
-      subtitle: "Relaxing sounds of the thunderstorm",
-      icon: Icons.waves,
-      image: 'assets/entertainment/images/thunderstorm.jpeg',
-      audioPath: 'assets/entertainment/audio/rain.mp3',
-    ),
-    MusicTrack(
-      title: "White Noise Waves",
-      subtitle: "Relaxing sounds of the white noise",
-      icon: Icons.waves,
-      image: 'assets/entertainment/images/white_noise.jpeg',
-      audioPath: 'assets/entertainment/audio/white_noise.mp3',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
+
+    final List<MusicTrack> musicTracks = [
+      MusicTrack(
+        title: localizations.oceanWavesTitle,
+        subtitle: localizations.oceanWavesSubtitle,
+        icon: Icons.waves,
+        image: 'assets/entertainment/images/ocean.jpg',
+        audioPath: 'assets/entertainment/audio/rain.mp3',
+      ),
+      MusicTrack(
+        title: localizations.birdsWavesTitle,
+        subtitle: localizations.birdsWavesSubtitle,
+        icon: Icons.waves,
+        image: 'assets/entertainment/images/birds.jpeg',
+        audioPath: 'assets/entertainment/audio/birds.mp3',
+      ),
+      MusicTrack(
+        title: localizations.forestWavesTitle,
+        subtitle: localizations.forestWavesSubtitle,
+        icon: Icons.waves,
+        image: 'assets/entertainment/images/Forest.jpeg',
+        audioPath:
+            'assets/entertainment/audio/forest-bird-harmonies-258412.mp3',
+      ),
+      MusicTrack(
+        title: localizations.rainWavesTitle,
+        subtitle: localizations.rainWavesSubtitle,
+        icon: Icons.waves,
+        image: 'assets/entertainment/images/rain.jpeg',
+        audioPath: 'assets/entertainment/audio/rain.mp3',
+      ),
+      MusicTrack(
+        title: localizations.thunderstormWavesTitle,
+        subtitle: localizations.thunderstormWavesSubtitle,
+        icon: Icons.waves,
+        image: 'assets/entertainment/images/thunderstorm.jpeg',
+        audioPath: 'assets/entertainment/audio/rain.mp3',
+      ),
+      MusicTrack(
+        title: localizations.whiteNoiseWavesTitle,
+        subtitle: localizations.whiteNoiseWavesSubtitle,
+        icon: Icons.waves,
+        image: 'assets/entertainment/images/white_noise.jpeg',
+        audioPath: 'assets/entertainment/audio/white_noise.mp3',
+      ),
+    ];
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: AppBar(
           title: Text(
-            "Therapeutic Music",
+            localizations.therapeuticMusicTitle,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -95,7 +99,7 @@ class Intertainment_Home extends StatelessWidget {
                   child: ListTile(
                     leading: Icon(Icons.mood, color: primaryColor),
                     title: Text(
-                      'Mood Tracker',
+                      localizations.moodTrackerTitle,
                       style: TextStyle(color: textMainColor),
                     ),
                     onTap: () {
@@ -108,7 +112,7 @@ class Intertainment_Home extends StatelessWidget {
                   child: ListTile(
                     leading: Icon(Icons.star, color: primaryColor),
                     title: Text(
-                      'Daily Challenge',
+                      localizations.dailyChallengeTitle,
                       style: TextStyle(color: textMainColor),
                     ),
                     onTap: () {
@@ -121,7 +125,7 @@ class Intertainment_Home extends StatelessWidget {
                   child: ListTile(
                     leading: Icon(Icons.videogame_asset, color: primaryColor),
                     title: Text(
-                      'Games',
+                      localizations.gamesTitle,
                       style: TextStyle(color: textMainColor),
                     ),
                     onTap: () {
@@ -137,13 +141,6 @@ class Intertainment_Home extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // Container(
-          //   height: 20,
-          //   decoration: BoxDecoration(
-          //     color: primaryColor,
-          //     borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
-          //   ),
-          // ),
           Expanded(
             child: ListView.builder(
               physics: BouncingScrollPhysics(),
@@ -214,7 +211,7 @@ class Intertainment_Home extends StatelessWidget {
                                   musicTracks[index].subtitle,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.white,
+                                    color: Colors.grey[600],
                                   ),
                                 ),
                               ],

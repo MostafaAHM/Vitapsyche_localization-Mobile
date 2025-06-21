@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
@@ -31,6 +32,7 @@ class _SigninScreenState extends State<SigninScreen> {
   bool _isPasswordFocused = false;
 
   Color _containerColor = primaryColor;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -61,8 +63,8 @@ class _SigninScreenState extends State<SigninScreen> {
   }
 
   void _validateAndSignIn() async {
-    String email = _emailController.text;
-    String password = _passwordController.text;
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
 
     if (email.isEmpty) {
       Fluttertoast.showToast(
@@ -94,6 +96,13 @@ class _SigninScreenState extends State<SigninScreen> {
       });
 
       try {
+        // First authenticate with Firebase
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        // If Firebase authentication succeeds, proceed with your backend login
         final response = await http.post(
           Uri.parse('https://abdokh.pythonanywhere.com/api/login/'),
           headers: {
@@ -111,14 +120,16 @@ class _SigninScreenState extends State<SigninScreen> {
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
           Fluttertoast.showToast(
-            msg: data['message'],
+            msg: data['message'] ?? "Login successful",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
           );
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('access_token', data['access_token']);
+          await prefs.setString('firebase_uid', userCredential.user!.uid);
 
+          print("Firebase UID: ${userCredential.user!.uid}");
           print("Access Token: ${data['access_token']}");
           print(response.statusCode);
           print(response.body);
@@ -126,15 +137,33 @@ class _SigninScreenState extends State<SigninScreen> {
           // Fetch user details using the access token
           await _fetchUserDetails(data['access_token']);
         } else {
+          // If backend fails but Firebase succeeded, sign out from Firebase
+          await _auth.signOut();
           Fluttertoast.showToast(
-            msg: "Login failed",
+            msg: "Login failed with backend",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
           );
         }
+      } on FirebaseAuthException catch (e) {
+        // Handle Firebase authentication errors
+        String errorMessage = "Authentication failed";
+        if (e.code == 'user-not-found') {
+          errorMessage = "No user found with this email";
+        } else if (e.code == 'wrong-password') {
+          errorMessage = "Incorrect password";
+        } else if (e.code == 'invalid-email') {
+          errorMessage = "Invalid email format";
+        }
+
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
       } catch (e) {
         Fluttertoast.showToast(
-          msg: "An error occurred",
+          msg: "An error occurred: ${e.toString()}",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
         );
@@ -161,8 +190,13 @@ class _SigninScreenState extends State<SigninScreen> {
       if (response.statusCode == 200) {
         final userDetails = jsonDecode(response.body);
         final role = userDetails['role'];
+        final email = _emailController.text.trim();
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        await prefs.setString('user_email', email);
+        await prefs.setString('user_id', userDetails['id'].toString());
+        await prefs.setString('user_role', role);
 
         if (role == 'patient') {
           // Save patient_details.id in SharedPreferences
@@ -293,303 +327,263 @@ class _SigninScreenState extends State<SigninScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = S.of(context); // Renamed from S to localizations
+    final localizations = S.of(context);
     final screenSize = MediaQuery.of(context).size;
     final screenWidth = screenSize.width;
     final screenHeight = screenSize.height;
 
     return GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          resizeToAvoidBottomInset: true,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: primaryColor),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            backgroundColor: Colors.white,
-            title: Text(localizations.signIn,
-                style: TextStyle(color: primaryColor)),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: Image.asset(
-                  'assets/images/Logo.png',
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ],
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: primaryColor),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          body: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // Top Section with Image and Back Button
-                    Stack(
-                      children: [
-                        SizedBox(
-                          height: 30,
-                        ),
-
-                        // Positioned(
-                        //   right: 0.1,
-                        //   child: Image.asset(
-                        //     'assets/animation/Animation - 1725391690653.gif',
-                        //     width: screenWidth * 0.3, // Reduced size
-                        //     height: screenWidth * 0.3, // Reduced size
-                        //     fit: BoxFit.contain,
-                        //   ),
-                        // ),
-
-                        // Positioned(
-                        //   top: 30,
-                        //   child: GestureDetector(
-                        //     onTap: () {
-                        //       Navigator.of(context)
-                        //           .pushNamed(AppRoutes.authentication);
-                        //     },
-                        //     onTapDown: _onTapDown,
-                        //     onTapUp: _onTapUp,
-                        //     child: Container(
-                        //       height: 50,
-                        //       decoration: BoxDecoration(
-                        //         shape: BoxShape.circle,
-                        //         color: _containerColor,
-                        //       ),
-                        //       padding: const EdgeInsets.only(left: 10),
-                        //       child: const Icon(
-                        //         Icons.arrow_back,
-                        //         color: Colors.white,
-                        //         size: 28,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
-                    ),
-
-                    // User Type Selection
-                    Padding(
-                      padding: EdgeInsets.only(top: screenHeight * 0.05),
-                      child: UserTypeSelection(
-                        isPatientSelected: false,
-                        isDoctorSelected: false,
-                        onPatientSelected: (value) {
-                          setState(() {
-                            // Handle patient selection
-                          });
-                        },
-                        onDoctorSelected: (value) {
-                          setState(() {
-                            // Handle doctor selection
-                          });
-                        },
-                        onPatientSelectedNavigation: () {
-                          // Navigator.pushReplacementNamed(
-                          //     context, AppRoutes.signupScreen);
-                        },
-                        onDoctorSelectedNavigation: () {
-                          // Navigator.pushReplacementNamed(
-                          //     context, AppRoutes.DoctorRegistration);
-                        },
+          backgroundColor: Colors.white,
+          title:
+              Text(localizations.signIn, style: TextStyle(color: primaryColor)),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Image.asset(
+                'assets/images/Logo.png',
+                width: 50,
+                height: 50,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ],
+        ),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  // Top Section with Image and Back Button
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 30,
                       ),
+                    ],
+                  ),
+
+                  // User Type Selection
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight * 0.05),
+                    child: UserTypeSelection(
+                      isPatientSelected: false,
+                      isDoctorSelected: false,
+                      onPatientSelected: (value) {
+                        setState(() {
+                          // Handle patient selection
+                        });
+                      },
+                      onDoctorSelected: (value) {
+                        setState(() {
+                          // Handle doctor selection
+                        });
+                      },
+                      onPatientSelectedNavigation: () {
+                        // Navigation logic
+                      },
+                      onDoctorSelectedNavigation: () {
+                        // Navigation logic
+                      },
                     ),
+                  ),
 
-                    SizedBox(
-                      height: 30,
-                    ),
+                  SizedBox(
+                    height: 30,
+                  ),
 
-                    // Sign In Section
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-                      child: Column(
-                        children: [
-                          Text(
-                            localizations.signIn,
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  // Sign In Section
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+                    child: Column(
+                      children: [
+                        Text(
+                          localizations.signIn,
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: 30),
+                        ),
+                        const SizedBox(height: 30),
 
-                          // Email Field
-                          TextField(
-                            controller: _emailController,
-                            focusNode: _emailFocusNode,
-                            cursorColor: primaryColor,
-                            decoration: InputDecoration(
-                              labelText: localizations.email,
-                              labelStyle: TextStyle(
-                                color: _isEmailFocused
-                                    ? primaryColor
-                                    : Colors.black,
-                              ),
-                              prefixIcon: Icon(
-                                Icons.email,
-                                color: _isEmailFocused
-                                    ? primaryColor
-                                    : Colors.black,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: Colors.grey, width: 2.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2.0),
-                              ),
-                              filled: true,
-                              fillColor: secoundryColor.withOpacity(0.8),
+                        // Email Field
+                        TextField(
+                          controller: _emailController,
+                          focusNode: _emailFocusNode,
+                          cursorColor: primaryColor,
+                          decoration: InputDecoration(
+                            labelText: localizations.email,
+                            labelStyle: TextStyle(
+                              color:
+                                  _isEmailFocused ? primaryColor : Colors.black,
                             ),
+                            prefixIcon: Icon(
+                              Icons.email,
+                              color:
+                                  _isEmailFocused ? primaryColor : Colors.black,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                  color: Colors.grey, width: 2.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                  color: primaryColor, width: 2.0),
+                            ),
+                            filled: true,
+                            fillColor: secoundryColor.withOpacity(0.8),
                           ),
-                          const SizedBox(height: 25),
+                        ),
+                        const SizedBox(height: 25),
 
-                          // Password Field
-                          TextField(
-                            controller: _passwordController,
-                            focusNode: _passwordFocusNode,
-                            obscureText: !_isPasswordVisible,
-                            cursorColor: primaryColor,
-                            decoration: InputDecoration(
-                              labelText: localizations.password,
-                              labelStyle: TextStyle(
-                                color: _isPasswordFocused
+                        // Password Field
+                        TextField(
+                          controller: _passwordController,
+                          focusNode: _passwordFocusNode,
+                          obscureText: !_isPasswordVisible,
+                          cursorColor: primaryColor,
+                          decoration: InputDecoration(
+                            labelText: localizations.password,
+                            labelStyle: TextStyle(
+                              color: _isPasswordFocused
+                                  ? primaryColor
+                                  : Colors.black,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: _isPasswordFocused
+                                  ? primaryColor
+                                  : Colors.black,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: _isPasswordVisible
                                     ? primaryColor
                                     : Colors.black,
                               ),
-                              prefixIcon: Icon(
-                                Icons.lock,
-                                color: _isPasswordFocused
-                                    ? primaryColor
-                                    : Colors.black,
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: _isPasswordVisible
-                                      ? primaryColor
-                                      : Colors.black,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _isPasswordVisible = !_isPasswordVisible;
-                                  });
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                  color: Colors.grey, width: 2.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                  color: primaryColor, width: 2.0),
+                            ),
+                            filled: true,
+                            fillColor: secoundryColor.withOpacity(0.8),
+                          ),
+                        ),
+                        const SizedBox(height: 25),
+
+                        // Sign In Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: _validateAndSignIn,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              elevation: 5,
+                              shadowColor: Colors.black,
+                            ).copyWith(
+                              overlayColor:
+                                  MaterialStateProperty.resolveWith<Color?>(
+                                (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.pressed)) {
+                                    return const Color.fromARGB(
+                                        255, 91, 255, 219);
+                                  }
+                                  return null;
                                 },
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: Colors.grey, width: 2.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                    color: primaryColor, width: 2.0),
-                              ),
-                              filled: true,
-                              fillColor: secoundryColor.withOpacity(0.8),
+                            ),
+                            child: Text(
+                              localizations.signIn,
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
                             ),
                           ),
-                          const SizedBox(height: 25),
+                        ),
+                        const SizedBox(height: 20),
 
-                          // Sign In Button
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: ElevatedButton(
-                              onPressed: _validateAndSignIn,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: primaryColor,
-                                elevation: 5,
-                                shadowColor: Colors.black,
-                              ).copyWith(
-                                overlayColor:
-                                    MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.pressed)) {
-                                      return const Color.fromARGB(
-                                          255, 91, 255, 219);
-                                    }
-                                    return null;
-                                  },
-                                ),
+                        // Sign Up Prompt
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              localizations.signIntext,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            const SizedBox(width: 8),
+                            GestureDetector(
+                              onTapDown: (_) {
+                                setState(() {
+                                  _isPressed = true;
+                                });
+                              },
+                              onTapUp: (_) {
+                                setState(() {
+                                  _isPressed = false;
+                                });
+                                Navigator.of(context)
+                                    .pushNamed(AppRoutes.signupScreen);
+                              },
                               child: Text(
                                 localizations.signIn,
                                 style: TextStyle(
-                                    fontSize: 18, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-
-                          // Sign Up Prompt
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                localizations.signIntext,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
+                                  color: _isPressed ? primaryColor : Colors.red,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              GestureDetector(
-                                onTapDown: (_) {
-                                  setState(() {
-                                    _isPressed = true;
-                                  });
-                                },
-                                onTapUp: (_) {
-                                  setState(() {
-                                    _isPressed = false;
-                                  });
-                                  Navigator.of(context)
-                                      .pushNamed(AppRoutes.signupScreen);
-                                },
-                                child: Text(
-                                  localizations.signIn,
-                                  style: TextStyle(
-                                    color:
-                                        _isPressed ? primaryColor : Colors.red,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Loading Indicator
+            if (_isLoading)
+              const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
                 ),
               ),
-
-              // Loading Indicator
-              if (_isLoading)
-                const Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
-                  ),
-                ),
-            ],
-          ),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }

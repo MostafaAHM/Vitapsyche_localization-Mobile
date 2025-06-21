@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
 import 'package:flutter_mindmed_project/features/ai_service/service/chat_bot/data/chat_provider.dart';
 import 'package:flutter_mindmed_project/features/ai_service/service/chat_bot/presentation/view/custom_drawer.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -149,7 +150,7 @@ class _OnlineChatScreenState extends State<OnlineChatScreen> {
     final headers = {
       'Content-Type': 'application/json',
       'Authorization':
-          'Bearer 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',
+          'Bearer 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',
     };
     final body = jsonEncode({
       "model": "deepseek/deepseek-r1:free",
@@ -267,14 +268,15 @@ class _OnlineChatScreenState extends State<OnlineChatScreen> {
   Widget build(BuildContext context) {
     final chatProvider = Provider.of<ChatProvider>(context);
     final hasMessages = chatProvider.currentChat.isNotEmpty;
+    final localizations = S.of(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text(
-          'ChatBot Service',
+        title: Text(
+          localizations.chatbotService,
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -443,6 +445,7 @@ class _OnlineChatScreenState extends State<OnlineChatScreen> {
   }
 
   Widget _buildWelcomeSection() {
+    final localizations = S.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
       child: Column(
@@ -454,8 +457,8 @@ class _OnlineChatScreenState extends State<OnlineChatScreen> {
             height: 120,
           ),
           const SizedBox(height: 20),
-          const Text(
-            'How can I help you today?',
+          Text(
+            localizations.chatWelcomeTitle,
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -464,8 +467,8 @@ class _OnlineChatScreenState extends State<OnlineChatScreen> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
-          const Text(
-            'Start typing or use the microphone to ask me anything.',
+          Text(
+            localizations.chatWelcomeSubtitle,
             style: TextStyle(
               color: Colors.white70,
               fontSize: 16,
@@ -478,6 +481,7 @@ class _OnlineChatScreenState extends State<OnlineChatScreen> {
   }
 
   Widget _buildInputField(BuildContext context) {
+    final localizations = S.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       decoration: BoxDecoration(
@@ -502,7 +506,7 @@ class _OnlineChatScreenState extends State<OnlineChatScreen> {
                   fontSize: 14,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Type your message...',
+                  hintText: localizations.typeYourMessage,
                   hintStyle: const TextStyle(
                     color: Colors.white54,
                     fontSize: 14,

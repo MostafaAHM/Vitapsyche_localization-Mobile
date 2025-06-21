@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/Doctor_home.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/accepted_appointments_screen.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/doctor_availability_screen.dart';
+import 'package:flutter_mindmed_project/staff%20Screen/doctor_messages_screen.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/request_screen.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/doctor_service_screen.dart'; // Import the new screen
 import '../../../../core/const/image_app.dart';
@@ -23,13 +25,13 @@ class _StaffMainNavigationScreenState extends State<StaffMainNavigationScreen>
 
   // List of pages corresponding to each navigation item
   final List<Widget> _pages = [
-    const DoctorHomeScreen(), // Home
-    const DoctorServiceScreen(), // Doctor Service
-    const RequestScreen(), // Request
-    const AcceptedAppointmentsScreen(), // Accepted Appointments
-    const DoctorAvailabilityScreen(), // Doctor Availability
+    const DoctorHomeScreen(),
+    const DoctorServiceScreen(),
+    const DoctorMessagesScreen(),
+    const RequestScreen(),
+    const AcceptedAppointmentsScreen(),
+    const DoctorAvailabilityScreen(),
   ];
-
   @override
   void initState() {
     super.initState();
@@ -44,21 +46,28 @@ class _StaffMainNavigationScreenState extends State<StaffMainNavigationScreen>
 
   // Bottom navigation bar items
   List<BottomNavigationBarItem> _bottomBar() {
-    return const [
-      BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
+    final localizations = S.of(context);
+    return [
       BottomNavigationBarItem(
-          label: 'Service',
-          icon: Icon(Icons.add_circle_outline)), // Service Add Icon
-      BottomNavigationBarItem(label: 'Request', icon: Icon(Icons.request_page)),
+          label: localizations.home, icon: Icon(Icons.home)),
       BottomNavigationBarItem(
-          label: 'Appointments', icon: Icon(Icons.event_available)),
+          label: localizations.specialty, icon: Icon(Icons.add_circle_outline)),
       BottomNavigationBarItem(
-          label: 'Availability', icon: Icon(Icons.calendar_today)),
+          // Add this item for messages
+          label: localizations.message,
+          icon: Icon(Icons.message)),
+      BottomNavigationBarItem(
+          label: localizations.request, icon: Icon(Icons.request_page)),
+      BottomNavigationBarItem(
+          label: localizations.appointments, icon: Icon(Icons.event_available)),
+      BottomNavigationBarItem(
+          label: localizations.availability, icon: Icon(Icons.calendar_today)),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: secoundryColor,
       appBar: AppBar(
@@ -72,17 +81,17 @@ class _StaffMainNavigationScreenState extends State<StaffMainNavigationScreen>
           cacheWidth: 80,
         ),
         titleSpacing: 0,
-        title: const Column(
+        title: Column(
           children: [
             Text(
-              'Vitapsyche',
+              localizations.appName,
               style: TextStyle(
                   fontSize: 25,
                   color: primaryColor,
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              'clear your mind, calm your heart',
+              localizations.appTagline,
               style: TextStyle(
                   fontSize: 8,
                   color: mainBlueColor,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'daily_challenge.dart';
@@ -12,27 +14,30 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
   late DailyChallenge currentChallenge;
   final TextEditingController _responseController = TextEditingController();
   bool showReward = false;
-
-  final List<DailyChallenge> challenges = [
-    DailyChallenge(
-      title: "تحدي التنفس العميق",
-      description:
-          "خذ 3 دقائق للتركيز على تنفسك. استنشق ببطء لعدّ 4، واحتفظ بالنفس لعدّ 4، ثم أخرجه لعدّ 6.",
-      reward: "\"التنفس العميق هو مرساة للهدوء النفسي.\"",
-      date: DateTime.now(),
-    ),
-    DailyChallenge(
-      title: "تحدي كتابة المشاعر",
-      description: "اكتب في دفتر مذكراتك مشاعرك الحالية دون أي تصحيح أو حكم.",
-      reward: "\"عندما تكتب، تمنح مشاعرك المساحة للتعبير.\"",
-      date: DateTime.now(),
-    ),
-  ];
+  late List<DailyChallenge> challenges;
 
   @override
   void initState() {
     super.initState();
     _loadCurrentChallenge();
+  }
+
+  void _initializeChallenges(BuildContext context) {
+    final localizations = S.of(context);
+    challenges = [
+      DailyChallenge(
+        title: localizations.deepBreathingChallenge,
+        description: localizations.deepBreathingDescription,
+        reward: localizations.deepBreathingReward,
+        date: DateTime.now(),
+      ),
+      DailyChallenge(
+        title: localizations.journalingChallenge,
+        description: localizations.journalingDescription,
+        reward: localizations.journalingReward,
+        date: DateTime.now(),
+      ),
+    ];
   }
 
   Future<void> _loadCurrentChallenge() async {
@@ -50,8 +55,13 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
       }
     }
 
-    currentChallenge = challenges[DateTime.now().day % challenges.length];
-    _saveCurrentChallenge();
+    // Challenges will be initialized in build method
+    if (mounted) {
+      setState(() {
+        currentChallenge = challenges[DateTime.now().day % challenges.length];
+      });
+      _saveCurrentChallenge();
+    }
   }
 
   Future<void> _saveCurrentChallenge() async {
@@ -78,14 +88,20 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
+    _initializeChallenges(context);
+
+    if (currentChallenge == null) {
+      currentChallenge = challenges[DateTime.now().day % challenges.length];
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'تحدي اليوم',
+          localizations.dailyChallengeTitle,
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
       ),
@@ -116,16 +132,16 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          currentChallenge.title,
+                          localizations.journalingChallenge,
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blueAccent,
+                            color: primaryColor,
                           ),
                         ),
                         SizedBox(height: 8),
                         Text(
-                          currentChallenge.description,
+                          localizations.journalingDescription,
                           style: TextStyle(fontSize: 16, color: Colors.black87),
                         ),
                       ],
@@ -139,7 +155,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                     maxLines: 3,
                     style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
-                      labelText: 'اكتب استجابتك هنا',
+                      labelText: localizations.writeResponseHere,
                       labelStyle: TextStyle(color: Colors.black),
                       filled: true,
                       fillColor: Colors.white.withOpacity(0.8),
@@ -151,7 +167,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                   SizedBox(height: 16),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: primaryColor,
                       padding: EdgeInsets.all(12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -159,7 +175,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                     ),
                     onPressed: _completeChallenge,
                     child: Text(
-                      'إكمال التحدي',
+                      localizations.completeChallenge,
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
@@ -170,7 +186,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    color: Colors.green.withOpacity(0.9),
+                    color: primaryColor,
                     elevation: 6,
                     child: Padding(
                       padding: EdgeInsets.all(16),
@@ -183,7 +199,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'مكافأتك',
+                            localizations.yourReward,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,

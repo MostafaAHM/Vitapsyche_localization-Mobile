@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart'; // For picking images
@@ -190,12 +191,13 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: primaryColor, // Set the AppBar color
-        title: const Text(
-          'Edit Profile',
+        title: Text(
+          localizations.editProfile,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
@@ -216,7 +218,7 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                         height: 200,
                         width: double.infinity,
                         decoration: const BoxDecoration(
-                          color: primaryColor,
+                          // color: primaryColor,
                           borderRadius: BorderRadius.only(
                               bottomRight: Radius.circular(200)),
                         ),
@@ -243,8 +245,8 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                                                     ? NetworkImage(
                                                         'https://abdokh.pythonanywhere.com${widget.userDetails['image']}')
                                                     : null, // Show nothing if no network image is available
-                                            backgroundColor: Colors
-                                                .white, // Background color
+                                            backgroundColor: primaryColor,
+                                            // Background color
                                             child: _image == null &&
                                                     widget.userDetails[
                                                             'image'] ==
@@ -253,7 +255,7 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                                                     Icons
                                                         .person, // Fallback icon if no image is available
                                                     size: 60,
-                                                    color: primaryColor,
+                                                    color: Colors.white,
                                                   )
                                                 : null, // No child if the image is available
                                           ),
@@ -285,11 +287,11 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                                         ],
                                       ),
                                       const SizedBox(height: 10),
-                                      const Text(
-                                        'Doctor Photo',
+                                      Text(
+                                        localizations.doctorPhoto,
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: Colors.white,
+                                          color: primaryColor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -309,16 +311,17 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                                             const Icon(
                                               Icons
                                                   .person, // Icon next to user name
-                                              color: Colors.white,
+                                              color: primaryColor,
                                             ),
                                             const SizedBox(width: 5),
                                             Text(
                                               widget.userDetails['username'] ??
-                                                  'User Name', // User name text
+                                                  localizations
+                                                      .userName, // User name text
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.white,
+                                                color: primaryColor,
                                               ),
                                             ),
                                           ],
@@ -328,15 +331,16 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                                           children: [
                                             const Icon(
                                               Icons.email, // Email icon
-                                              color: Colors.white,
+                                              color: primaryColor,
                                             ),
                                             const SizedBox(width: 5),
                                             Text(
                                               widget.userDetails['email'] ??
-                                                  'user@example.com', // User email text
+                                                  localizations
+                                                      .userEmail, // User email text
                                               style: const TextStyle(
                                                 fontSize: 14,
-                                                color: Colors.white,
+                                                color: primaryColor,
                                               ),
                                             ),
                                           ],
@@ -357,30 +361,34 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                           key: _formKey,
                           child: Column(
                             children: [
-                              _buildEditField('Username', _usernameController),
                               _buildEditField(
-                                  'First Name', _firstNameController),
-                              _buildEditField('Last Name', _lastNameController),
-                              _buildEditField('Email', _emailController),
+                                  localizations.userName, _usernameController),
+                              _buildEditField(localizations.firstName,
+                                  _firstNameController),
                               _buildEditField(
-                                  'Phone Number', _phoneNumberController),
+                                  localizations.lastName, _lastNameController),
                               _buildEditField(
-                                  'Birth Date', _birthDateController),
-                              _buildEditField('Gender', _genderController),
+                                  localizations.email, _emailController),
+                              _buildEditField(localizations.phoneNumber,
+                                  _phoneNumberController),
+                              _buildEditField(localizations.birthDate,
+                                  _birthDateController),
                               _buildEditField(
-                                  'Nationality', _nationalityController),
-                              _buildEditField('Current Residence',
+                                  localizations.gender, _genderController),
+                              _buildEditField(localizations.nationality,
+                                  _nationalityController),
+                              _buildEditField(localizations.currentResidence,
                                   _currentResidenceController),
-                              _buildEditField('Fluent Languages',
+                              _buildEditField(localizations.fluentLanguage,
                                   _fluentLanguagesController),
-                              _buildEditField(
-                                  'Doctor Email', _doctorEmailController),
-                              _buildEditField(
-                                  'Specialization', _specializationController),
-                              _buildEditField('Years of Experience',
+                              _buildEditField(localizations.doctorEmail,
+                                  _doctorEmailController),
+                              _buildEditField(localizations.specialization,
+                                  _specializationController),
+                              _buildEditField(localizations.yearOfExperience,
                                   _yearsOfExperienceController),
-                              _buildEditField(
-                                  'Clinic Name', _clinicNameController),
+                              _buildEditField(localizations.clinicName,
+                                  _clinicNameController),
                               const SizedBox(height: 20),
                               ElevatedButton(
                                 onPressed: _updateProfile,
@@ -392,8 +400,8 @@ class _EditDoctorProfileScreenState extends State<EditDoctorProfileScreen> {
                                     borderRadius: BorderRadius.circular(30),
                                   ),
                                 ),
-                                child: const Text(
-                                  'Save Changes',
+                                child: Text(
+                                  localizations.saveChanges,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../../../core/theme/colors.dart';
 
 class SearchBarWidget extends StatelessWidget {
@@ -11,6 +12,7 @@ class SearchBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: TextField(
@@ -18,7 +20,7 @@ class SearchBarWidget extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Therapist name or title',
+          hintText: localizations.therapistNameOrTitle,
           hintStyle: const TextStyle(color: Colors.grey),
           prefixIcon: const Icon(Icons.search, color: primaryColor),
           border: _buildBorder(),

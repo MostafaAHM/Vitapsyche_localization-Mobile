@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PaymentTestInfoWidget extends StatefulWidget {
@@ -21,67 +22,86 @@ class _PaymentTestInfoWidgetState extends State<PaymentTestInfoWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Premium Test Details",
+        Text(
+          localizations.premiumTestDetails,
           style: TextStyle(
             color: mainBlueColor,
-            fontSize: 20,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
         SizedBox(height: 5.h),
         RichText(
           text: TextSpan(
-            style: const TextStyle(fontSize: 16, color: Colors.black),
+            style: TextStyle(fontSize: 16.sp, color: Colors.black),
             children: [
-              const TextSpan(
-                text: "Test Name: ",
+              TextSpan(
+                text: "${localizations.testName}: ",
                 style: TextStyle(
-                    fontWeight: FontWeight.w500, color: mainBlueColor),
+                  fontWeight: FontWeight.w500, 
+                  color: mainBlueColor,
+                  fontSize: 16.sp,
+                ),
               ),
-              TextSpan(text: widget.testName),
+              TextSpan(
+                text: widget.testName,
+                style: TextStyle(fontSize: 16.sp),
+              ),
             ],
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 5.h),
         RichText(
           text: TextSpan(
-            style: const TextStyle(fontSize: 16, color: Colors.black),
+            style: TextStyle(fontSize: 16.sp, color: Colors.black),
             children: [
-              const TextSpan(
-                text: "Price: ",
+              TextSpan(
+                text: "${localizations.price}: ",
                 style: TextStyle(
-                    fontWeight: FontWeight.w500, color: mainBlueColor),
+                  fontWeight: FontWeight.w500, 
+                  color: mainBlueColor,
+                  fontSize: 16.sp,
+                ),
               ),
-              TextSpan(text: "\$${widget.price.toStringAsFixed(2)}"),
+              TextSpan(
+                text: "${localizations.currencySymbol}${widget.price.toStringAsFixed(2)}",
+                style: TextStyle(fontSize: 16.sp),
+              ),
             ],
           ),
         ),
-        const SizedBox(height: 15),
-        const Text(
-          "Coupon Code",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        SizedBox(height: 15.h),
+        Text(
+          localizations.couponCode,
+          style: TextStyle(
+            fontSize: 16.sp, 
+            fontWeight: FontWeight.w500
+          ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Row(
           children: [
             Expanded(
               child: TextField(
                 controller: _couponController,
                 decoration: InputDecoration(
-                  hintText: "Enter coupon code",
+                  hintText: localizations.enterCouponCode,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 12.w, 
+                    vertical: 10.h
+                  ),
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10.w),
             ElevatedButton(
               onPressed: () {
                 // Apply coupon logic
@@ -89,13 +109,19 @@ class _PaymentTestInfoWidgetState extends State<PaymentTestInfoWidget> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor.withOpacity(.8),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                  borderRadius: BorderRadius.circular(8.r)
+                ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w, 
+                  vertical: 14.h
+                ),
               ),
-              child: const Text(
-                "Apply",
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                localizations.apply,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.sp,
+                ),
               ),
             ),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -216,12 +217,13 @@ class _DoctorAvailabilityScreenState extends State<DoctorAvailabilityScreen>
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: Colors.white, // Set background to white
       body: Column(
         children: [
           AppBar(
-            title: const Text('Doctor Availability',
+            title: Text(localizations.doctorAvailability,
                 style: TextStyle(color: Colors.white, fontSize: 24)),
             backgroundColor: const Color.fromARGB(255, 3, 190, 150),
             elevation: 0,
@@ -245,14 +247,14 @@ class _DoctorAvailabilityScreenState extends State<DoctorAvailabilityScreen>
         selectedItemColor: const Color.fromARGB(255, 3, 190, 150),
         unselectedItemColor: Colors.grey,
         backgroundColor: Colors.white,
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: 'Availability',
+            label: localizations.availability,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: 'Schedules',
+            label: localizations.schedules,
           ),
         ],
       ),
@@ -260,6 +262,7 @@ class _DoctorAvailabilityScreenState extends State<DoctorAvailabilityScreen>
   }
 
   Widget _buildAvailabilityScreen() {
+    final localizations = S.of(context);
     return Column(
       children: [
         Padding(
@@ -323,6 +326,7 @@ class _DoctorAvailabilityScreenState extends State<DoctorAvailabilityScreen>
   }
 
   Widget _buildScheduleScreen() {
+    final localizations = S.of(context);
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(
@@ -408,14 +412,14 @@ class _DoctorAvailabilityScreenState extends State<DoctorAvailabilityScreen>
                             // Max Patients
                             Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.people,
                                   color: Colors.white,
                                   size: 18,
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'Max Patients: ${schedule['max_patients_per_slot']}',
+                                  '${localizations.maxPatients}: ${schedule['max_patients_per_slot']}',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -527,6 +531,7 @@ class _DayScheduleState extends State<DaySchedule> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -558,8 +563,8 @@ class _DayScheduleState extends State<DaySchedule> {
               backgroundColor: const Color.fromARGB(255, 3, 190, 150),
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
             ),
-            child: const Text(
-              'Submit',
+            child: Text(
+              localizations.submit,
               style: TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
@@ -611,6 +616,7 @@ class ScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -622,7 +628,7 @@ class ScheduleWidget extends StatelessWidget {
                 child: TextFormField(
                   controller: fromTimeController,
                   decoration: InputDecoration(
-                    labelText: 'Start Time',
+                    labelText: localizations.startTime,
                     hintText: 'HH:mm:ss',
                     border: const OutlineInputBorder(),
                     labelStyle:
@@ -648,7 +654,7 @@ class ScheduleWidget extends StatelessWidget {
                 child: TextFormField(
                   controller: toTimeController,
                   decoration: InputDecoration(
-                    labelText: 'End Time',
+                    labelText: localizations.endTime,
                     hintText: 'HH:mm:ss',
                     border: const OutlineInputBorder(),
                     labelStyle:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/routes/app_routes.dart';
 import 'package:flutter_mindmed_project/features/ai_service/service/chat_bot/presentation/view/online_chatbot.dart';
 import 'package:flutter_mindmed_project/features/ai_service/service/lina/presentation/view/online_linaScreen.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/const/animation_gif.dart';
@@ -25,7 +26,7 @@ class AiServiceScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+        margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.r),
           side: const BorderSide(color: primaryColor),
@@ -68,13 +69,13 @@ class AiServiceScreen extends StatelessWidget {
               child: clipRoundedImage
                   ? ClipRRect(
                       borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(15.r),
-                        bottomRight: Radius.circular(15.r),
+                        topLeft: Radius.circular(15.r),
+                        bottomLeft: Radius.circular(15.r),
                       ),
                       child: Image.asset(
                         imagePath,
                         // fit: BoxFit.cover,
-                        height: 100.h, // Consistent image size
+                        height: 85.h, // Consistent image size
                         width: 100.w,
                       ),
                     )
@@ -93,11 +94,12 @@ class AiServiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
-          'AI Support',
+        title: Text(
+          localizations.aiSupport,
           style: TextStyle(
             color: primaryColor,
             fontWeight: FontWeight.bold,
@@ -111,9 +113,9 @@ class AiServiceScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _serviceCard(
-            title: ' Online Chat Service',
-            subtitle1: 'Click to Treat',
-            subtitle2: 'Yourself',
+            title: localizations.onlineChatService,
+            subtitle1: localizations.clickToTreat,
+            subtitle2: localizations.yourself,
             imagePath: AnimationGif.chatBot,
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
@@ -130,9 +132,9 @@ class AiServiceScreen extends StatelessWidget {
           //   clipRoundedImage: true,
           // ),
           _serviceCard(
-            title: ' Online Lina Service',
-            subtitle1: 'Click to Treat',
-            subtitle2: 'Yourself',
+            title: localizations.onlineLinaService,
+            subtitle1: localizations.clickToTreat,
+            subtitle2: localizations.yourself,
             imagePath: AnimationGif.linachatBot,
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(

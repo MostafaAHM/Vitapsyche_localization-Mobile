@@ -1,6 +1,7 @@
-// games/breathing_game.dart
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 
 class BreathingGame extends StatefulWidget {
   const BreathingGame({Key? key}) : super(key: key);
@@ -57,10 +58,12 @@ class BreathingGameState extends State<BreathingGame>
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
+
     return Scaffold(
       backgroundColor: Colors.teal[50],
       appBar: AppBar(
-        title: const Text('التنفس المتزامن'),
+        title: Text(localizations.synchronizedBreathing),
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.teal[900],
@@ -79,7 +82,7 @@ class BreathingGameState extends State<BreathingGame>
               ),
             ),
             Text(
-              'تنفس ${totalBreaths} من ${targetBreaths}',
+              '${localizations.breath} $totalBreaths  $targetBreaths',
               style: TextStyle(
                 color: Colors.teal[700],
                 fontSize: 16,
@@ -107,7 +110,9 @@ class BreathingGameState extends State<BreathingGame>
                         ],
                       ),
                       child: Text(
-                        isBreathingIn ? 'خذ نفساً عميقاً' : 'اخرج النفس',
+                        isBreathingIn
+                            ? localizations.breatheIn
+                            : localizations.breatheOut,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -147,8 +152,7 @@ class BreathingGameState extends State<BreathingGame>
                                 shape: BoxShape.circle,
                                 color: Colors.teal[100],
                                 border: Border.all(
-                                  color: Colors
-                                      .teal[300]!, // التأكد من عدم استخدام null
+                                  color: Colors.teal[300]!,
                                   width: 2,
                                 ),
                               ),
@@ -176,11 +180,11 @@ class BreathingGameState extends State<BreathingGame>
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(Icons.check_circle, color: Colors.green),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text(
-                            'أحسنت! لقد أكملت التمرين',
+                            localizations.exerciseCompleted,
                             style: TextStyle(
                               color: Colors.green,
                               fontWeight: FontWeight.bold,
@@ -198,7 +202,7 @@ class BreathingGameState extends State<BreathingGame>
                       });
                     },
                     icon: const Icon(Icons.refresh),
-                    label: const Text('بدء من جديد'),
+                    label: Text(localizations.startOver),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
                     ),

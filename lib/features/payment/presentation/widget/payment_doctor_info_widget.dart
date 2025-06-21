@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 
 class PaymentDoctorInfoWidget extends StatelessWidget {
-  const PaymentDoctorInfoWidget({super.key, required this.imageDoctor, required this.nameDoctor, required this.timeDoctor});
-  final String imageDoctor,nameDoctor ,timeDoctor;
+  const PaymentDoctorInfoWidget({
+    super.key, 
+    required this.imageDoctor,
+    required this.nameDoctor,
+    required this.timeDoctor,
+  });
+  
+  final String imageDoctor;
+  final String nameDoctor;
+  final String timeDoctor;
   
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context)!;
+    
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -19,19 +30,18 @@ class PaymentDoctorInfoWidget extends StatelessWidget {
           ),
         ],
       ),
-      child:  Row(
+      child: Row(
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundImage:
-                AssetImage(imageDoctor), // Replace with actual doctor image
+            backgroundImage: AssetImage(imageDoctor),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 Text(
+                Text(
                   nameDoctor,
                   style: const TextStyle(
                     fontSize: 18,
@@ -39,27 +49,27 @@ class PaymentDoctorInfoWidget extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                const Text(
-                  'Psychiatrist',
-                  style: TextStyle(
+                Text(
+                  localizations.psychiatrist,
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.calendar_today, size: 16, color: Colors.grey),
-                    SizedBox(width: 4),
+                    const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                    const SizedBox(width: 4),
                     Text(
-                      '06 Oct 2024 - 10 Oct 2024',
-                      style: TextStyle(fontSize: 14, color: Colors.black),
+                      localizations.appointmentDates,
+                      style: const TextStyle(fontSize: 14, color: Colors.black),
                     ),
                   ],
                 ),
                 const SizedBox(height: 6),
                 Row(
-                  children:  [
+                  children: [
                     const Icon(Icons.attach_money, size: 16, color: Colors.grey),
                     const SizedBox(width: 4),
                     Text(

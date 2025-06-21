@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
 import 'package:flutter_mindmed_project/features/ai_service/service/chat_bot/data/chat_provider.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -163,6 +164,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     final chatProvider = Provider.of<ChatProvider>(context);
     final groupedSessions = chatProvider.groupedChatSessions;
+    final localizations = S.of(context);
 
     // Sort the dates in descending order
     final sortedDates = groupedSessions.keys.toList()
@@ -234,8 +236,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Welcome back',
+                          Text(
+                            localizations.welcomeBack,
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
@@ -278,7 +280,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            'Language',
+                            localizations.languages,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -347,7 +349,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               color: Colors.white.withOpacity(0.1),
                             ),
                           ),
-                          child: const Row(
+                          child: Row(
                             children: [
                               Icon(
                                 Icons.history,
@@ -359,7 +361,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Chatbot History',
+                                    localizations.chatBotService,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
@@ -368,7 +370,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     ),
                                   ),
                                   Text(
-                                    'Your previous conversations',
+                                    localizations.yourPreviousConversations,
                                     style: TextStyle(
                                       color: Colors.white60,
                                       fontSize: 14,
@@ -399,7 +401,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 children: sessions.map((session) {
                                   return ListTile(
                                     title: Text(
-                                      'Session ${session['id']}',
+                                      '${localizations.session} ${session['id']}',
                                       style: const TextStyle(
                                         color: Colors.white70,
                                         fontSize: 14,
@@ -497,8 +499,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Text(
-                          'Start New Chat',
+                        Text(
+                          localizations.startNewChat,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,

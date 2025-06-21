@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../products/presentation/cubit/cart_cubit.dart';
 import '../../data/data_payment.dart';
@@ -10,8 +11,8 @@ import '../widget/payment_method_selection.dart';
 class PaymentProductScreen extends StatefulWidget {
   const PaymentProductScreen({super.key, required this.price});
   final double price;
+
   @override
-  // ignore: library_private_types_in_public_api
   _PaymentProductScreenState createState() => _PaymentProductScreenState();
 }
 
@@ -24,27 +25,28 @@ class _PaymentProductScreenState extends State<PaymentProductScreen> {
     cartCubit.removeAllCart();
     showDialog(
       context: context,
-      barrierDismissible: false, // منع الإغلاق أثناء التحميل
+      barrierDismissible: false,
       builder: (context) => Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: loadingProdcutBuy(),
+          child: loadingProdcutBuy(context),
         ),
       ),
     );
   }
 
-  PreferredSizeWidget? _buildAppBar() {
+  PreferredSizeWidget? _buildAppBar(BuildContext context) {
+    final localizations = S.of(context)!;
     return AppBar(
       foregroundColor: primaryColor,
       backgroundColor: secoundryColor,
       centerTitle: true,
-      title: const Text(
-        'Check Out',
-        style: TextStyle(
+      title: Text(
+        localizations.checkOut,
+        style: const TextStyle(
           color: primaryColor,
           fontSize: 21,
           fontWeight: FontWeight.bold,
@@ -53,7 +55,8 @@ class _PaymentProductScreenState extends State<PaymentProductScreen> {
     );
   }
 
-  Widget _buildFooter() {
+  Widget _buildFooter(BuildContext context) {
+    final localizations = S.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 21, horizontal: 10),
       decoration: BoxDecoration(
@@ -71,7 +74,7 @@ class _PaymentProductScreenState extends State<PaymentProductScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '-${widget.price.toStringAsFixed(2)} EGP', //amount ---
+            '-${widget.price.toStringAsFixed(2)} ${localizations.egpCurrency}',
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Row(
@@ -86,12 +89,11 @@ class _PaymentProductScreenState extends State<PaymentProductScreen> {
                       borderRadius: BorderRadius.circular(12),
                     )),
                 onPressed: () {
-                  // Handle cancel logic
                   Navigator.of(context).pop();
                 },
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(
+                child: Text(
+                  localizations.cancel,
+                  style: const TextStyle(
                       color: secoundryColor,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
@@ -109,12 +111,11 @@ class _PaymentProductScreenState extends State<PaymentProductScreen> {
                   ),
                 ),
                 onPressed: () {
-                  // Add checkout animation logic
                   _confirmDeleteDone(context);
                 },
-                child: const Text(
-                  'Done',
-                  style: TextStyle(
+                child: Text(
+                  localizations.done,
+                  style: const TextStyle(
                       color: secoundryColor,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
@@ -130,7 +131,7 @@ class _PaymentProductScreenState extends State<PaymentProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -161,7 +162,7 @@ class _PaymentProductScreenState extends State<PaymentProductScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildFooter(),
+      bottomNavigationBar: _buildFooter(context),
     );
   }
 }

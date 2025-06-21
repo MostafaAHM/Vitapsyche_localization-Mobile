@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/core/routes/app_routes.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../widget/doctor_profile_header.dart';
 import '../../data/doctor_model.dart';
 import 'package:http/http.dart' as http;
@@ -31,12 +33,43 @@ class _ServiceDoctorBookingScreenState
   Set<TimeOfDay> bookedSlots = {};
   bool isLoading = false;
   Map<String, List<Map<String, dynamic>>> schedulesByDay = {};
+  List<dynamic> existingAppointments = [];
 
   @override
   void initState() {
     super.initState();
     print('Doctor ID: ${widget.doctorDetailsId}');
     _fetchDoctorAvailability();
+    _fetchExistingAppointments();
+  }
+
+  Future<void> _fetchExistingAppointments() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    int? patientDetailsId = prefs.getInt('patient_details_id');
+
+    if (accessToken == null || patientDetailsId == null) {
+      return;
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://abdokh.pythonanywhere.com/api/appointments/?patient_id=$patientDetailsId&doctor=${widget.doctorDetailsId}'),
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          existingAppointments = json.decode(response.body);
+        });
+      }
+    } catch (e) {
+      print('Error fetching existing appointments: $e');
+    }
   }
 
   Future<void> _fetchDoctorAvailability() async {
@@ -91,12 +124,6 @@ class _ServiceDoctorBookingScreenState
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
     }
   }
 
@@ -127,6 +154,10 @@ class _ServiceDoctorBookingScreenState
       final filteredSlots = schedulesByDay[dayOfWeek] ?? [];
 
       timeSlots.clear();
+      bookedSlots.clear();
+
+      // Get booked slots for this date
+      final bookedTimes = _getBookedTimesForDate(selectedDate!);
 
       for (var slot in filteredSlots) {
         final startTime = TimeOfDay(
@@ -137,23 +168,49 @@ class _ServiceDoctorBookingScreenState
           hour: int.parse(slot['end_time'].split(':')[0]),
           minute: int.parse(slot['end_time'].split(':')[1]),
         );
-        _generateTimeSlots(startTime, endTime);
+        _generateTimeSlots(startTime, endTime, bookedTimes);
       }
 
       setState(() {});
     }
   }
 
-  void _generateTimeSlots(TimeOfDay startTime, TimeOfDay endTime) {
+  List<TimeOfDay> _getBookedTimesForDate(DateTime date) {
+    final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+    final bookedTimes = <TimeOfDay>[];
+
+    for (var appointment in existingAppointments) {
+      final appointmentDate = DateTime.parse(appointment['date_time']);
+      if (DateFormat('yyyy-MM-dd').format(appointmentDate) == formattedDate) {
+        bookedTimes.add(TimeOfDay(
+          hour: appointmentDate.hour,
+          minute: appointmentDate.minute,
+        ));
+      }
+    }
+
+    return bookedTimes;
+  }
+
+  void _generateTimeSlots(
+      TimeOfDay startTime, TimeOfDay endTime, List<TimeOfDay> bookedTimes) {
     final slots = <TimeOfDay>[];
     var currentTime = startTime;
 
     while (currentTime.hour < endTime.hour ||
         (currentTime.hour == endTime.hour &&
             currentTime.minute <= endTime.minute)) {
-      if (!bookedSlots.contains(currentTime)) {
+      // Check if this time slot is already booked
+      final isBooked = bookedTimes.any((bookedTime) =>
+          bookedTime.hour == currentTime.hour &&
+          bookedTime.minute == currentTime.minute);
+
+      if (!isBooked) {
         slots.add(currentTime);
+      } else {
+        bookedSlots.add(currentTime);
       }
+
       currentTime = _addMinutes(currentTime, 30);
     }
 
@@ -224,19 +281,15 @@ class _ServiceDoctorBookingScreenState
         );
 
         if (response.statusCode == 201) {
-          setState(() {
-            bookedSlots.add(selectedTime!);
-            timeSlots.removeWhere((slot) =>
-                slot.hour == selectedTime!.hour &&
-                slot.minute == selectedTime!.minute);
-            selectedTime = null;
-          });
+          // Refresh the existing appointments
+          await _fetchExistingAppointments();
 
+          // Refresh the available slots
           await _fetchAvailableSlots();
 
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Appointment successfully booked!'),
+            SnackBar(
+              content: Text(S.of(context).appointmentDeletedSuccessfully),
               backgroundColor: Colors.green,
             ),
           );
@@ -247,7 +300,7 @@ class _ServiceDoctorBookingScreenState
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                  'Failed to book appointment: ${responseBody['detail'] ?? 'Unknown error'}'),
+                  '${S.of(context).failedToDeleteAppointment}: ${responseBody['detail'] ?? S.of(context).errorDeletingAppointment}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -255,24 +308,23 @@ class _ServiceDoctorBookingScreenState
       } catch (e) {
         print('Error booking appointment: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content:
-                Text('Failed to book appointment. Please try again later.'),
+          SnackBar(
+            content: Text(S.of(context).failedToDeleteAppointment),
             backgroundColor: Colors.red,
           ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content:
-              Text('Please fill in all the details to book an appointment'),
+        SnackBar(
+          content: Text(S.of(context).pleaseSignInToBookAppointment),
         ),
       );
     }
   }
 
   Widget _buildAvailabilityCalendar() {
+    final localizations = S.of(context);
     final now = DateTime.now();
     final next30Days = DateTime.now().add(const Duration(days: 30));
     final days = List.generate(
@@ -281,8 +333,8 @@ class _ServiceDoctorBookingScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Available Days",
+        Text(
+          localizations.available,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
@@ -343,115 +395,185 @@ class _ServiceDoctorBookingScreenState
     );
   }
 
+  Future<bool> _isAuthenticated() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    return accessToken != null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DoctorProfileHeader(doctor: widget.doctor),
-                    const SizedBox(height: 24),
-                    _buildAvailabilityCalendar(),
-                    const SizedBox(height: 24),
-                    if (selectedDate != null) ...[
-                      const Text(
-                        "Available Time Slots",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+      body: FutureBuilder<bool>(
+        future: _isAuthenticated(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || !snapshot.data!) {
+            // User is not authenticated - show sign in button
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    localizations.pleaseSignInToBookAppointment,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.signinScreen),
+                    child: Text(
+                      localizations.signIn,
+                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: mainBlueColor,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                      const SizedBox(height: 10),
-                      if (timeSlots.isEmpty)
-                        const Text("No available slots for this day")
-                      else
-                        GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                            childAspectRatio: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // User is authenticated - show normal content
+          return isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DoctorProfileHeader(doctor: widget.doctor),
+                        const SizedBox(height: 24),
+                        _buildAvailabilityCalendar(),
+                        const SizedBox(height: 24),
+                        if (selectedDate != null) ...[
+                          Text(
+                             localizations.available,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          itemCount: timeSlots.length,
-                          itemBuilder: (context, index) {
-                            final slot = timeSlots[index];
-                            return GestureDetector(
-                              onTap: () =>
-                                  _onTimeSelected(slot), // Select the time slot
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                decoration: BoxDecoration(
-                                  color: selectedTime == slot
-                                      ? Colors.teal
-                                      : Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
-                                    if (selectedTime == slot)
-                                      BoxShadow(
-                                        color: Colors.teal.withOpacity(0.4),
-                                        spreadRadius: 3,
-                                        blurRadius: 6,
-                                      )
-                                  ],
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    slot.format(
-                                        context), // Format the time slot
-                                    style: TextStyle(
-                                      color: selectedTime == slot
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontWeight: FontWeight.w600,
+                          const SizedBox(height: 10),
+                          if (timeSlots.isEmpty && bookedSlots.isEmpty)
+                             Text(localizations.noAppointments)
+                          else
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 1.5,
+                              ),
+                              itemCount: timeSlots.length + bookedSlots.length,
+                              itemBuilder: (context, index) {
+                                final allSlots = [...timeSlots, ...bookedSlots];
+                                final slot = allSlots[index];
+                                final isBooked = bookedSlots.contains(slot);
+
+                                return GestureDetector(
+                                  onTap: isBooked
+                                      ? null
+                                      : () => _onTimeSelected(slot),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 300),
+                                    decoration: BoxDecoration(
+                                      color: isBooked
+                                          ? Colors.red[300]
+                                          : selectedTime == slot
+                                              ? Colors.teal
+                                              : Colors.grey[300],
+                                      borderRadius: BorderRadius.circular(15),
+                                      boxShadow: [
+                                        if (selectedTime == slot && !isBooked)
+                                          BoxShadow(
+                                            color: Colors.teal.withOpacity(0.4),
+                                            spreadRadius: 3,
+                                            blurRadius: 6,
+                                          )
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            slot.format(context),
+                                            style: TextStyle(
+                                              color: isBooked ||
+                                                      selectedTime == slot
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          if (isBooked)
+                                            Text(
+                                             localizations.booked,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                                     ),
                                   ),
+                                );
+                              },
+                            ),
+                          const SizedBox(height: 20),
+                          if (selectedTime != null)
+                            ElevatedButton(
+                              onPressed: _onBookAppointment,
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: const Size(double.infinity, 50),
+                                backgroundColor: Colors.teal,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      const SizedBox(height: 20),
-                      if (selectedTime != null)
-                        ElevatedButton(
-                          onPressed: _onBookAppointment,
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(double.infinity, 50),
-                            backgroundColor: Colors.teal,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              child:  Text(
+                            localizations.bookAppointment  ,
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'Book Appointment',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
+                        ],
+                      ],
+                    ),
+                  ),
+                );
+        },
+      ),
     );
   }
 
   PreferredSizeWidget _buildAppBar() {
+     final localizations = S.of(context);
     return AppBar(
       backgroundColor: Colors.white,
       foregroundColor: primaryColor,
       elevation: 0,
-      title: const Text(
-        'Book Appointment',
+      title: Text(
+        localizations.bookAppointment,
         style: TextStyle(color: primaryColor),
       ),
       centerTitle: true,

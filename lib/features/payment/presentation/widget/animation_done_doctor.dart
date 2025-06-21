@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../../../core/theme/colors.dart';
 
 Future<void> _simulateLoading() async {
   await Future.delayed(const Duration(seconds: 5));
 }
 
-Widget loadingDoctorBuy() {
+Widget loadingDoctorBuy(BuildContext context) {
+  final localizations = S.of(context)!;
+  
   return FutureBuilder(
     future: _simulateLoading(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Column(
+        return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Waiting please...',
-              style: TextStyle(color: mainBlueColor, fontSize: 16),
+              localizations.pleaseWait,
+              style: const TextStyle(color: mainBlueColor, fontSize: 16),
             ),
-            SizedBox(height: 20),
-            CircularProgressIndicator.adaptive(
+            const SizedBox(height: 20),
+            const CircularProgressIndicator.adaptive(
               backgroundColor: primaryColor,
-              valueColor: AlwaysStoppedAnimation(
-                grayColor,
-              ),
+              valueColor: AlwaysStoppedAnimation(grayColor),
             ),
           ],
         );
@@ -36,18 +36,19 @@ Widget loadingDoctorBuy() {
             Navigator.pop(context);
           });
         });
-        return const Column(
+        return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.check_circle, color: Colors.green, size: 50),
-            SizedBox(height: 10),
+            const Icon(Icons.check_circle, color: Colors.green, size: 50),
+            const SizedBox(height: 10),
             Text(
-              'Process completed successfully!',
-              style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+              localizations.processCompleted,
+              style: const TextStyle(
+                color: Colors.green,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/main.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/theme/colors.dart';
 import '../../data/req_test.dart';
 import '../../data/test.dart';
@@ -13,51 +15,73 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
-  late Future<List<Test>> _testsFuture; // متغير لتحميل جميع البيانات مسبقًا
+  late Future<List<Test>> _testsFuture;
 
-  // قائمة الاختبارات مع العناوين والمسارات
-  final List<Map<String, dynamic>> dummyTests = [
+  // List of tests with English and Arabic paths
+  final List<Map<String, dynamic>> testsData = [
     {
-      'title': 'Davidson Trauma Scale',
-      'filePath': ReqTest.kDavidsonTraumaScaleDSMIVEn
-    },
-    {
-      'title': 'ADHD Test',
-      'filePath': ReqTest.kADHDandImpulsivityDiagnosisScale
-    },
-    {
-      'title': 'Beck Depression Inventory',
-      'filePath': ReqTest.kBeckDepressionInventoryEn
+      'title': 'Depression scale',
+      'englishPath': ReqTest.kBeckDepressionInventory,
+      'arabicPath': ReqTest.kBeckDepressionInventoryAr,
     },
     {
       'title': 'Internet Addiction Scale',
-      'filePath': ReqTest.kInternetAddictionScale
+      'englishPath': ReqTest.kInternetAddictionScale,
+      'arabicPath': ReqTest.kInternetAddictionScaleAr,
     },
-    {'title': 'Taylor Anxiety Scale', 'filePath': ReqTest.kTaylorAnxietyScale},
     {
-      'title': 'Yale-Brown Obsessive Compulsive Scale',
-      'filePath': ReqTest.kYaleBrownObsessiveCompulsiveScale
+      'title': 'OCD Scale',
+      'englishPath': ReqTest.kOcdScale,
+      'arabicPath': ReqTest.kOcdScaleAr,
+    },
+    {
+      'title': 'Ptsd Scale',
+      'englishPath': ReqTest.kPtsdScale,
+      'arabicPath': ReqTest.kPtsdScaleAr,
+    },
+    {
+      'title': 'Rosenberg Self Esteem Scale',
+      'englishPath': ReqTest.kRosenbergSelfEsteemScale,
+      'arabicPath': ReqTest.kRosenbergSelfEsteemScaleAr,
+    },
+    {
+      'title': 'Taylor Anxiety Scale',
+      'englishPath': ReqTest.kTaylorAnxietyScale,
+      'arabicPath': ReqTest.kTaylorAnxietyScaleAr,
+    },
+    {
+      'title': 'Cognitive Distortions Assessment',
+      'englishPath': ReqTest.kCognitiveDistortionsAssessment,
+      'arabicPath': ReqTest.kCognitiveDistortionsAssessmentAr,
+    },
+    {
+      'title': 'Conners Test',
+      'englishPath': ReqTest.kConnersTest,
+      'arabicPath': ReqTest.kConnersTestAr,
     },
     {
       'title': 'Personality Disorders Test',
-      'filePath': ReqTest.kPersonalityDisordersTest
+      'englishPath': ReqTest.kPersonalityDisordersTest,
+      'arabicPath': ReqTest.kPersonalityDisordersTestAr,
     },
-    {'title': 'Disorder Test', 'filePath': ReqTest.kDisorderTest},
-    {'title': 'Conners Test', 'filePath': ReqTest.kConnersTest},
   ];
 
   @override
   void initState() {
     super.initState();
-    _testsFuture = _loadAllTests(); // تحميل جميع الاختبارات عند إنشاء الشاشة
+    _testsFuture = _loadAllTests();
   }
 
-  // تحميل جميع الاختبارات مرة واحدة
   Future<List<Test>> _loadAllTests() async {
     List<Test> tests = [];
-    for (var testData in dummyTests) {
+    for (var testData in testsData) {
       try {
-        Test test = await ReqTest.loadTest(testData['filePath']);
+        final path = ReqTest.getLocalizedPath(
+          context,
+          testData['englishPath'],
+          testData['arabicPath'],
+        );
+        Test test = await ReqTest.loadTest(path);
         tests.add(test);
       } catch (e) {
         debugPrint('Error loading test: ${testData['title']} -> $e');
@@ -75,8 +99,7 @@ class _TestScreenState extends State<TestScreen> {
         future: _testsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator()); // عرض التحميل
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
                 child: Text('Error loading tests: ${snapshot.error}'));
@@ -91,7 +114,6 @@ class _TestScreenState extends State<TestScreen> {
     );
   }
 
-  // بناء قائمة الاختبارات
   Widget _buildTestsList(List<Test> tests) {
     return SingleChildScrollView(
       child: Padding(
@@ -106,8 +128,8 @@ class _TestScreenState extends State<TestScreen> {
                 final test = tests[index];
                 return TestCard(
                   test: test,
-                  title: test.testTitle, // عرض عنوان الاختبار
-                  questionCount: test.questions.length, // عدد الأسئلة
+                  title: test.testTitle,
+                  questionCount: test.questions.length,
                   isPayment: test.payment,
                 );
               },
@@ -124,7 +146,10 @@ class _TestScreenState extends State<TestScreen> {
       backgroundColor: secoundryColor,
       centerTitle: true,
       title: Text(
-        'Tests',
+        // Localize the title as well
+        Provider.of<LocaleProvider>(context).locale.languageCode == 'ar'
+            ? 'الاختبارات'
+            : 'Tests',
         style: TextStyle(
           color: primaryColor,
           fontSize: 26.sp,

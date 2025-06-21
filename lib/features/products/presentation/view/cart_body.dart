@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mindmed_project/core/routes/app_routes.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../widget/cart_item.dart';
 import '../cubit/cart_cubit.dart';
 
@@ -10,13 +11,15 @@ class CartBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context)!;
+    
     return BlocBuilder<CartCubit, CartState>(
       builder: (context, state) {
         if (state.cartItems.isEmpty) {
-          return const Center(
+          return Center(
             child: Text(
-              'Your cart is empty',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              localizations.yourCartIsEmpty,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
           );
         }
@@ -30,10 +33,7 @@ class CartBody extends StatelessWidget {
                   final item = state.cartItems[index];
                   return CartItem(
                     onDelete: () {
-                      print('Deleting item: ${item.title}');
-                      context
-                          .read<CartCubit>()
-                          .removeFromCart(state.cartItems[index]);
+                      context.read<CartCubit>().removeFromCart(item);
                     },
                     data: item,
                     onUpdateCount: (newCount) {
@@ -46,14 +46,14 @@ class CartBody extends StatelessWidget {
                 },
               ),
             ),
-            _buildBottomBar(context, state),
+            _buildBottomBar(context, state, localizations),
           ],
         );
       },
     );
   }
 
-  Widget _buildBottomBar(BuildContext context, CartState state) {
+  Widget _buildBottomBar(BuildContext context, CartState state,  localizations) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -71,14 +71,13 @@ class CartBody extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Total',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                localizations.total,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
                 '£${state.totalValue.toStringAsFixed(2)}',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -93,13 +92,14 @@ class CartBody extends StatelessWidget {
               minimumSize: const Size(double.infinity, 50),
             ),
             onPressed: () {
-              // Handle checkout
-              Navigator.of(context).pushNamed(AppRoutes.paymentProductScreen,
-                  arguments: state.totalValue);
+              Navigator.of(context).pushNamed(
+                AppRoutes.paymentProductScreen,
+                arguments: state.totalValue,
+              );
             },
-            child: const Text(
-              'Buy Now',
-              style: TextStyle(fontSize: 18, color: Colors.white),
+            child: Text(
+              localizations.buyNow,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
           ),
         ],

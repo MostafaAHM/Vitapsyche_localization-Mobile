@@ -5,6 +5,7 @@ import 'package:flutter_mindmed_project/features/doctor/presentation/view/doctor
 import 'package:flutter_mindmed_project/features/home/appointmentsScreen.dart';
 import 'package:flutter_mindmed_project/features/home/presentation/view/home_screen.dart';
 import 'package:flutter_mindmed_project/features/more/presentation/view/more.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/const/image_app.dart';
 import '../../../ai_service/view/ai_service_screen.dart';
@@ -49,6 +50,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
     if (accessToken == null) {
       return [
         const HomeScreen(), // Home
+        DoctorScreen(), // Doctor
         const AiServiceScreen(), // AI Service
         const More(), // More
       ];
@@ -65,29 +67,38 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
 
   // Bottom navigation bar items
   List<BottomNavigationBarItem> get _bottomBar {
+    final localizations = S.of(context);
     if (accessToken == null) {
-      return const [
-        BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
-        BottomNavigationBarItem(label: 'Online AI', icon: Icon(Icons.chat)),
+      return [
         BottomNavigationBarItem(
-            label: 'More', icon: Icon(Icons.more_horiz_sharp)),
+            label: localizations.home, icon: Icon(Icons.home)),
+        BottomNavigationBarItem(
+            label: localizations.doctor, icon: Icon(Icons.person_4_outlined)),
+        BottomNavigationBarItem(
+            label: localizations.onlineAI, icon: Icon(Icons.chat)),
+        BottomNavigationBarItem(
+            label: localizations.more, icon: Icon(Icons.more_horiz_sharp)),
       ];
     } else {
-      return const [
-        BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
+      return [
         BottomNavigationBarItem(
-            label: 'Doctor', icon: Icon(Icons.person_4_outlined)),
+            label: localizations.home, icon: Icon(Icons.home)),
         BottomNavigationBarItem(
-            label: 'Appointments', icon: Icon(Icons.event_available)),
-        BottomNavigationBarItem(label: 'Online AI', icon: Icon(Icons.chat)),
+            label: localizations.doctor, icon: Icon(Icons.person_4_outlined)),
         BottomNavigationBarItem(
-            label: 'More', icon: Icon(Icons.more_horiz_sharp)),
+            label: localizations.appointments,
+            icon: Icon(Icons.event_available)),
+        BottomNavigationBarItem(
+            label: localizations.onlineAI, icon: Icon(Icons.chat)),
+        BottomNavigationBarItem(
+            label: localizations.more, icon: Icon(Icons.more_horiz_sharp)),
       ];
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: secoundryColor,
       appBar: AppBar(
@@ -101,17 +112,17 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
           cacheWidth: 80,
         ),
         titleSpacing: 0,
-        title: const Column(
+        title: Column(
           children: [
             Text(
-              'Vitapsyche',
+              localizations.appTitle,
               style: TextStyle(
                   fontSize: 25,
                   color: primaryColor,
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              'clear your mind, calm your heart',
+              localizations.mindHeartText,
               style: TextStyle(
                   fontSize: 8,
                   color: mainBlueColor,
@@ -128,7 +139,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
                 Navigator.pushNamed(context, '/profile');
               },
               child: Container(
-                margin: const EdgeInsets.only(right: 16),
+                margin: const EdgeInsets.only(right: 16, left: 16),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
@@ -155,7 +166,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
                     onPressed: () =>
                         Navigator.of(context).pushNamed(AppRoutes.signinScreen),
                     child: Text(
-                      'Sign In',
+                      localizations.signIn,
                       style: _textStyle(12, Colors.white, FontWeight.bold),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -172,7 +183,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen>
                     onPressed: () =>
                         Navigator.of(context).pushNamed(AppRoutes.signupScreen),
                     child: Text(
-                      'Sign Up',
+                      localizations.signUp,
                       style: _textStyle(12, Colors.white, FontWeight.bold),
                     ),
                     style: ElevatedButton.styleFrom(

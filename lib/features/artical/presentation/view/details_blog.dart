@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../data/model_blog.dart';
@@ -14,33 +15,37 @@ class DetailsBlog extends StatelessWidget {
     required String treatment,
     required String title,
     required String dec,
+    required BuildContext context,
   }) {
+    final localizations = S.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _blogImage(imagesBlog),
-        _buildInfoCard("Description", dec),
+        _blogImage(imagesBlog, context),
+        _buildInfoCard(localizations.description, dec, context),
         SizedBox(height: 24.h),
-        _sectionCard("Symptoms", symptoms),
+        _sectionCard(localizations.symptoms, symptoms, context),
         SizedBox(height: 16.h),
-        _sectionCard("Causes", causes),
+        _sectionCard(localizations.causes, causes, context),
         SizedBox(height: 16.h),
-        _treatmentSection(treatment),
+        _treatmentSection(treatment, context),
       ],
     );
   }
 
-  Widget _blogImage(String imagesBlog) {
+  Widget _blogImage(String imagesBlog, BuildContext context) {
+    final localizations = S.of(context)!;
+
     return Hero(
-      tag: imagesBlog, // Use the same tag here
+      tag: imagesBlog,
       child: Image.asset(
         imagesBlog,
         height: 200.h,
         width: double.infinity,
         fit: BoxFit.cover,
-        
         errorBuilder: (context, error, stackTrace) {
-          return const Center(
+          return Center(
             child: Icon(Icons.error, color: Colors.red),
           );
         },
@@ -48,7 +53,7 @@ class DetailsBlog extends StatelessWidget {
     );
   }
 
-  Widget _sectionCard(String title, List<String> items) {
+  Widget _sectionCard(String title, List<String> items, BuildContext context) {
     return Card(
       color: secoundryColor,
       margin: EdgeInsets.symmetric(horizontal: 16.w),
@@ -70,7 +75,7 @@ class DetailsBlog extends StatelessWidget {
             SizedBox(height: 12.h),
             Column(
               children: items.asMap().entries.map((entry) {
-                return _listItem(entry.value, entry.key);
+                return _listItem(entry.value, entry.key, context);
               }).toList(),
             )
           ],
@@ -79,7 +84,7 @@ class DetailsBlog extends StatelessWidget {
     );
   }
 
-  Widget _listItem(String text, int index) {
+  Widget _listItem(String text, int index, BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Row(
@@ -100,7 +105,7 @@ class DetailsBlog extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard(String title, String content) {
+  Widget _buildInfoCard(String title, String content, BuildContext context) {
     return Card(
       color: secoundryColor,
       margin: EdgeInsets.symmetric(horizontal: 16.w),
@@ -134,14 +139,17 @@ class DetailsBlog extends StatelessWidget {
     );
   }
 
-  Widget _treatmentSection(String treatment) {
-    return _buildInfoCard("Treatment", treatment);
+  Widget _treatmentSection(String treatment, BuildContext context) {
+    final localizations = S.of(context)!;
+    return _buildInfoCard(localizations.treatment, treatment, context);
   }
 
   @override
   Widget build(BuildContext context) {
     final ModelBlog blog =
         ModalRoute.of(context)!.settings.arguments as ModelBlog;
+    final localizations = S.of(context)!;
+
     return Scaffold(
       backgroundColor: secoundryColor,
       appBar: AppBar(
@@ -164,6 +172,7 @@ class DetailsBlog extends StatelessWidget {
           title: blog.title,
           symptoms: blog.symptoms,
           treatment: blog.treatment,
+          context: context,
         ),
       ),
     );

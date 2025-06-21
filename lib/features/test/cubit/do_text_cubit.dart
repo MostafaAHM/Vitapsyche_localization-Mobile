@@ -6,8 +6,8 @@ class DoTestState {
   final Map<int, String> selectedAnswers;
   final bool isComplete;
 
-  DoTestState( {
-    this.totalSorce=0,
+  DoTestState({
+    this.totalSorce = 0,
     this.currentIndex = 0,
     this.selectedAnswers = const {},
     this.isComplete = false,
@@ -27,6 +27,7 @@ class DoTestState {
     );
   }
 }
+
 class DoTestCubit extends Cubit<DoTestState> {
   DoTestCubit() : super(DoTestState());
 
@@ -51,6 +52,18 @@ class DoTestCubit extends Cubit<DoTestState> {
       totalSorce: updatedScore,
     ));
   }
+  // void selectAnswer(int questionIndex, int score) {
+  //   final updatedAnswers = Map<int, int>.from(state.selectedAnswers);
+  //   final prevScore = updatedAnswers[questionIndex] ?? 0;
+  //   updatedAnswers[questionIndex] = score;
+
+  //   final updatedTotalScore = state.totalScore - prevScore + score;
+
+  //   emit(state.copyWith(
+  //     selectedAnswers: updatedAnswers,
+  //     totalScore: updatedTotalScore,
+  //   ));
+  // }
 
   void nextQuestion(int totalQuestions) {
     if (state.currentIndex < totalQuestions - 1) {

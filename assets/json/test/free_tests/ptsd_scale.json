@@ -1,0 +1,218 @@
+{
+  "testTitle": "PTSD Scale according to DSM-IV",
+  "testSlug": "ptsd-scale", 
+  "payment": false,
+  "max": 17,
+  "questions": [
+    {
+      "id": 1,
+      "question":
+        "Have you experienced recurring images, thoughts, or memories of the trauma?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 2,
+      "question": "Do you dream about the trauma or experience nightmares?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 3,
+      "question":
+        "Do you feel or act as if the traumatic event is happening again?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 4,
+      "question": "Do you feel upset when reminded of the traumatic event?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 5,
+      "question":
+        "Do you avoid thoughts, feelings, or conversations about the trauma?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+
+    {
+      "id": 6,
+      "question":
+        "Do you avoid activities, places, or people that remind you of the trauma?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 7,
+      "question": "Do you have trouble remembering parts of the trauma?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 8,
+      "question": "Do you lose interest in activities you used to enjoy?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 9,
+      "question": "Do you feel detached or isolated from others?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 10,
+      "question":
+        "Do you find it difficult to experience positive feelings?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 11,
+      "question":
+        "Do you feel as if your future goals or plans will not be achieved?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 12,
+      "question": "Do you find it difficult to fall asleep or stay asleep?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 13,
+      "question": "Are you irritable or have angry outbursts?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 14,
+      "question": "Do you find it difficult to concentrate?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 15,
+      "question": "Are you overly alert or watchful, feeling on guard?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 16,
+      "question": "Do you startle easily when surprised?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    },
+    {
+      "id": 17,
+      "question":
+        "Do bad things and people remind you of past experiences that make you suffer from shortness of breath, tremors, and rapid heartbeat?",
+      "choices": [
+        { "id": 1, "text": "Never", "score": 0 },
+        { "id": 2, "text": "Rarely", "score": 0 },
+        { "id": 3, "text": "Sometimes", "score": 0 },
+        { "id": 4, "text": "Often", "score": 1 },
+        { "id": 5, "text": "Always", "score": 1 }
+      ]
+    }
+  ],
+
+    "scoreRanges": [
+      {
+        "range": [0,4],
+        "description": "You dont have ptsd",
+        "color": "bg-green-400",
+        "info": "You are experiencing no symptoms of Post-Traumatic Stress Disorder (PTSD)."
+      },
+      {
+        "range": [5,17],
+        "description": "You have ptsd.",
+        "color": "bg-red-600",
+        "info": " You are experiencing symptoms consistent with Post-Traumatic Stress Disorder (PTSD), which significantly affect your mental and emotional well-being."
+      }
+    ]
+  }

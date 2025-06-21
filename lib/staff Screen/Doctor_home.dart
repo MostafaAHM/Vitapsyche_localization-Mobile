@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/features/ai_service/service/chat_bot/presentation/view/online_chatbot.dart';
+import 'package:flutter_mindmed_project/features/ai_service/service/lina/presentation/view/online_linaScreen.dart';
 import 'package:flutter_mindmed_project/features/home/presentation/category_services_screen.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +22,7 @@ class DoctorHomeScreen extends StatefulWidget {
 
 class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   List<dynamic> categories = [];
+  String? accessToken;
 
   @override
   void initState() {
@@ -28,19 +32,19 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
   Future<void> _fetchCategories() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('access_token');
+    accessToken = prefs.getString('access_token');
 
-    if (accessToken == null) {
-      print('Access token not found. Please log in again.');
-      return;
-    }
+    // if (accessToken == null) {
+    //   print('Access token not found. Please log in again.');
+    //   return;
+    // }
 
     try {
       final response = await http.get(
         Uri.parse('https://abdokh.pythonanywhere.com/api/categories/'),
         headers: {
           'accept': 'application/json',
-          'Authorization': 'Bearer $accessToken',
+          // 'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -75,7 +79,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
   // Function to call Vitapsyche Support
   Future<void> _callVitapsycheSupport() async {
-    final Uri phoneUrl = Uri.parse('tel:01289355070');
+    final Uri phoneUrl = Uri.parse('tel:16328');
     if (!await launchUrl(phoneUrl)) {
       throw Exception('Could not launch $phoneUrl');
     }
@@ -121,6 +125,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
             clipRoundedImage
                 ? ClipRRect(
                     borderRadius: BorderRadius.only(
+                      bottomLeft: const Radius.circular(15).r,
+                      topLeft: const Radius.circular(15).r,
                       bottomRight: const Radius.circular(15).r,
                       topRight: const Radius.circular(15).r,
                     ),
@@ -151,12 +157,13 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: secoundryColor,
       body: CustomScrollView(
         slivers: [
           // Header Section
-          SliverToBoxAdapter(child: _header('Our Service')),
+          SliverToBoxAdapter(child: _header(localizations.ourServices)),
 
           // ChatBot and Lina Service Section
           SliverToBoxAdapter(
@@ -167,21 +174,28 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                 scrollDirection: Axis.horizontal,
                 children: [
                   _serviceCard(
-                    title: 'Lina Service',
-                    subtitle1: 'Click to Treat',
-                    subtitle2: 'Yourself',
+                    title: localizations.linaService,
+                    subtitle1: localizations.clickToTreat,
+                    subtitle2: localizations.yourself,
                     imagePath: AnimationGif.linachatBot,
-                    onTap: () =>
-                        Navigator.of(context).pushNamed(AppRoutes.linaScreen),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            OnlineLynaModel(title: localizations.linaService),
+                      ),
+                    ),
                     clipRoundedImage: true,
                   ),
                   _serviceCard(
-                    title: 'ChatBot Service',
-                    subtitle1: 'Click to Treat',
-                    subtitle2: 'Yourself',
+                    title: localizations.chatbotService,
+                    subtitle1: localizations.clickToTreat,
+                    subtitle2: localizations.yourself,
                     imagePath: AnimationGif.chatBot,
-                    onTap: () =>
-                        Navigator.of(context).pushNamed(AppRoutes.chatScreen),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => OnlineChatScreen(),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -196,22 +210,27 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 8).w,
                 scrollDirection: Axis.horizontal,
                 children: [
-                  _compunetService('Test', AnimationGif.test,
+                  // _compunetService('Heart Rate', AnimationGif.test,
+                  //     onTap: () => Navigator.of(context)
+                  //         .pushNamed(AppRoutes.heartRateMonitor)),
+                  _compunetService(localizations.test, AnimationGif.test,
                       onTap: () => Navigator.of(context)
                           .pushNamed(AppRoutes.testScreen)),
-                  _compunetService('Blog', AnimationGif.blog,
+                  _compunetService(localizations.blog, AnimationGif.blog,
                       onTap: () => Navigator.of(context)
                           .pushNamed(AppRoutes.blogScreen)),
-                  _compunetService('product', AnimationGif.production,
+                  _compunetService(
+                      localizations.product, AnimationGif.production,
                       onTap: () => Navigator.of(context)
                           .pushNamed(AppRoutes.productsScreen)),
-                  _compunetService('FQAs', AnimationGif.fqas,
+                  _compunetService(localizations.fqas, AnimationGif.fqas,
                       onTap: () => Navigator.of(context)
                           .pushNamed(AppRoutes.fqasScreen)),
-                  _compunetService('Ask Doctor', AnimationGif.askDoctor,
-                      onTap: () =>
-                          Navigator.of(context).pushNamed(AppRoutes.askDoctor)),
-                  _compunetService('Entertainment', AnimationGif.soundAnimation,
+                  // _compunetService('Ask Doctor', AnimationGif.askDoctor,
+                  //     onTap: () =>
+                  //         Navigator.of(context).pushNamed(AppRoutes.askDoctor)),
+                  _compunetService(
+                      localizations.entertainment, AnimationGif.soundAnimation,
                       onTap: () => Navigator.of(context)
                           .pushNamed(AppRoutes.intertainment_Home)),
                 ],
@@ -220,7 +239,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
           ),
 
           // Doctors Specialists Section
-          SliverToBoxAdapter(child: _header('Doctors Specialists')),
+          // if (accessToken != null) ...[
+          SliverToBoxAdapter(child: _header(localizations.doctorsSpecialists)),
           SliverToBoxAdapter(
             child: SizedBox(
               height: 300.h,
@@ -234,8 +254,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                       MaterialPageRoute(
                         builder: (context) => CategoryServicesScreen(
                           categoryId: categories[index]['id'],
-                          categoryName: categories[index]
-                              ['name'], // Pass the category name
+                          categoryName: categories[index]['name'],
                         ),
                       ),
                     ),
@@ -247,15 +266,23 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
               ),
             ),
           ),
+          // ],
           // Get Help Section
-          SliverToBoxAdapter(child: _header('Get Help')),
+          SliverToBoxAdapter(child: _header(localizations.getHelp)),
           SliverToBoxAdapter(
             child: Column(
               children: [
                 _getHelpCard(
-                    Icons.support_agent_sharp, 'Talk to Vitapsyche Support'),
-                _getHelpcall(Icons.phone, 'Call Vitapsyche Support',
-                    onTap: _callVitapsycheSupport), // Call Function
+                    Icons.support_agent_sharp, localizations.talkToSupport),
+                // if (accessToken != null) ...[
+                _getHelpcall(Icons.question_answer, localizations.askDoctor,
+                    onTap: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.askDoctor)),
+                // ],
+                // if (accessToken != null) ...[
+                _getHelpcall(Icons.phone, localizations.callSupport,
+                    onTap: _callVitapsycheSupport),
+                // ], // Call Function
               ],
             ),
           ),

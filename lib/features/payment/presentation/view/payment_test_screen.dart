@@ -32,7 +32,7 @@ class _PaymentTestScreenState extends State<PaymentTestScreen> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: loadingTestBuy(widget.test),
+          child: loadingTestBuy(context , widget.test),
         ),
       ),
     );

@@ -104,7 +104,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                       MediaQuery.of(context).size.height * 0.04,
                                   width:
                                       MediaQuery.of(context).size.width * 0.04,
-                                  child: Image.asset("assets/icons/check.png"),
+                                  child: Image.asset("assets/images/check.png"),
                                 ),
                               ],
                             ),
@@ -142,7 +142,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                       MediaQuery.of(context).size.height * 0.06,
                                   width:
                                       MediaQuery.of(context).size.width * 0.06,
-                                  child: Image.asset("assets/icons/arrow.png"),
+                                  child: Image.asset("assets/images/arrow.png"),
                                 ),
                               ],
                             ),

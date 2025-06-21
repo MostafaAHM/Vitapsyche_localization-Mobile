@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter_mindmed_project/generated/l10n.dart';
+
 class MemoryGame extends StatefulWidget {
   const MemoryGame({Key? key}) : super(key: key);
 
@@ -113,10 +115,11 @@ class MemoryGameState extends State<MemoryGame> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: Colors.teal[50],
       appBar: AppBar(
-        title: const Text('لعبة الذاكرة',
+        title: Text(localizations.memoryGame,
             style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
         backgroundColor: Colors.teal,
@@ -130,11 +133,12 @@ class MemoryGameState extends State<MemoryGame> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  _buildStatCard(localizations.time,
+                      _formatTime(_secondsElapsed), Icons.timer),
                   _buildStatCard(
-                      'الوقت', _formatTime(_secondsElapsed), Icons.timer),
-                  _buildStatCard('الحركات', _moves.toString(), Icons.touch_app),
-                  _buildStatCard('الأزواج', '$_pairs/${_emojis.length ~/ 2}',
-                      Icons.favorite),
+                      localizations.moves, _moves.toString(), Icons.touch_app),
+                  _buildStatCard(localizations.pairs,
+                      '$_pairs/${_emojis.length ~/ 2}', Icons.favorite),
                 ],
               ),
             ),
@@ -162,7 +166,7 @@ class MemoryGameState extends State<MemoryGame> {
                   });
                 },
                 icon: const Icon(Icons.refresh),
-                label: const Text('إعادة اللعبة'),
+                label: Text(localizations.playAgain),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
                   backgroundColor: Colors.teal,

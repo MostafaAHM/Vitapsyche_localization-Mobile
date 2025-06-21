@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/features/doctor/presentation/view/constService_doctor_book_screen.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/theme/colors.dart';
 import '../../data/doctor_model.dart';
 import '../widget/doctor_list_item.dart';
 import '../widget/search_bar_widget.dart';
 import 'doctor_profile_details.dart';
+import 'doctor_chat_screen.dart';
 
 class DoctorScreen extends StatefulWidget {
   DoctorScreen({super.key});
@@ -23,31 +26,32 @@ class _DoctorScreenState extends State<DoctorScreen> {
   bool isLoading = true;
   String searchQuery = '';
   String? accessToken;
+  String? _userEmail;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
     _fetchDoctors();
+    _loadUserEmail();
+  }
+
+  Future<void> _loadUserEmail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _userEmail = prefs.getString('user_email');
+    });
   }
 
   Future<void> _fetchDoctors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     accessToken = prefs.getString('access_token');
 
-    if (accessToken == null) {
-      print('Access token not found. Please log in again.');
-      setState(() {
-        isLoading = false;
-      });
-      return;
-    }
-
     try {
       final response = await http.get(
         Uri.parse('https://abdokh.pythonanywhere.com/api/doctors/'),
         headers: {
           'accept': 'application/json',
-          'Authorization': 'Bearer $accessToken',
         },
       );
 
@@ -80,6 +84,49 @@ class _DoctorScreenState extends State<DoctorScreen> {
     });
   }
 
+  void _navigateToChatScreen(BuildContext context, DoctorModel doctor) async {
+    // Use the authenticated user's email if available, otherwise generate anonymous ID
+    final userId =
+        _userEmail ?? 'anonymous_${DateTime.now().millisecondsSinceEpoch}';
+    final userName = _userEmail?.split('@').first ?? 'User';
+
+    // Create chat room between user and doctor
+    final chatRoomId = _getChatRoomId(userId, doctor.id.toString());
+
+    await _firestore.collection('chat_rooms').doc(chatRoomId).set({
+      'participants': {
+        userId: true,
+        'doctor_${doctor.id}': true,
+      },
+      'participantNames': {
+        userId: userName,
+        'doctor_${doctor.id}': 'Dr. ${doctor.firstName} ${doctor.lastName}',
+      },
+      'lastMessage': '',
+      'lastMessageTime': FieldValue.serverTimestamp(),
+      'createdAt': FieldValue.serverTimestamp(),
+      'userEmail': _userEmail,
+    }, SetOptions(merge: true));
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DoctorChatScreen(
+          doctor: doctor,
+          chatRoomId: chatRoomId,
+          currentUserId: userId,
+          currentUserName: userName,
+        ),
+      ),
+    );
+  }
+
+  String _getChatRoomId(String userId, String doctorId) {
+    List<String> ids = [userId, 'doctor_$doctorId'];
+    ids.sort();
+    return ids.join('_');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,15 +134,10 @@ class _DoctorScreenState extends State<DoctorScreen> {
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          if (accessToken != null) ...[
-            SearchBarWidget(onSearchChanged: _onSearchChanged),
-          ],
+          SearchBarWidget(onSearchChanged: _onSearchChanged),
           Expanded(
-            child: isLoading
-                ? _buildShimmerLoading()
-                : accessToken == null
-                    ? _buildSignInSignUpButtons()
-                    : _buildDoctorsList(context),
+            child:
+                isLoading ? _buildShimmerLoading() : _buildDoctorsList(context),
           ),
         ],
       ),
@@ -104,7 +146,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
 
   Widget _buildShimmerLoading() {
     return ListView.builder(
-      itemCount: 6, // Number of shimmer items to show
+      itemCount: 6,
       itemBuilder: (context, index) => Shimmer.fromColors(
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
@@ -119,7 +161,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
               height: 120,
               child: Row(
                 children: [
-                  // Doctor image placeholder
                   Container(
                     width: 80,
                     height: 80,
@@ -136,21 +177,18 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Doctor name placeholder
                           Container(
                             width: 150,
                             height: 20,
                             color: Colors.white,
                           ),
                           const SizedBox(height: 8),
-                          // Specialty placeholder
                           Container(
                             width: 100,
                             height: 16,
                             color: Colors.white,
                           ),
                           const SizedBox(height: 8),
-                          // Rating placeholder
                           Container(
                             width: 80,
                             height: 16,
@@ -160,7 +198,6 @@ class _DoctorScreenState extends State<DoctorScreen> {
                       ),
                     ),
                   ),
-                  // Book button placeholder
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Container(
@@ -181,20 +218,12 @@ class _DoctorScreenState extends State<DoctorScreen> {
     );
   }
 
-  Widget _buildSignInSignUpButtons() {
-    return Center(
-      child: Text(
-        'Please log in to view therapists',
-        style: TextStyle(fontSize: 14, color: mainBlueColor),
-      ),
-    );
-  }
-
   PreferredSizeWidget _buildAppBar() {
+    final localizations = S.of(context);
     return AppBar(
       backgroundColor: Colors.white,
-      title: const Text(
-        'Our Therapists',
+      title: Text(
+        localizations.ourTherapists,
         style: TextStyle(
           color: primaryColor,
           fontWeight: FontWeight.bold,
@@ -207,10 +236,11 @@ class _DoctorScreenState extends State<DoctorScreen> {
   }
 
   Widget _buildDoctorsList(BuildContext context) {
+    final localizations = S.of(context);
     return filteredDoctors.isEmpty && searchQuery.isNotEmpty
         ? Center(
             child: Text(
-              'No doctors found for "$searchQuery"',
+              '${localizations.noDoctorsFound} "$searchQuery"',
               style: const TextStyle(color: Colors.grey),
             ),
           )
@@ -222,6 +252,8 @@ class _DoctorScreenState extends State<DoctorScreen> {
                   _navigateToDoctorProfile(context, filteredDoctors[index]),
               onBookView: () =>
                   _navigateToDoctorBook(context, filteredDoctors[index]),
+              onChat: () =>
+                  _navigateToChatScreen(context, filteredDoctors[index]),
             ),
           );
   }

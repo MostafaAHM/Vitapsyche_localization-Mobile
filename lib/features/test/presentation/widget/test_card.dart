@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/routes/app_routes.dart';
 import 'package:flutter_mindmed_project/features/test/data/test.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,6 +46,7 @@ class _TestCardState extends State<TestCard> {
 
   @override
   Widget build(BuildContext context) {
+       final localizations = S.of(context);
     // Don't show payment cards if no access token exists
     if (widget.isPayment && !hasAccessToken) {
       return const SizedBox.shrink();
@@ -89,14 +91,14 @@ class _TestCardState extends State<TestCard> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  '${widget.questionCount} Questions',
+                    '${widget.questionCount} ${localizations.questions}',
                   style: TextStyle(
                     color: textThirdColor,
                     fontSize: 14.sp,
                   ),
                 ),
                 Text(
-                  'Every 2week',
+                   localizations.everyTwoWeeks,
                   style: TextStyle(
                     color: textThirdColor,
                     fontSize: 14.sp,
@@ -125,6 +127,7 @@ class _TestCardState extends State<TestCard> {
   }
 
   Widget _buildButton(void Function() onTap, bool isPayment) {
+     final localizations = S.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -135,7 +138,7 @@ class _TestCardState extends State<TestCard> {
         ),
         padding: const EdgeInsets.symmetric(vertical: 10).w,
         child: Text(
-          isPayment ? 'payment the test' : 'take the test',
+         isPayment ? localizations.paymentTheTest : localizations.takeTheTest,
           textAlign: TextAlign.center,
           style: const TextStyle(
               color: secoundryColor, fontWeight: FontWeight.bold, fontSize: 16),

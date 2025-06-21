@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/features/artical/data/model_blog.dart';
 import 'package:flutter_mindmed_project/features/artical/data/read_json_file.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_mindmed_project/main.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/routes/app_routes.dart';
 
 class BlogScreen extends StatefulWidget {
@@ -20,7 +23,9 @@ class _BlogScreenState extends State<BlogScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchBlogs();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchBlogs(context);
+    });
     _searchController.addListener(_filterBlogs);
   }
 
@@ -31,25 +36,24 @@ class _BlogScreenState extends State<BlogScreen> {
     super.dispose();
   }
 
-  // Fetch blog data from JSON
-  Future<void> _fetchBlogs() async {
-    List<dynamic> jsonData =
-        await ReadJsonFile.readJsonData(path: 'assets/json/articles.json');
+  Future<void> _fetchBlogs(BuildContext context) async {
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
+    final isArabic = localeProvider.locale.languageCode == 'ar';
+    final jsonPath =
+        isArabic ? 'assets/json/articles_ar.json' : 'assets/json/articles.json';
+
+    List<dynamic> jsonData = await ReadJsonFile.readJsonData(path: jsonPath);
     setState(() {
       _blogs = jsonData.map((e) => ModelBlog.fromJson(e)).toList();
-      _filteredBlogs = _blogs; // Initially, show all blogs
+      _filteredBlogs = _blogs;
     });
   }
 
-  // Filter blogs based on search query
   void _filterBlogs() {
     String query = _searchController.text.toLowerCase();
     setState(() {
       _filteredBlogs = _blogs
-          .where((blog) => blog.title.toLowerCase().contains(query)
-              //  ||
-              // blog.description.toLowerCase().contains(query)
-              )
+          .where((blog) => blog.title.toLowerCase().contains(query))
           .toList();
     });
   }
@@ -61,7 +65,8 @@ class _BlogScreenState extends State<BlogScreen> {
     );
   }
 
-  Widget _search() {
+  Widget _search(BuildContext context) {
+    final localizations = S.of(context);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -80,7 +85,7 @@ class _BlogScreenState extends State<BlogScreen> {
           suffixIcon: Icon(Icons.search, color: Colors.grey.shade600),
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Search articles',
+          hintText: localizations.searchArticles,
           hintStyle: TextStyle(color: Colors.grey.shade600, fontSize: 16),
           border: _textFieldBorder(),
           enabledBorder: _textFieldBorder(),
@@ -90,88 +95,89 @@ class _BlogScreenState extends State<BlogScreen> {
     );
   }
 
-  Widget _blogItem(BuildContext _, ModelBlog blog) {
-  return Card(
-    elevation: 5,
-    margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Hero(
-          tag: blog.images, // Use a unique tag (e.g., image URL)
-          child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: Image.asset(
-              blog.images,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 180.h,
+  Widget _blogItem(BuildContext context, ModelBlog blog) {
+    final localizations = S.of(context);
+    return Card(
+      elevation: 5,
+      margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Hero(
+            tag: blog.images,
+            child: ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
+              child: Image.asset(
+                blog.images,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 180.h,
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                blog.title,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  blog.title,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              SizedBox(height: 5.h),
-              Text(
-                blog.description,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: textSecoundColor, fontSize: 15.sp),
-              ),
-              SizedBox(height: 10.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(
-                        _, AppRoutes.detailsBlog,
-                        arguments: blog),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 4,
-                      backgroundColor: primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                SizedBox(height: 5.h),
+                Text(
+                  blog.description,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: textSecoundColor, fontSize: 15.sp),
+                ),
+                SizedBox(height: 10.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(
+                          context, AppRoutes.detailsBlog,
+                          arguments: blog),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 4,
+                        backgroundColor: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.my_library_books_outlined, size: 18),
+                          SizedBox(width: 5),
+                          Text(
+                            localizations.readMore,
+                            style: TextStyle(color: secoundryColor, fontSize: 14),
+                          ),
+                        ],
                       ),
                     ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.my_library_books_outlined, size: 18),
-                        SizedBox(width: 5),
-                        Text(
-                          'Read More',
-                          style:
-                              TextStyle(color: secoundryColor, fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: secoundryColor,
       appBar: AppBar(
@@ -180,7 +186,7 @@ class _BlogScreenState extends State<BlogScreen> {
         backgroundColor: secoundryColor,
         elevation: 0,
         title: Text(
-          'Articles',
+          localizations.articles,
           style: TextStyle(
             color: primaryColor,
             fontSize: 26.sp,
@@ -190,7 +196,7 @@ class _BlogScreenState extends State<BlogScreen> {
         centerTitle: true,
       ),
       body: _blogs.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: Text(localizations.loadingArticles))
           : CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(
@@ -199,19 +205,26 @@ class _BlogScreenState extends State<BlogScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _search(),
+                        _search(context),
                         SizedBox(height: 20.h),
                       ],
                     ),
                   ),
                 ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _blogItem(
-                        context, _filteredBlogs[index]), // Show filtered blogs
-                    childCount: _filteredBlogs.length,
+                if (_filteredBlogs.isEmpty)
+                  SliverFillRemaining(
+                    child: Center(
+                      child: Text(localizations.noArticlesFound),
+                    ),
+                  )
+                else
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) =>
+                          _blogItem(context, _filteredBlogs[index]),
+                      childCount: _filteredBlogs.length,
+                    ),
                   ),
-                ),
               ],
             ),
     );

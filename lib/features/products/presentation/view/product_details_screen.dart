@@ -1,12 +1,11 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_mindmed_project/core/routes/app_routes.dart';
 import 'package:flutter_mindmed_project/features/products/data/product_model.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../../../core/theme/colors.dart';
 import '../widget/custem_button_card.dart';
+
 
 class DetailsProduct extends StatefulWidget {
   const DetailsProduct({
@@ -30,19 +29,15 @@ class _DetailsProductState extends State<DetailsProduct> {
   int _currentImageIndex = 0;
   final PageController _pageController = PageController();
   Timer? _autoPageTimer;
-  late List<ImageData> _images; // Initialize with an empty list
+  late List<ImageData> _images;
 
   @override
   void initState() {
     super.initState();
-
-    // Use a Future.delayed to wait until context is available
     Future.delayed(Duration.zero, () {
-      // Initialize _images and start the timer
       setState(() {
         _images = widget.image;
       });
-
       _startAutoPageChange();
     });
   }
@@ -59,7 +54,6 @@ class _DetailsProductState extends State<DetailsProduct> {
       if (_images.isNotEmpty) {
         setState(() {
           _currentImageIndex = (_currentImageIndex + 1) % _images.length;
-          print('Timer tick: $_currentImageIndex'); // Debugging
         });
 
         if (mounted) {
@@ -68,19 +62,17 @@ class _DetailsProductState extends State<DetailsProduct> {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
-          print('Animating to page: $_currentImageIndex'); // Debugging
         }
-      } else {
-        print('Images are empty, skipping timer'); // Debugging
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = widget.title;
-    List<String> about = widget.about;
-    double price = widget.price;
+    final localizations = S.of(context)!;
+    final title = widget.title;
+    final about = widget.about;
+    final price = widget.price;
 
     return Scaffold(
       backgroundColor: secoundryColor,
@@ -98,16 +90,13 @@ class _DetailsProductState extends State<DetailsProduct> {
         ),
         actions: [
           IconButton(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(AppRoutes.cartScreen),
+            onPressed: () => Navigator.of(context).pushNamed(AppRoutes.cartScreen),
             icon: const Icon(Icons.shopping_bag_outlined),
           ),
         ],
       ),
       body: _images.isEmpty
-          ? const Center(
-              child:
-                  CircularProgressIndicator()) // Show a loader while images are being initialized
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -143,9 +132,9 @@ class _DetailsProductState extends State<DetailsProduct> {
                   const SizedBox(height: 8),
                   _buildThumbnails(),
                   const SizedBox(height: 16),
-                  const Text(
-                    'About this product:',
-                    style: TextStyle(
+                  Text(
+                    localizations.aboutThisProduct,
+                    style: const TextStyle(
                       color: primaryColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -171,7 +160,7 @@ class _DetailsProductState extends State<DetailsProduct> {
                   Row(
                     children: [
                       Text(
-                        'EGP ${price.toStringAsFixed(2)}',
+                        '${localizations.price}: ${localizations.egp} ${price.toStringAsFixed(2)}',
                         style: const TextStyle(
                           color: primaryColor,
                           fontSize: 20,

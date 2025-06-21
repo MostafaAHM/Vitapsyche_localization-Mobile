@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/service_card.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -162,11 +163,12 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Doctor Services',
+        title: Text(
+          localizations.doctorsSpecialists,
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -197,8 +199,8 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Doctor ID not found.'),
+                        SnackBar(
+                          content: Text(localizations.doctorIdNotFound),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -209,8 +211,8 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
                     size: 30,
                     color: Colors.white,
                   ),
-                  label: const Text(
-                    'View Services',
+                  label: Text(
+                    localizations.viewServices,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,
@@ -232,7 +234,7 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
               // Service Name
               _buildInputField(
                 controller: _nameController,
-                label: 'Service Name',
+                label: localizations.serviceName,
                 validator: (value) =>
                     value!.isEmpty ? 'Name is required' : null,
               ),
@@ -240,7 +242,7 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
               // Description
               _buildInputField(
                 controller: _descriptionController,
-                label: 'Description',
+                label: localizations.description,
                 validator: (value) =>
                     value!.isEmpty ? 'Description is required' : null,
               ),
@@ -248,7 +250,7 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
               // Price
               _buildInputField(
                 controller: _priceController,
-                label: 'Price',
+                label: localizations.price,
                 keyboardType: TextInputType.number,
                 validator: (value) =>
                     value!.isEmpty ? 'Price is required' : null,
@@ -257,14 +259,14 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
               // Duration
               _buildInputField(
                 controller: _durationController,
-                label: 'Duration (HH:MM:SS)',
+                label: localizations.duration,
                 validator: (value) =>
                     value!.isEmpty ? 'Duration is required' : null,
               ),
 
               // Category dropdown
               _buildDropdown(
-                label: 'Category',
+                label: localizations.category,
                 value: selectedCategory,
                 items: categoryList
                     .map((category) => category['name'] as String)
@@ -293,8 +295,8 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
                     children: [
-                      const Text(
-                        'Is Active:',
+                      Text(
+                        '${localizations.isActive}:',
                         style: TextStyle(fontSize: 16),
                       ),
                       const Spacer(),
@@ -326,13 +328,13 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: _pickedImage == null
-                        ? const Center(
+                        ? Center(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.image, size: 40, color: Colors.grey),
                                 SizedBox(height: 8),
-                                Text('Tap to pick an image',
+                                Text(localizations.tapToPickImage,
                                     style: TextStyle(color: Colors.grey)),
                               ],
                             ),
@@ -355,8 +357,8 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
                     borderRadius: BorderRadius.circular(50),
                   ),
                 ),
-                child: const Text(
-                  'Submit Service',
+                child: Text(
+                  localizations.submitService,
                   style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
@@ -400,6 +402,7 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
     required void Function(String?) onChanged,
     required String? Function(String?) validator,
   }) {
+    final localizations = S.of(context);
     return Card(
       color: Colors.white,
       margin: const EdgeInsets.only(bottom: 16),
@@ -435,7 +438,7 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      value ?? 'Select $label',
+                      value ?? '${localizations.select} $label',
                       style: TextStyle(
                         color: value == null ? Colors.grey[600] : Colors.black,
                         fontSize: 16,
@@ -462,6 +465,7 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
       backgroundColor: Colors.transparent,
       isScrollControlled: true, // Allow the bottom sheet to take full height
       builder: (context) {
+        final localizations = S.of(context);
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -471,8 +475,8 @@ class _DoctorServiceScreenState extends State<DoctorServiceScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Select Category',
+              Text(
+                '${localizations.select} ${localizations.category}',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),

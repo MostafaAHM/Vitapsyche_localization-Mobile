@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -77,10 +78,23 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
       }
 
       return {
-        'day': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index],
+        'day': _getDayAbbreviation(index),
         'value': averageMood,
       };
     });
+  }
+
+  String _getDayAbbreviation(int index) {
+    final localizations = S.of(context)!;
+    return [
+      localizations.mondayShort,
+      localizations.tuesdayShort,
+      localizations.wednesdayShort,
+      localizations.thursdayShort,
+      localizations.fridayShort,
+      localizations.saturdayShort,
+      localizations.sundayShort,
+    ][index];
   }
 
   Widget _buildMoodVisualizer() {
@@ -145,32 +159,35 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
   }
 
   String _getSuggestion() {
+    final localizations = S.of(context)!;
     if (moodHistory.isEmpty) {
-      return "Start logging your mood to get suggestions!";
+      return localizations.moodTrackerInitialSuggestion;
     }
     final lastMood = moodHistory.last['mood'];
     switch (lastMood) {
       case '😊':
-        return "You're feeling great! Keep up the positive energy.";
+        return localizations.moodTrackerHappySuggestion;
       case '😐':
-        return "Feeling neutral? Try a new activity to boost your mood.";
+        return localizations.moodTrackerNeutralSuggestion;
       case '😔':
-        return "Feeling down? Reach out to a friend or take a walk.";
+        return localizations.moodTrackerSadSuggestion;
       case '😡':
-        return "Feeling angry? Try deep breathing exercises.";
+        return localizations.moodTrackerAngrySuggestion;
       case '😴':
-        return "Feeling tired? Make sure to get enough rest.";
+        return localizations.moodTrackerTiredSuggestion;
       default:
-        return "Keep tracking your mood for personalized suggestions.";
+        return localizations.moodTrackerDefaultSuggestion;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Mood Tracker",
+        title: Text(
+          localizations.moodTrackerTitle,
           style: TextStyle(color: textMainColor),
         ),
         centerTitle: true,
@@ -191,8 +208,8 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              "How are you feeling today?",
+            Text(
+              localizations.moodTrackerQuestion,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -230,8 +247,8 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
                 ],
               ),
               child: TextField(
-                decoration: const InputDecoration(
-                  labelText: "Add a note (optional)",
+                decoration: InputDecoration(
+                  labelText: localizations.moodTrackerNoteHint,
                   border: InputBorder.none,
                   prefixIcon: Icon(Icons.edit, color: primaryColor),
                 ),
@@ -253,21 +270,21 @@ class _MoodTrackerScreenState extends State<MoodTrackerScreen> {
                   borderRadius: BorderRadius.circular(25),
                 ),
               ),
-              child: const Text(
-                "Log Mood",
+              child: Text(
+                localizations.moodTrackerLogButton,
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
             const SizedBox(height: 40),
-            const Text(
-              "Weekly Mood Chart",
+            Text(
+              localizations.moodTrackerWeeklyChart,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             _buildMoodVisualizer(),
             const SizedBox(height: 40),
-            const Text(
-              "Suggestion",
+            Text(
+              localizations.moodTrackerSuggestionTitle,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),

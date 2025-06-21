@@ -1,7 +1,9 @@
 import 'package:audio_session/audio_session.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mindmed_project/features/ai_service/service/chat_bot/data/chat_provider.dart';
+// import 'package:flutter_mindmed_project/firebase_options.dart';
 // import 'package:flutter_mindmed_project/notification_service.dart';
 import 'package:provider/provider.dart';
 import 'features/ai_service/service/chat_bot/data/chat_service.dart';
@@ -11,6 +13,8 @@ import 'my_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
 
   // Initialize audio session
   final session = await AudioSession.instance;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/EditServiceDetailScreen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -65,14 +66,15 @@ class _ServiceCardScreenState extends State<ServiceCardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Doctor Services'),
+        title: Text(localizations.doctorsSpecialists),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : services.isEmpty
-              ? const Center(child: Text('No services available.'))
+              ? Center(child: Text(localizations.noServicesAvailable))
               : GridView.builder(
                   padding: const EdgeInsets.all(16),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -122,6 +124,7 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Card(
       color: Colors.white,
       elevation: 4,
@@ -164,7 +167,7 @@ class ServiceCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Price: $price',
+                  '${localizations.price}: $price',
                   style: const TextStyle(
                     fontSize: 14,
                     color: Colors.green,

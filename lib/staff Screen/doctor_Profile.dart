@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_mindmed_project/staff%20Screen/editDoctorProfileScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -126,12 +127,13 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: primaryColor, // Set the AppBar color
-        title: const Text(
-          'Profile',
+        title: Text(
+          localizations.profile,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
@@ -152,7 +154,6 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                         height: 300,
                         width: double.infinity,
                         decoration: const BoxDecoration(
-                          color: primaryColor,
                           borderRadius: BorderRadius.only(
                               bottomRight: Radius.circular(200)),
                         ),
@@ -163,37 +164,37 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        isUserInfoSelected = true;
-                                      });
-                                    },
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          'Doctor Information',
-                                          style: TextStyle(
-                                            color: isUserInfoSelected
-                                                ? const Color.fromARGB(
-                                                    255, 1, 255, 1)
-                                                : secoundryColor,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        if (isUserInfoSelected)
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 4),
-                                            height: 2,
-                                            width: 150,
-                                            color: const Color.fromARGB(
-                                                255, 1, 255, 1),
-                                          ),
-                                      ],
-                                    ),
-                                  ),
+                                  // GestureDetector(
+                                  //   onTap: () {
+                                  //     setState(() {
+                                  //       isUserInfoSelected = true;
+                                  //     });
+                                  //   },
+                                  //   child: Column(
+                                  //     children: [
+                                  //       Text(
+                                  //         'Doctor Information',
+                                  //         style: TextStyle(
+                                  //           color: isUserInfoSelected
+                                  //               ? const Color.fromARGB(
+                                  //                   255, 1, 255, 1)
+                                  //               : secoundryColor,
+                                  //           fontSize: 18,
+                                  //           fontWeight: FontWeight.bold,
+                                  //         ),
+                                  //       ),
+                                  //       if (isUserInfoSelected)
+                                  //         Container(
+                                  //           margin:
+                                  //               const EdgeInsets.only(top: 4),
+                                  //           height: 2,
+                                  //           width: 150,
+                                  //           color: const Color.fromARGB(
+                                  //               255, 1, 255, 1),
+                                  //         ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   // const SizedBox(width: 30),
                                   // GestureDetector(
                                   //   onTap: () {
@@ -251,13 +252,13 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                                     'https://abdokh.pythonanywhere.com${userDetails['image']}')
                                                 : null, // Show nothing if no network image is available
                                             backgroundColor:
-                                                secoundryColor, // Background color
+                                                primaryColor, // Background color
                                             child: userDetails['image'] == null
                                                 ? const Icon(
                                                     Icons
                                                         .person, // Fallback icon if no image is available
                                                     size: 80,
-                                                    color: Colors.white,
+                                                    color: primaryColor,
                                                   )
                                                 : null, // No child if the image is available
                                           ),
@@ -289,11 +290,11 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                         ],
                                       ),
                                       const SizedBox(height: 10),
-                                      const Text(
-                                        'Doctor Photo',
+                                      Text(
+                                        localizations.doctorPhoto,
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: secoundryColor,
+                                          color: primaryColor,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -313,16 +314,17 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                             const Icon(
                                               Icons
                                                   .person, // Icon next to user name
-                                              color: secoundryColor,
+                                              color: primaryColor,
                                             ),
                                             const SizedBox(width: 5),
                                             Text(
                                               userDetails['username'] ??
-                                                  'User Name', // User name text
+                                                  localizations
+                                                      .userName, // User name text
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
-                                                color: secoundryColor,
+                                                color: primaryColor,
                                               ),
                                             ),
                                           ],
@@ -332,15 +334,16 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                           children: [
                                             const Icon(
                                               Icons.email, // Email icon
-                                              color: secoundryColor,
+                                              color: primaryColor,
                                             ),
                                             const SizedBox(width: 5),
                                             Text(
                                               userDetails['email'] ??
-                                                  'user@example.com', // User email text
+                                                  localizations
+                                                      .userEmail, // User email text
                                               style: const TextStyle(
                                                 fontSize: 14,
-                                                color: secoundryColor,
+                                                color: primaryColor,
                                               ),
                                             ),
                                           ],
@@ -371,8 +374,8 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                                 ),
                                               );
                                             },
-                                            child: const Text(
-                                              'Edit Info',
+                                            child: Text(
+                                              localizations.editInfo,
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: secoundryColor,
@@ -391,8 +394,8 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const Text(
-                        'My Profile',
+                      Text(
+                        localizations.myProfile,
                         style: TextStyle(
                             fontSize: 30,
                             color: primaryColor,
@@ -402,31 +405,34 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            _buildInfoItem('Email', Icons.email,
+                            _buildInfoItem(localizations.email, Icons.email,
                                 userDetails['email'] ?? 'N/A'),
-                            _buildInfoItem('Phone', Icons.phone,
+                            _buildInfoItem(localizations.phone, Icons.phone,
                                 userDetails['phone_number'] ?? 'N/A'),
-                            _buildInfoItem('Gender', Icons.male_outlined,
+                            _buildInfoItem(
+                                localizations.gender,
+                                Icons.male_outlined,
                                 userDetails['gender'] ?? 'N/A'),
-                            _buildInfoItem('Birthday', Icons.cake,
+                            _buildInfoItem(localizations.birthDate, Icons.cake,
                                 userDetails['birth_date'] ?? 'N/A'),
-                            _buildInfoItem('Password', Icons.lock, '********'),
+                            _buildInfoItem(
+                                localizations.password, Icons.lock, '********'),
                             if (userDetails['doctor_details'] != null) ...[
                               _buildInfoItem(
-                                  'Specialization',
+                                  localizations.specialization,
                                   Icons.work,
                                   userDetails['doctor_details']
                                           ['specialization'] ??
                                       'N/A'),
                               _buildInfoItem(
-                                  'Years of Experience',
+                                  localizations.yearOfExperience,
                                   Icons.timeline,
                                   userDetails['doctor_details']
                                               ['years_of_experience']
                                           ?.toString() ??
                                       'N/A'),
                               _buildInfoItem(
-                                  'Clinic Name',
+                                  localizations.clinicName,
                                   Icons.business,
                                   userDetails['doctor_details']
                                           ['clinic_name'] ??
@@ -488,12 +494,12 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                                   borderRadius: BorderRadius.circular(50),
                                 ),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(Icons.logout),
                                   SizedBox(width: 8.0),
-                                  Text('Sign Out',
+                                  Text(localizations.signOut,
                                       style: TextStyle(
                                           color: Colors.red,
                                           fontSize: 14,
@@ -511,7 +517,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: Image.asset(
-                        'assets/animation/Animation - 1726516753981.gif',
+                        'assets/animation/profile.gif',
                         width: 100,
                         height: 100,
                         fit: BoxFit.contain,
@@ -566,7 +572,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     await prefs.remove('access_token'); // Remove the access token
     Fluttertoast.showToast(
       backgroundColor: primaryColor,
-      msg: "Successfully logged out", // Success message
+      msg: S.of(context).logoutSuccess, // Success message
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
     );

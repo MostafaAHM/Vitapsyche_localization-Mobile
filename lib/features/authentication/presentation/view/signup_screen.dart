@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
@@ -22,6 +23,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool isPatientSelected = true;
   bool isDoctorSelected = false;
   final ValueNotifier<String?> _selectedGender = ValueNotifier<String?>(null);
+  bool _isLoading = false;
 
   Color _containerColor = primaryColor;
 
@@ -54,6 +56,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _currentResidenceController =
       TextEditingController();
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   void dispose() {
     _nameFocusNode.dispose();
@@ -64,10 +68,20 @@ class _SignupScreenState extends State<SignupScreen> {
     _confirmPasswordFocusNode.dispose();
     _phoneController.dispose();
     _dateController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _nationalityController.dispose();
+    _fluentLanguageController.dispose();
+    _currentResidenceController.dispose();
+    _selectedGender.dispose();
     super.dispose();
   }
 
-  void _validateAndSubmit() {
+  Future<void> _validateAndSubmit() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     String name = _nameController.text.trim();
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
@@ -76,61 +90,151 @@ class _SignupScreenState extends State<SignupScreen> {
     String date = _dateController.text.trim();
 
     if (name.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "Please enter your name",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      _showErrorToast("Please enter your name");
       return;
     }
 
     if (email.isEmpty ||
         !RegExp(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+")
             .hasMatch(email)) {
-      Fluttertoast.showToast(
-        msg: "Please enter a valid email",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      _showErrorToast("Please enter a valid email");
       return;
     }
 
     if (password.isEmpty || password.length < 6) {
-      Fluttertoast.showToast(
-        msg: "Password must be at least 6 characters",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      _showErrorToast("Password must be at least 6 characters");
       return;
     }
 
     if (confirmPassword.isEmpty || confirmPassword != password) {
-      Fluttertoast.showToast(
-        msg: "Passwords do not match",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      _showErrorToast("Passwords do not match");
       return;
     }
 
     if (phone.isEmpty || phone.length < 10) {
-      Fluttertoast.showToast(
-        msg: "Please enter a valid phone number",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      _showErrorToast("Please enter a valid phone number");
       return;
     }
 
     if (date.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "Please enter a valid date",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      _showErrorToast("Please enter a valid date");
       return;
-    } else {
-      _register();
+    }
+
+    try {
+      // First register with Firebase
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // If Firebase registration is successful, proceed with your backend registration
+      if (userCredential.user != null) {
+        await _registerToBackend(userCredential.user!.uid);
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (e.code == 'weak-password') {
+        _showErrorToast('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        _showErrorToast('The account already exists for that email.');
+      } else {
+        _showErrorToast('Firebase error: ${e.message}');
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showErrorToast('An error occurred. Please try again.');
+    }
+  }
+
+  void _showErrorToast(String message) {
+    setState(() {
+      _isLoading = false;
+    });
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+    );
+  }
+
+  Future<void> _registerToBackend(String firebaseUid) async {
+    final url =
+        Uri.parse('https://abdokh.pythonanywhere.com/api/register/patient/');
+
+    try {
+      // Create a multipart request
+      var request = http.MultipartRequest('POST', url);
+
+      // Add headers
+      request.headers['accept'] = 'application/json';
+      request.headers['X-CSRFToken'] =
+          'zQmFjmYkVkVsRqzuTGkw9jf12qiOKT6GCCJEpCyS2JV0CEX51fUcZW4Rt0Yr6zU3';
+
+      // Add form fields including the Firebase UID
+      request.fields['username'] = _nameController.text.trim();
+      request.fields['first_name'] = _firstNameController.text.trim();
+      request.fields['last_name'] = _lastNameController.text.trim();
+      request.fields['email'] = _emailController.text.trim();
+      request.fields['password'] = _passwordController.text;
+      request.fields['password2'] = _confirmPasswordController.text;
+      request.fields['phone_number'] = _phoneController.text.trim();
+      request.fields['birth_date'] = _dateController.text.trim();
+      request.fields['gender'] = _genderController.text.trim();
+      request.fields['nationality'] = _nationalityController.text.trim();
+      request.fields['fluent_languages'] =
+          _fluentLanguageController.text.trim();
+      request.fields['current_residence'] =
+          _currentResidenceController.text.trim();
+      request.fields['firebase_uid'] = firebaseUid;
+
+      // Send the request
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+
+      if (response.statusCode == 201) {
+        final responseData = jsonDecode(responseBody);
+        print('SUCCESS: Registration successful');
+        _showSuccessDialog(context);
+      } else {
+        // If backend registration fails, delete the Firebase user to maintain consistency
+        if (_auth.currentUser != null) {
+          await _auth.currentUser!.delete();
+        }
+
+        final responseData = jsonDecode(responseBody);
+        String errorMessage = 'Registration failed';
+
+        if (responseData is Map) {
+          errorMessage +=
+              ': ${responseData['error'] ?? responseData['message'] ?? 'Please check your input'}';
+        }
+
+        _showErrorToast(errorMessage);
+      }
+    } catch (error, stackTrace) {
+      // If backend registration fails, delete the Firebase user to maintain consistency
+      if (_auth.currentUser != null) {
+        await _auth.currentUser!.delete();
+      }
+
+      print('\n=== EXCEPTION ===');
+      print('Error: $error');
+      print('Stack Trace: $stackTrace');
+      print('================\n');
+
+      _showErrorToast('Network error. Please try again.');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -168,7 +272,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   width: 80,
                   height: 80,
                   child: Image.asset(
-                    'assets/animation/Animation - 1726443797305 (1).gif',
+                    'assets/images/Logo.png',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -212,64 +316,9 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
-  Future<void> _register() async {
-    final url =
-        Uri.parse('https://abdokh.pythonanywhere.com/api/register/patient/');
-    final headers = {
-      'accept': 'application/json',
-      'Content-Type': 'application/json',
-    };
-    final body = jsonEncode({
-      "username": _nameController.text.trim(),
-      "first_name": _firstNameController.text.trim(),
-      "last_name": _lastNameController.text.trim(),
-      "email": _emailController.text.trim(),
-      "password": _passwordController.text,
-      "password2": _confirmPasswordController.text,
-      "phone_number": _phoneController.text.trim(),
-      "birth_date": _dateController.text.trim(),
-      "gender": _genderController.text.trim(),
-      "nationality": _nationalityController.text.trim(),
-      "fluent_languages": _fluentLanguageController.text.trim(),
-      "current_residence": _currentResidenceController.text.trim(),
-    });
-
-    try {
-      final response = await http.post(url, headers: headers, body: body);
-
-      if (response.statusCode == 201) {
-        final responseData = jsonDecode(response.body);
-        _showSuccessDialog(context);
-        print('Status Code: ${response.statusCode}');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(responseData['message']),
-        ));
-      } else if (response.statusCode == 400) {
-        final responseData = jsonDecode(response.body);
-        print('Error 400: ${responseData}');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-                  'Registration failed: ${responseData['error'] ?? 'Bad request'}')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-                  'Registration failed. Status code: ${response.statusCode}')),
-        );
-      }
-    } catch (error) {
-      print('Error: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred. Please try again.')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final localizations = S.of(context); // Renamed from S to localizations
+    final localizations = S.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -325,9 +374,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     isPatientSelected = !value;
                   });
                 },
-                onPatientSelectedNavigation: () {
-                  // No need to navigate, already on the SignupScreen
-                },
+                onPatientSelectedNavigation: () {},
                 onDoctorSelectedNavigation: () {
                   Navigator.pushReplacementNamed(
                       context, AppRoutes.DoctorRegistration);
@@ -408,16 +455,18 @@ class _SignupScreenState extends State<SignupScreen> {
                         icon: Icons.home,
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _validateAndSubmit,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
-                        ),
-                        child: Text(
-                          localizations.submit,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
+                      _isLoading
+                          ? CircularProgressIndicator(color: primaryColor)
+                          : ElevatedButton(
+                              onPressed: _validateAndSubmit,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: primaryColor,
+                              ),
+                              child: Text(
+                                localizations.submit,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                     ],
                   ),
                 ),
@@ -658,15 +707,7 @@ class _SignupScreenState extends State<SignupScreen> {
           );
 
           if (pickedDate != null) {
-            int selectedDay = pickedDate.day;
             String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-
-            if (selectedDay == 1) {
-              print("You selected the first day of the month!");
-            } else {
-              print("Selected day is $selectedDay.");
-            }
-
             setState(() {
               _dateController.text = formattedDate;
             });

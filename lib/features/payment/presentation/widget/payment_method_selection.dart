@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../../../core/theme/colors.dart';
 
 class PaymentMethodSelectionWidget extends StatelessWidget {
@@ -16,12 +16,14 @@ class PaymentMethodSelectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context)!;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Payment Method',
-          style: TextStyle(
+        Text(
+          localizations.paymentMethod,
+          style: const TextStyle(
             color: mainBlueColor,
             fontSize: 18,
             fontWeight: FontWeight.bold,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/features/test/data/test.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/colors.dart';
@@ -16,27 +17,61 @@ class DepressionScaleResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScoreRange _getScoreRange(int totalScore, List<ScoreRange> scoreRanges) {
-      return scoreRanges.firstWhere(
-        (range) => totalScore >= range.range[0] && totalScore <= range.range[1],
-        orElse: () {
-          print("Error: No matching range for score: $totalScore");
-          return ScoreRange(
+      print("✅ ScoreRanges parsed: ");
+      scoreRanges.forEach((range) {
+        print("→ range: ${range.range}, description: ${range.description}");
+      });
+
+      print("🔥 totalScore = $totalScore");
+      print("🔥 scoreRanges length: ${scoreRanges.length}");
+
+      for (var r in scoreRanges) {
+        print("📍 Range: ${r.range}");
+      }
+
+      try {
+        return scoreRanges.firstWhere(
+          (range) {
+            if (range.range == null || range.range!.length < 2) {
+              print("⚠️ Skipping invalid range: ${range.range}");
+              return false;
+            }
+
+            print(
+                "🔍 Checking score: $totalScore with start: ${range.range![0]} and end: ${range.range![1]}");
+            return totalScore >= range.range![0]! &&
+                totalScore <= range.range![1]!;
+          },
+          orElse: () {
+            print("❌ Error: No matching range for score: $totalScore");
+            return ScoreRange(
               range: [0, 0],
               description: "Unknown",
               info: "No data",
-              color: '');
-        },
-      );
+              color: '',
+            );
+          },
+        );
+      } catch (e) {
+        print("💥 Exception: $e");
+        return ScoreRange(
+          range: [0, 0],
+          description: "Unknown",
+          info: "No data",
+          color: '',
+        );
+      }
     }
 
     final ScoreRange scoreRange = _getScoreRange(totalSorce, test.scoreRanges);
+    final localizations = S.of(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: secoundryColor,
         foregroundColor: primaryColor,
         centerTitle: true,
         title: Text(
-          'Depression Scale',
+          localizations.depressionScale,
           style: TextStyle(
               color: primaryColor,
               fontSize: 18.sp,
@@ -75,7 +110,7 @@ class DepressionScaleResult extends StatelessWidget {
                         Align(
                           alignment: Alignment.center,
                           child: Text(
-                            scoreRange.description,
+                            scoreRange.description!,
                             style: const TextStyle(
                               fontSize: 21,
                               color: primaryColor,
@@ -83,10 +118,10 @@ class DepressionScaleResult extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            'What does that mean?',
+                            localizations.whatDoesThatMean,
                             style: TextStyle(
                               fontSize: 21,
                               color: mainBlueColor,
@@ -99,7 +134,7 @@ class DepressionScaleResult extends StatelessWidget {
                           padding:
                               const EdgeInsets.symmetric(horizontal: 10.0).w,
                           child: Text(
-                            scoreRange.info,
+                            scoreRange.info!,
                             style: TextStyle(fontSize: 16.sp),
                           ),
                         ),
@@ -110,14 +145,14 @@ class DepressionScaleResult extends StatelessWidget {
 
                     // Action buttons
                     _buildActionButton(
-                      'Book An Appointment',
+                       localizations.bookAnAppointment,
                       onPressed: () {
                         Navigator.of(context).pushNamed(AppRoutes.doctor);
                       },
                     ),
                     SizedBox(height: 12.h),
                     _buildOutlinedButton(
-                      'Talk With AI',
+                       localizations.talkWithAI,
                       onPressed: () {
                         Navigator.of(context).pushNamed(AppRoutes.chatScreen);
                       },

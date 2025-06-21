@@ -36,7 +36,7 @@ class _PaymentDoctorScreenState extends State<PaymentDoctorScreen> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: loadingDoctorBuy(),
+          child: loadingDoctorBuy(context),
         ),
       ),
     );

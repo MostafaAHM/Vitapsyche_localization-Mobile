@@ -9,6 +9,7 @@ import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:intl/intl.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DoctorRegistrationScreen extends StatefulWidget {
   const DoctorRegistrationScreen({super.key});
@@ -72,7 +73,31 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
   File? _profileImage;
 
   int _currentStep = 0;
-  bool _isLoading = false; // Track loading state
+  bool _isLoading = false;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _fullNameController.dispose();
+    _prefixController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _dobController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _institutionController.dispose();
+    _graduationYearController.dispose();
+    _yearsOfExperienceController.dispose();
+    _licenseNumberController.dispose();
+    _clinicNameController.dispose();
+    _cvController.dispose();
+    _qualificationsController.dispose();
+    super.dispose();
+  }
 
   void _selectDate() async {
     DateTime? picked = await showDatePicker(
@@ -263,7 +288,6 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
     ];
   }
 
-  //*validation
   String? _validateRequired(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'This field is required';
@@ -314,7 +338,6 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.doctorRegistration),
-        // automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -353,9 +376,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
                     Navigator.pushReplacementNamed(
                         context, AppRoutes.signupScreen);
                   },
-                  onDoctorSelectedNavigation: () {
-                    // No need to navigate, already on the DoctorRegistrationScreen
-                  },
+                  onDoctorSelectedNavigation: () {},
                 ),
                 Container(
                   height: 600,
@@ -548,12 +569,54 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
     );
   }
 
-  void _submitForm() async {
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _isLoading = true; // Start loading
+        _isLoading = true;
       });
 
+      try {
+        // First register with Firebase
+        UserCredential userCredential =
+            await _auth.createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+
+        // If Firebase registration is successful, proceed with backend registration
+        if (userCredential.user != null) {
+          await _registerToBackend(userCredential.user!.uid);
+        }
+      } on FirebaseAuthException catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        String errorMessage;
+        if (e.code == 'weak-password') {
+          errorMessage = 'The password provided is too weak.';
+        } else if (e.code == 'email-already-in-use') {
+          errorMessage = 'The account already exists for that email.';
+        } else {
+          errorMessage = 'Firebase error: ${e.message}';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('An error occurred. Please try again.')),
+        );
+      }
+    }
+  }
+
+  Future<void> _registerToBackend(String firebaseUid) async {
+    try {
       Map<String, dynamic> doctorData = {
         "username": _usernameController.text,
         "first_name": _firstNameController.text,
@@ -574,6 +637,7 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
         "graduation_year": _graduationYearController.text,
         "years_of_experience": _yearsOfExperienceController.text,
         "clinic_name": _clinicNameController.text,
+        "firebase_uid": firebaseUid, // Add Firebase UID to backend data
       };
 
       Api api = Api();
@@ -581,16 +645,34 @@ class _DoctorRegistrationScreenState extends State<DoctorRegistrationScreen> {
           await api.registerDoctor(doctorData, _profileImage, _cvFile);
 
       setState(() {
-        _isLoading = false; // Stop loading
+        _isLoading = false;
       });
 
       if (response.containsKey('error')) {
+        // If backend registration fails, delete the Firebase user
+        if (_auth.currentUser != null) {
+          await _auth.currentUser!.delete();
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(response['error'])),
         );
       } else {
         _showSuccessDialog(context);
       }
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      // If backend registration fails, delete the Firebase user
+      if (_auth.currentUser != null) {
+        await _auth.currentUser!.delete();
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration failed. Please try again.')),
+      );
     }
   }
 

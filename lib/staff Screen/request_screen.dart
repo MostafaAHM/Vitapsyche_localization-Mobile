@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -38,6 +39,8 @@ class RequestScreen extends StatefulWidget {
 class _RequestScreenState extends State<RequestScreen> {
   List<RequestItem> userRequests = [];
   bool isLoading = true;
+  String csrfToken =
+      'VMgmCVZKupuWY1Bndrcpbmtu17pxiBa85NrDod8vdqV8rZd3qJpcxcPLYz02dYl9';
 
   @override
   void initState() {
@@ -62,8 +65,7 @@ class _RequestScreenState extends State<RequestScreen> {
         headers: {
           'accept': 'application/json',
           'Authorization': 'Bearer $token',
-          'X-CSRFToken':
-              'va4JTfgGtNMQaLoG74oy7aD6od550NDGHInh2FtLmX2SuMdFoOIwFibk2Jk8wXGX',
+          'X-CSRFToken': csrfToken,
         },
       );
 
@@ -82,26 +84,56 @@ class _RequestScreenState extends State<RequestScreen> {
           return dateB.compareTo(dateA);
         });
 
-        // Create request items
+        // Create request items with proper type conversion
         final List<RequestItem> requests =
             bookedAppointments.map((appointment) {
-          final appointmentId = appointment['id'];
+          final appointmentId = appointment['id'] is int
+              ? appointment['id']
+              : int.tryParse(appointment['id'].toString()) ?? 0;
+
+          final patientId = appointment['patient'] is int
+              ? appointment['patient']
+              : int.tryParse(appointment['patient'].toString()) ?? 0;
+
+          final doctorId = appointment['doctor'] is int
+              ? appointment['doctor']
+              : int.tryParse(appointment['doctor'].toString()) ?? 0;
+
+          final services = appointment['services'] is List
+              ? List<int>.from(appointment['services']
+                  .map((s) => s is int ? s : int.tryParse(s.toString()) ?? 0))
+              : <int>[];
+
           final formattedDate = formatAppointmentDate(appointment['date_time']);
 
           return RequestItem(
-            title: 'Appointment #${appointment['id']}',
-            description: 'Appointment on $formattedDate',
+            title: '${S.of(context).appointment} #$appointmentId',
+           description: '${S.of(context).appointmentOn} $formattedDate',
             imageUrl:
-                'assets/images/woman-choosing-dates-calendar-appointment-booking_23-2148552956.avif', // Replace with your image
-            status: appointment['status'],
-            patientId: appointment['patient'],
-            doctorId: appointment['doctor'],
-            services: List<int>.from(appointment['services']),
+                'assets/images/woman-choosing-dates-calendar-appointment-booking_23-2148552956.avif',
+            status: appointment['status'] ?? 'unknown',
+            patientId: patientId,
+            doctorId: doctorId,
+            services: services,
             onAcceptPressed: () {
-              updateAppointmentStatus(appointmentId, 'confirmed');
+              updateAppointmentStatus(
+                appointmentId: appointmentId,
+                dateTime: appointment['date_time'],
+                status: 'confirmed',
+                patientId: patientId,
+                doctorId: doctorId,
+                services: services,
+              );
             },
             onRejectPressed: () {
-              updateAppointmentStatus(appointmentId, 'cancelled');
+              updateAppointmentStatus(
+                appointmentId: appointmentId,
+                dateTime: appointment['date_time'],
+                status: 'cancelled',
+                patientId: patientId,
+                doctorId: doctorId,
+                services: services,
+              );
             },
           );
         }).toList();
@@ -124,62 +156,64 @@ class _RequestScreenState extends State<RequestScreen> {
     }
   }
 
-  Future<void> updateAppointmentStatus(int appointmentId, String status) async {
+  Future<void> updateAppointmentStatus({
+    required int appointmentId,
+    required String dateTime,
+    required String status,
+    required int patientId,
+    required int doctorId,
+    required List<int> services,
+  }) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('access_token') ?? '';
 
-      // Find the appointment to update
-      final appointment = userRequests.firstWhere(
-        (request) => request.title == 'Appointment #$appointmentId',
-        orElse: () => throw Exception('Appointment not found'),
-      );
-
-      final url = Uri.parse(
-          'https://abdokh.pythonanywhere.com/api/appointments/$appointmentId/');
+      final url =
+          Uri.parse('https://abdokh.pythonanywhere.com/api/appointments/');
       final response = await http.put(
         url,
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
-          'X-CSRFToken':
-              'va4JTfgGtNMQaLoG74oy7aD6od550NDGHInh2FtLmX2SuMdFoOIwFibk2Jk8wXGX',
+          'X-CSRFToken': csrfToken,
         },
         body: json.encode({
-          "date_time":
-              "2025-02-27T17:16:14.717636Z", // Replace with actual date time
-          "cost": "300", // Replace with actual cost
-          "notes": "string", // Replace with actual notes
-          "appointment_address": "string", // Replace with actual address
-          "is_follow_up": true, // Replace with actual value
-          "patient": appointment.patientId,
-          "doctor": appointment.doctorId,
-          "services": [],
+          "id": appointmentId,
+          "date_time": dateTime,
           "status": status,
+          "cost": "200",
+          "notes": "string",
+          "appointment_address": "string",
+          "is_follow_up": true,
+          "is_confirmed": status == 'confirmed',
+          "patient": patientId,
+          "doctor": doctorId,
+          "services": services,
         }),
       );
 
       if (response.statusCode == 200) {
         print('Appointment updated successfully: ${response.body}');
-        fetchAppointments(); // Refresh the appointments list
+        final responseData = json.decode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              "Appointment status updated to $status!",
+              "Appointment with ${responseData['patient_first_name']} ${responseData['patient_last_name']} updated to $status!",
               style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.green,
           ),
         );
+        fetchAppointments(); // Refresh the appointments list
       } else {
         print(
             'Failed to update appointment: ${response.statusCode}, ${response.body}');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text(
               "Failed to update appointment status",
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.red,
           ),
@@ -187,13 +221,22 @@ class _RequestScreenState extends State<RequestScreen> {
       }
     } catch (error) {
       print('Error updating appointment: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Error: ${error.toString()}",
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   String formatAppointmentDate(String dateTimeString) {
     try {
       final dateTime = DateTime.parse(dateTimeString);
-      return DateFormat('yyyy-MM-dd').format(dateTime);
+      return DateFormat('yyyy-MM-dd – HH:mm').format(dateTime);
     } catch (e) {
       print('Error formatting date: $e');
       return dateTimeString;
@@ -202,15 +245,16 @@ class _RequestScreenState extends State<RequestScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Request Screen',
+        title: Text(localizations.appointmentRequests,
             style: TextStyle(color: Colors.white, fontSize: 24)),
         backgroundColor: const Color.fromARGB(255, 3, 190, 150),
         elevation: 0,
-        automaticallyImplyLeading: false, // This removes the back arrow
-        centerTitle: true, // This centers the title
+        automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
       body: isLoading
           ? const Center(
@@ -218,176 +262,155 @@ class _RequestScreenState extends State<RequestScreen> {
               color: Colors.teal,
             ))
           : userRequests.isEmpty
-              ? const Center(child: Text('No appointments found'))
-              : ListView.builder(
-                  itemCount: userRequests.length,
-                  itemBuilder: (context, index) {
-                    final request = userRequests[index];
+              ? Center(
+                  child: Text(
+                    localizations.noAppointmentRequests,
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                )
+              : RefreshIndicator(
+                  onRefresh: fetchAppointments,
+                  child: ListView.builder(
+                    itemCount: userRequests.length,
+                    itemBuilder: (context, index) {
+                      final request = userRequests[index];
 
-                    return GestureDetector(
-                      onTap: () {
-                        // You can navigate to a detailed screen if necessary
-                      },
-                      child: Container(
+                      return Container(
                         margin: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16), // Reduced margins
+                            vertical: 8, horizontal: 16),
                         child: Card(
                           color: Colors.white,
-                          elevation: 4, // Reduced elevation for a flatter look
+                          elevation: 4,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Column(
-                            children: [
-                              // Image Section with Circular Design and Shadow
-                              Container(
-                                margin: const EdgeInsets.symmetric(vertical: 8),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      blurRadius: 6,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: ClipOval(
-                                  child: Image.asset(
-                                    request.imageUrl,
-                                    height: 80,
-                                    width: 80,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              // Content Section with details
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   children: [
-                                    // Title and Status Section in a Row
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
+                                    CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage:
+                                          AssetImage(request.imageUrl),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
                                             request.title,
                                             style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
                                               color: Colors.blueAccent,
                                             ),
-                                            softWrap: true,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 4,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: request.status == 'confirmed'
-                                                ? Colors.green
-                                                : request.status == 'pending'
-                                                    ? Colors.orange
-                                                    : Colors.amber,
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          child: Text(
-                                            request.status,
-                                            style: const TextStyle(
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            request.description,
+                                            style: TextStyle(
                                               fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
+                                              color: Colors.grey[700],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: request.status == 'confirmed'
+                                            ? Colors.green
+                                            : request.status == 'pending'
+                                                ? Colors.orange
+                                                : Colors.amber,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        request.status.toUpperCase(),
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    if (request.onAcceptPressed != null)
+                                      Expanded(
+                                        child: ElevatedButton.icon(
+                                          icon: const Icon(
+                                            Icons.check_circle,
+                                            color: Colors.white,
+                                          ),
+                                          label: Text(
+                                            localizations.accept,
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          onPressed: request.onAcceptPressed,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 3, 190, 150),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 12,
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    // Description Section
-                                    Text(
-                                      request.description,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.grey[700],
                                       ),
-                                    ),
+                                    if (request.onRejectPressed != null) ...[
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: ElevatedButton.icon(
+                                          icon: const Icon(Icons.cancel,
+                                              color: Colors.white),
+                                          label: Text(
+                                            localizations.reject,
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          onPressed: request.onRejectPressed,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ],
                                 ),
-                              ),
-                              // Action Buttons (Accept/Reject)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (request.onAcceptPressed != null)
-                                      ElevatedButton.icon(
-                                        icon: const Icon(
-                                          Icons.check,
-                                          color: Colors.white,
-                                        ),
-                                        label: const Text(
-                                          'Accept',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        onPressed: request.onAcceptPressed,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(
-                                              255, 3, 190, 150),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 24,
-                                            vertical: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    const SizedBox(width: 12),
-                                    if (request.onRejectPressed != null)
-                                      ElevatedButton.icon(
-                                        icon: const Icon(Icons.close,
-                                            color: Colors.white),
-                                        label: const Text(
-                                          'Reject',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        onPressed: request.onRejectPressed,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 24,
-                                            vertical: 12,
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
     );
   }

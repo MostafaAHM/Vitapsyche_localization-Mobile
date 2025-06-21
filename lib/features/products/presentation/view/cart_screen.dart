@@ -1,31 +1,32 @@
-import 'package:flutter/material.dart'; // Import your CartCubit
+import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
-import 'cart_body.dart'; // Import your CartBody widget
+import 'package:flutter_mindmed_project/generated/l10n.dart';
+import 'cart_body.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Ensure that the BlocProvider is wrapping the entire screen
+    final localizations = S.of(context)!;
+    
     return Scaffold(
-      backgroundColor: secoundryColor, // Your background color
+      backgroundColor: secoundryColor,
       appBar: AppBar(
         elevation: 3,
-        
         foregroundColor: primaryColor,
-        backgroundColor: secoundryColor, // Your app bar color
+        backgroundColor: secoundryColor,
         centerTitle: true,
-        title: const Text(
-          'Cart Products',
-          style: TextStyle(
+        title: Text(
+          localizations.cartProducts,
+          style: const TextStyle(
             color: primaryColor,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
-      body: const CartBody(), // The CartBody widget where CartCubit is used
+      body: const CartBody(),
     );
   }
 }

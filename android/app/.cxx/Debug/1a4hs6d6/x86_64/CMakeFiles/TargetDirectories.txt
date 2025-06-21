@@ -1,0 +1,2 @@
+D:/m/mobile5/mobile/android/app/.cxx/Debug/1a4hs6d6/x86_64/CMakeFiles/edit_cache.dir
+D:/m/mobile5/mobile/android/app/.cxx/Debug/1a4hs6d6/x86_64/CMakeFiles/rebuild_cache.dir

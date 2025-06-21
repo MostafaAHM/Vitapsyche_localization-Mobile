@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
 import 'package:flutter_mindmed_project/features/doctor/data/doctor_model.dart';
 import 'package:flutter_mindmed_project/features/doctor/presentation/widget/doctor_profile_header.dart';
-
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,14 +10,14 @@ import 'package:intl/intl.dart';
 
 class DoctorServiceBookingScreen extends StatefulWidget {
   final DoctorModel doctor;
-  final int doctorDetailsId; // Use doctor ID instead of doctor_details ID
-  final int serviceId; // Add serviceId parameter
+  final int doctorDetailsId;
+  final int serviceId;
 
   const DoctorServiceBookingScreen({
     super.key,
     required this.doctor,
-    required this.doctorDetailsId, // Use doctor ID
-    required this.serviceId, // Add serviceId
+    required this.doctorDetailsId,
+    required this.serviceId,
   });
 
   @override
@@ -29,17 +29,48 @@ class _DoctorServiceBookingScreenState
     extends State<DoctorServiceBookingScreen> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
-  List<Map<String, dynamic>> availableSlots = []; // To hold available slots
-  List<TimeOfDay> timeSlots = []; // To hold generated time slots
-  Set<TimeOfDay> bookedSlots = {}; // To track booked time slots
+  List<Map<String, dynamic>> availableSlots = [];
+  List<TimeOfDay> timeSlots = [];
+  Set<TimeOfDay> bookedSlots = {};
   bool isLoading = false;
   Map<String, List<Map<String, dynamic>>> schedulesByDay = {};
+  List<dynamic> existingAppointments = [];
 
   @override
   void initState() {
     super.initState();
     print('Doctor ID: ${widget.doctorDetailsId}');
     _fetchDoctorAvailability();
+    _fetchExistingAppointments();
+  }
+
+  Future<void> _fetchExistingAppointments() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    int? patientDetailsId = prefs.getInt('patient_details_id');
+
+    if (accessToken == null || patientDetailsId == null) {
+      return;
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://abdokh.pythonanywhere.com/api/appointments/?patient_id=$patientDetailsId&doctor=${widget.doctorDetailsId}'),
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          existingAppointments = json.decode(response.body);
+        });
+      }
+    } catch (e) {
+      print('Error fetching existing appointments: $e');
+    }
   }
 
   Future<void> _fetchDoctorAvailability() async {
@@ -130,6 +161,10 @@ class _DoctorServiceBookingScreenState
       final filteredSlots = schedulesByDay[dayOfWeek] ?? [];
 
       timeSlots.clear();
+      bookedSlots.clear();
+
+      // Get booked slots for this date
+      final bookedTimes = _getBookedTimesForDate(selectedDate!);
 
       for (var slot in filteredSlots) {
         final startTime = TimeOfDay(
@@ -140,23 +175,49 @@ class _DoctorServiceBookingScreenState
           hour: int.parse(slot['end_time'].split(':')[0]),
           minute: int.parse(slot['end_time'].split(':')[1]),
         );
-        _generateTimeSlots(startTime, endTime);
+        _generateTimeSlots(startTime, endTime, bookedTimes);
       }
 
       setState(() {});
     }
   }
 
-  void _generateTimeSlots(TimeOfDay startTime, TimeOfDay endTime) {
+  List<TimeOfDay> _getBookedTimesForDate(DateTime date) {
+    final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+    final bookedTimes = <TimeOfDay>[];
+
+    for (var appointment in existingAppointments) {
+      final appointmentDate = DateTime.parse(appointment['date_time']);
+      if (DateFormat('yyyy-MM-dd').format(appointmentDate) == formattedDate) {
+        bookedTimes.add(TimeOfDay(
+          hour: appointmentDate.hour,
+          minute: appointmentDate.minute,
+        ));
+      }
+    }
+
+    return bookedTimes;
+  }
+
+  void _generateTimeSlots(
+      TimeOfDay startTime, TimeOfDay endTime, List<TimeOfDay> bookedTimes) {
     final slots = <TimeOfDay>[];
     var currentTime = startTime;
 
     while (currentTime.hour < endTime.hour ||
         (currentTime.hour == endTime.hour &&
             currentTime.minute <= endTime.minute)) {
-      if (!bookedSlots.contains(currentTime)) {
+      // Check if this time slot is already booked
+      final isBooked = bookedTimes.any((bookedTime) =>
+          bookedTime.hour == currentTime.hour &&
+          bookedTime.minute == currentTime.minute);
+
+      if (!isBooked) {
         slots.add(currentTime);
+      } else {
+        bookedSlots.add(currentTime);
       }
+
       currentTime = _addMinutes(currentTime, 30);
     }
 
@@ -195,12 +256,10 @@ class _DoctorServiceBookingScreenState
     if (selectedDate != null && selectedTime != null) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('access_token');
-      int? patientDetailsId =
-          prefs.getInt('patient_details_id'); // Retrieve patient_details_id
+      int? patientDetailsId = prefs.getInt('patient_details_id');
 
       if (accessToken == null || patientDetailsId == null) {
-        print(
-            'Access token or patient details ID not found. Please log in again.');
+        print('Access token or patient details ID not found.');
         return;
       }
 
@@ -212,9 +271,9 @@ class _DoctorServiceBookingScreenState
         "appointment_address": "string",
         "is_follow_up": false,
         "is_confirmed": false,
-        "patient": patientDetailsId, // Use patient_details_id instead of userId
+        "patient": patientDetailsId,
         "doctor": widget.doctorDetailsId,
-        "services": [widget.serviceId], // Use the serviceId from the widget
+        "services": [widget.serviceId],
       };
 
       try {
@@ -229,21 +288,15 @@ class _DoctorServiceBookingScreenState
         );
 
         if (response.statusCode == 201) {
-          // Add the selected time slot to the bookedSlots set
-          setState(() {
-            bookedSlots.add(selectedTime!); // Mark the slot as booked
-            timeSlots.removeWhere((slot) =>
-                slot.hour == selectedTime!.hour &&
-                slot.minute == selectedTime!.minute); // Remove from timeSlots
-            selectedTime = null; // Clear the selected time
-          });
+          // Refresh the existing appointments
+          await _fetchExistingAppointments();
 
           // Refresh the available slots
           await _fetchAvailableSlots();
 
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Appointment successfully booked!'),
+            SnackBar(
+              content: Text(S.of(context).appointmentDeletedSuccessfully),
               backgroundColor: Colors.green,
             ),
           );
@@ -251,11 +304,10 @@ class _DoctorServiceBookingScreenState
           final responseBody = json.decode(response.body);
           print('Error Response Body: $responseBody');
 
-          String errorMessage =
-              'Another user booked this appointment. Please select another time.';
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('$errorMessage'),
+              content: Text(
+                  '${S.of(context).failedToDeleteAppointment}: ${responseBody['detail'] ?? S.of(context).errorDeletingAppointment}'),
               backgroundColor: Colors.red,
             ),
           );
@@ -263,24 +315,25 @@ class _DoctorServiceBookingScreenState
       } catch (e) {
         print('Error booking appointment: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+           SnackBar(
             content:
-                Text('Failed to book appointment. Please try again later.'),
+                Text(S.of(context).failedToDeleteAppointment),
             backgroundColor: Colors.red,
           ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+       SnackBar(
           content:
-              Text('Please fill in all the details to book an appointment'),
+              Text(S.of(context).pleaseSignInToBookAppointment),
         ),
       );
     }
   }
 
   Widget _buildAvailabilityCalendar() {
+    final localizations = S.of(context);
     final now = DateTime.now();
     final next30Days = DateTime.now().add(const Duration(days: 30));
     final days = List.generate(
@@ -289,8 +342,8 @@ class _DoctorServiceBookingScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Available Days",
+        Text(
+          localizations.availableDays,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
@@ -353,6 +406,7 @@ class _DoctorServiceBookingScreenState
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
@@ -369,14 +423,14 @@ class _DoctorServiceBookingScreenState
                     _buildAvailabilityCalendar(),
                     const SizedBox(height: 24),
                     if (selectedDate != null) ...[
-                      const Text(
-                        "Available Time Slots",
+                      Text(
+                        localizations.availableTimeSlots,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10),
-                      if (timeSlots.isEmpty)
-                        const Text("No available slots for this day")
+                      if (timeSlots.isEmpty && bookedSlots.isEmpty)
+                        Text(localizations.noAvailableSlots)
                       else
                         GridView.builder(
                           shrinkWrap: true,
@@ -388,21 +442,27 @@ class _DoctorServiceBookingScreenState
                             mainAxisSpacing: 10,
                             childAspectRatio: 1.5,
                           ),
-                          itemCount: timeSlots.length,
+                          itemCount: timeSlots.length + bookedSlots.length,
                           itemBuilder: (context, index) {
-                            final slot = timeSlots[index];
+                            // Combine available and booked slots
+                            final allSlots = [...timeSlots, ...bookedSlots];
+                            final slot = allSlots[index];
+                            final isBooked = bookedSlots.contains(slot);
+
                             return GestureDetector(
-                              onTap: () =>
-                                  _onTimeSelected(slot), // Select the time slot
+                              onTap:
+                                  isBooked ? null : () => _onTimeSelected(slot),
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 300),
                                 decoration: BoxDecoration(
-                                  color: selectedTime == slot
-                                      ? Colors.teal
-                                      : Colors.grey[300],
+                                  color: isBooked
+                                      ? Colors.red[300] // Red for booked slots
+                                      : selectedTime == slot
+                                          ? Colors.teal // Selected slot
+                                          : Colors.grey[300], // Available slot
                                   borderRadius: BorderRadius.circular(15),
                                   boxShadow: [
-                                    if (selectedTime == slot)
+                                    if (selectedTime == slot && !isBooked)
                                       BoxShadow(
                                         color: Colors.teal.withOpacity(0.4),
                                         spreadRadius: 3,
@@ -411,15 +471,28 @@ class _DoctorServiceBookingScreenState
                                   ],
                                 ),
                                 child: Center(
-                                  child: Text(
-                                    slot.format(
-                                        context), // Format the time slot
-                                    style: TextStyle(
-                                      color: selectedTime == slot
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        slot.format(context),
+                                        style: TextStyle(
+                                          color:
+                                              isBooked || selectedTime == slot
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      if (isBooked)
+                                        Text(
+                                          localizations.booked,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -437,8 +510,8 @@ class _DoctorServiceBookingScreenState
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          child: const Text(
-                            'Book Appointment',
+                          child: Text(
+                            localizations.bookAppointment,
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -454,12 +527,13 @@ class _DoctorServiceBookingScreenState
   }
 
   PreferredSizeWidget _buildAppBar() {
+     final localizations = S.of(context);
     return AppBar(
       backgroundColor: Colors.white,
       foregroundColor: primaryColor,
       elevation: 0,
-      title: const Text(
-        'Book Appointment',
+      title:  Text(
+       localizations.bookAppointment,
         style: TextStyle(color: primaryColor),
       ),
       centerTitle: true,

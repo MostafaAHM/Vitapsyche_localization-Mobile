@@ -1,7 +1,5 @@
-
-// widgets/doctor_filter_dialog.dart
 import 'package:flutter/material.dart';
-
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../../../core/theme/colors.dart';
 
 class DoctorFilterDialog extends StatefulWidget {
@@ -23,6 +21,8 @@ class _DoctorFilterDialogState extends State<DoctorFilterDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
+    
     return Container(
       height: 600,
       width: MediaQuery.of(context).size.width,
@@ -31,27 +31,27 @@ class _DoctorFilterDialogState extends State<DoctorFilterDialog> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(),
+            _buildHeader(localizations),
             const SizedBox(height: 20),
-            _buildAvailabilitySection(),
-            _buildDateSection(),
-            _buildInterestsSection(),
-            _buildDurationSection(),
-            _buildGenderSection(),
-            _buildRatingSection(),
-            _buildLocationSection(),
-            _buildSalarySection(),
-            _buildApplyButton(),
+            _buildAvailabilitySection(localizations),
+            _buildDateSection(localizations),
+            _buildInterestsSection(localizations),
+            _buildDurationSection(localizations),
+            _buildGenderSection(localizations),
+            _buildRatingSection(localizations),
+            _buildLocationSection(localizations),
+            _buildSalarySection(localizations),
+            _buildApplyButton(localizations),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader() {
-    return const Text(
-      'Filter Options',
-      style: TextStyle(
+  Widget _buildHeader(S localizations) {
+    return Text(
+      localizations.filterOptions,
+      style: const TextStyle(
         fontSize: 18,
         color: primaryColor,
         fontWeight: FontWeight.bold,
@@ -59,14 +59,18 @@ class _DoctorFilterDialogState extends State<DoctorFilterDialog> {
     );
   }
 
-Widget _buildAvailabilitySection() {
+  Widget _buildAvailabilitySection(S localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(Icons.access_time, 'Availability'),
+        _buildSectionHeader(Icons.access_time, localizations.availability),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: ['Today', 'This Week', 'Online'].map((value) {
+          children: [
+            localizations.today,
+            localizations.thisWeek,
+            localizations.online
+          ].map((value) {
             return Row(
               children: [
                 Radio<String>(
@@ -85,11 +89,11 @@ Widget _buildAvailabilitySection() {
     );
   }
 
-  Widget _buildDateSection() {
+  Widget _buildDateSection(S localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(Icons.date_range, 'Specific Date or Range'),
+        _buildSectionHeader(Icons.date_range, localizations.specificDateOrRange),
         TextButton(
           onPressed: () async {
             final pickedDate = await showDatePicker(
@@ -108,16 +112,20 @@ Widget _buildAvailabilitySection() {
     );
   }
 
-  Widget _buildInterestsSection() {
+  Widget _buildInterestsSection(S localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(Icons.location_on, 'Areas of Interest'),
+        _buildSectionHeader(Icons.location_on, localizations.areasOfInterest),
         DropdownButton<String>(
           isExpanded: true,
-          hint: const Text('Select Language'),
-          items: ['English', 'Spanish', 'French', 'German']
-              .map((value) => DropdownMenuItem(value: value, child: Text(value)))
+          hint: Text(localizations.selectLanguage),
+          items: [
+            localizations.english,
+            localizations.spanish,
+            localizations.french,
+            localizations.german
+          ].map((value) => DropdownMenuItem(value: value, child: Text(value)))
               .toList(),
           onChanged: (String? newValue) {},
         ),
@@ -125,14 +133,18 @@ Widget _buildAvailabilitySection() {
     );
   }
 
-  Widget _buildDurationSection() {
+  Widget _buildDurationSection(S localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(Icons.timer, 'Duration'),
+        _buildSectionHeader(Icons.timer, localizations.duration),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: ['All', '30 min', '60 min'].map((value) {
+          children: [
+            localizations.all,
+            '30 ${localizations.min}',
+            '60 ${localizations.min}'
+          ].map((value) {
             return Row(
               children: [
                 Radio<String>(
@@ -151,14 +163,14 @@ Widget _buildAvailabilitySection() {
     );
   }
 
-  Widget _buildGenderSection() {
+  Widget _buildGenderSection(S localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(Icons.person, 'Therapist Gender'),
+        _buildSectionHeader(Icons.person, localizations.therapistGender),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: ['Male', 'Female'].map((value) {
+          children: [localizations.male, localizations.female].map((value) {
             return Row(
               children: [
                 Radio<String>(
@@ -177,11 +189,11 @@ Widget _buildAvailabilitySection() {
     );
   }
 
-  Widget _buildRatingSection() {
+  Widget _buildRatingSection(S localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(Icons.star, 'Rating'),
+        _buildSectionHeader(Icons.star, localizations.rating),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(5, (index) {
@@ -198,16 +210,20 @@ Widget _buildAvailabilitySection() {
     );
   }
 
-  Widget _buildLocationSection() {
+  Widget _buildLocationSection(S localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(Icons.public, 'Country and City'),
+        _buildSectionHeader(Icons.public, localizations.countryAndCity),
         DropdownButton<String>(
           isExpanded: true,
           value: selectedCountry,
-          items: ['USA', 'Canada', 'UK', 'Australia']
-              .map((value) => DropdownMenuItem(value: value, child: Text(value)))
+          items: [
+            localizations.usa,
+            localizations.canada,
+            localizations.uk,
+            localizations.australia
+          ].map((value) => DropdownMenuItem(value: value, child: Text(value)))
               .toList(),
           onChanged: (String? newValue) {
             setState(() => selectedCountry = newValue!);
@@ -217,8 +233,12 @@ Widget _buildAvailabilitySection() {
         DropdownButton<String>(
           isExpanded: true,
           value: selectedCity,
-          items: ['New York', 'Toronto', 'London', 'Sydney']
-              .map((value) => DropdownMenuItem(value: value, child: Text(value)))
+          items: [
+            localizations.newYork,
+            localizations.toronto,
+            localizations.london,
+            localizations.sydney
+          ].map((value) => DropdownMenuItem(value: value, child: Text(value)))
               .toList(),
           onChanged: (String? newValue) {
             setState(() => selectedCity = newValue!);
@@ -228,33 +248,33 @@ Widget _buildAvailabilitySection() {
     );
   }
 
-  Widget _buildSalarySection() {
+  Widget _buildSalarySection(S localizations) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader(Icons.attach_money, 'Salary Range'),
+        _buildSectionHeader(Icons.attach_money, localizations.salaryRange),
         Slider(
           value: selectedSalaryRange,
           min: 50,
           max: 500,
           divisions: 9,
-          label: '\$${selectedSalaryRange.round()}',
+          label: '${localizations.currencySymbol}${selectedSalaryRange.round()}',
           onChanged: (value) => setState(() => selectedSalaryRange = value),
         ),
       ],
     );
   }
 
-  Widget _buildApplyButton() {
+  Widget _buildApplyButton(S localizations) {
     return Center(
       child: ElevatedButton(
         onPressed: () => Navigator.pop(context),
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
         ),
-        child: const Text(
-          'Apply Filter',
-          style: TextStyle(color: secoundryColor),
+        child: Text(
+          localizations.applyFilter,
+          style: const TextStyle(color: secoundryColor),
         ),
       ),
     );

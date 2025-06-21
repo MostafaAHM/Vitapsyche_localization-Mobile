@@ -15,26 +15,20 @@ class Test {
 
   factory Test.fromJson(Map<String, dynamic> json) {
     return Test(
-      testTitle: json['testTitle'],
-      payment: json['payment'],
-      questions: (json['questions'] as List)
-          .map((questionJson) => Question.fromJson(questionJson))
-          .toList(),
-      scoreRanges: (json['scoreRanges'] as List)
-          .map((rangeJson) => ScoreRange.fromJson(rangeJson))
-          .toList(),
-      max: json['MAX'],
+      testTitle: json['testTitle'] ?? 'Unknown Test',
+      payment: json['payment'] ?? false,
+      questions: json['questions'] is List
+          ? (json['questions'] as List)
+              .map((q) => Question.fromJson(q))
+              .toList()
+          : [], // Default to an empty list if not a List
+      scoreRanges: json['scoreRanges'] is List
+          ? (json['scoreRanges'] as List)
+              .map((r) => ScoreRange.fromJson(r))
+              .toList()
+          : [], // Default to an empty list if not a List
+      max: json['max'] ?? 0,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'testTitle': testTitle,
-      'payment': payment,
-      'questions': questions.map((question) => question.toJson()).toList(),
-      'scoreRanges': scoreRanges.map((range) => range.toJson()).toList(),
-      'MAX': max,
-    };
   }
 }
 
@@ -58,14 +52,6 @@ class Question {
           .toList(),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'question': question,
-      'choices': choices.map((choice) => choice.toJson()).toList(),
-    };
-  }
 }
 
 class Choice {
@@ -80,7 +66,7 @@ class Choice {
   factory Choice.fromJson(Map<String, dynamic> json) {
     return Choice(
       score: json['score'],
-      text: json['text'],
+      text: json['text'] ?? 'no text',
     );
   }
 
@@ -93,10 +79,10 @@ class Choice {
 }
 
 class ScoreRange {
-  List<int> range;
-  String description;
-  String color;
-  String info;
+  List<int>? range;
+  String? description;
+  String? color;
+  String? info;
 
   ScoreRange({
     required this.range,
@@ -107,10 +93,10 @@ class ScoreRange {
 
   factory ScoreRange.fromJson(Map<String, dynamic> json) {
     return ScoreRange(
-      range: List<int>.from(json['range']),
-      description: json['description'],
-      color: json['color'],
-      info: json['info'],
+      range: (json['range'] != null) ? List<int>.from(json['range']) : [0, -1],
+      description: json['description'] ?? 'no description',
+      color: json['color'] ?? 'no color',
+      info: json['info'] ?? 'no info',
     );
   }
 

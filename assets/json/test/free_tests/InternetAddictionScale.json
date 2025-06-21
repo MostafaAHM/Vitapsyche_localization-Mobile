@@ -1,30 +1,42 @@
 {
   "testTitle": "Internet Addiction Scale",
-  "payment":false,
+  "testSlug": "internet-addiction-scale",
+  "max": 100,
+  "payment": false,
   "questions": [
     {
       "id": 1,
       "question": "How often do you find that you stay online longer than you intended?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -33,24 +45,34 @@
       "question": "How often do you neglect household chores to spend more time online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -59,24 +81,34 @@
       "question": "How often do you prefer the excitement of the Internet to intimacy with your partner?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -85,24 +117,34 @@
       "question": "How often do you form new relationships with fellow online users?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -111,24 +153,34 @@
       "question": "How often do others in your life complain to you about the amount of time you spend online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -137,24 +189,34 @@
       "question": "How often does your academic performance suffer because of the time you spend online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -163,24 +225,34 @@
       "question": "How often do you check your email before doing something else you need to do?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -189,24 +261,34 @@
       "question": "How often does your job performance or productivity suffer because of the Internet?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -215,24 +297,34 @@
       "question": "How often do you avoid others to spend more time online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -241,24 +333,34 @@
       "question": "How often do you block disturbing thoughts about your life with soothing thoughts of the Internet?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -267,24 +369,34 @@
       "question": "How often do you find yourself anticipating the next time you will go online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -293,24 +405,34 @@
       "question": "How often do you fear that life without the Internet would be boring, empty, and joyless?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -319,24 +441,34 @@
       "question": "How often do you become irritated if someone interrupts you while you are online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -345,76 +477,106 @@
       "question": "How often do you lose sleep due to late-night log-ins?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
     {
       "id": 15,
-      "question": "How often do you find yourself thinking about the Internet even when you are offline?",
+      "question": "How often do you feel preoccupied with the Internet when offline, or fantasize about being online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
     {
       "id": 16,
-      "question": "How often do you say ‘just a few more minutes’ when online?",
+      "question": "How often do you find yourself saying “just a few more minutes” when online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -423,50 +585,70 @@
       "question": "How often do you try to cut down the amount of time you spend online and fail?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
     {
       "id": 18,
-      "question": "How often do you hide how long you’ve been online from others?",
+      "question": "How often do you try to hide how long you’ve been online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -475,24 +657,34 @@
       "question": "How often do you choose to spend more time online over going out with others?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     },
@@ -501,56 +693,58 @@
       "question": "How often do you feel depressed, moody, or nervous when you are offline, which goes away once you are back online?",
       "choices": [
         {
-          "score": 1,
-          "text": "Rarely"
+          "id": 1,
+          "text": "Rarely",
+          "score": 1
         },
         {
-          "score": 2,
-          "text": "Sometimes"
+          "id": 2,
+          "text": "Sometimes",
+          "score": 2
         },
         {
-          "score": 3,
-          "text": "Frequently"
+          "id": 3,
+          "text": "Frequently",
+          "score": 3
         },
         {
-          "score": 4,
-          "text": "Usually"
+          "id": 4,
+          "text": "Usually",
+          "score": 4
         },
         {
-          "score": 5,
-          "text": "Always"
+          "id": 5,
+          "text": "Always",
+          "score": 5
+        },
+        {
+          "id": 0,
+          "text": "Ignore the question",
+          "score": 0
         }
       ]
     }
   ],
-  "scoreRanges": [
-    {
-      "range": [
-        20,
-        49
-      ],
-      "description": " normal range.",
-      "color": "bg-green-600",
-      "info": "Internet usage is within healthy limits and does not negatively impact daily life, relationships, or overall well-being."
-    },
-    {
-      "range": [
-        50,
-        79
-      ],
-      "description": "You are experiencing occasional problems due to Internet overuse.",
-      "color": "bg-yellow-400",
-      "info": "Internet usage is starting to cause minor disruptions in daily life, though they are manageable with some effort."
-    },
-    {
-      "range": [
-        80,
-        100
-      ],
-      "description": "Your Internet usage is causing significant problems in your life.",
-      "color": "bg-red-600",
-      "info": "nternet overuse is leading to major disruptions in personal, professional, and social aspects of life."
-    }
-  ],
-  "MAX": 100
-}
+
+    "instruction": "Add up your score for all the questions. The higher the score, the more severe your level of Internet addiction.",
+    "scoreRanges": [
+      {
+        "range": [20,49],
+        "description": " normal range.",
+        "color": "bg-green-600",
+        "info": "Internet usage is within healthy limits and does not negatively impact daily life, relationships, or overall well-being."
+      },
+      {
+        "range": [50,79],
+        "description": "You are experiencing occasional problems due to Internet overuse.",
+        "color": "bg-yellow-400",
+        "info": "Internet usage is starting to cause minor disruptions in daily life, though they are manageable with some effort."
+      },
+      {
+        "range": [80,100],
+        "description": "Your Internet usage is causing significant problems in your life.",
+        "color": "bg-red-600",
+        "info": "nternet overuse is leading to major disruptions in personal, professional, and social aspects of life."
+      }
+    ]
+  }

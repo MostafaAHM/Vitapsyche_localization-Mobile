@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'music_track.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -100,11 +101,13 @@ class _PlayerScreenState extends State<PlayerScreen>
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBar(
         title: Text(
-          "Now Playing",
+          localizations.nowPlayingTitle,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -125,13 +128,6 @@ class _PlayerScreenState extends State<PlayerScreen>
       ),
       body: Column(
         children: [
-          // Container(
-          //   height: 20,
-          //   decoration: BoxDecoration(
-          //     color: primaryColor,
-          //     borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
-          //   ),
-          // ),
           Expanded(
             child: SingleChildScrollView(
               padding: EdgeInsets.all(20),
@@ -172,7 +168,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                     widget.musicTrack.subtitle,
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.white,
+                      color: Colors.grey[600],
                     ),
                   ),
                   SizedBox(height: 20),
@@ -181,7 +177,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                     children: [
                       Text(
                         _formatDuration(_position),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: textMainColor),
                       ),
                       Expanded(
                         child: Slider(
@@ -198,7 +194,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                       ),
                       Text(
                         _formatDuration(_duration),
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: textMainColor),
                       ),
                     ],
                   ),
@@ -229,6 +225,15 @@ class _PlayerScreenState extends State<PlayerScreen>
                     ],
                   ),
                   SizedBox(height: 16),
+                  Text(
+                    localizations.sleepTimerTitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: textMainColor,
+                    ),
+                  ),
+                  SizedBox(height: 8),
                   Wrap(
                     spacing: 12,
                     children: [5, 10, 15, 30].map((minutes) {
@@ -247,7 +252,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                               vertical: 8,
                             ),
                             child: Text(
-                              '$minutes minutes',
+                              localizations.minutesCount(minutes),
                               style: TextStyle(
                                 color:
                                     isSelected ? Colors.white : textMainColor,

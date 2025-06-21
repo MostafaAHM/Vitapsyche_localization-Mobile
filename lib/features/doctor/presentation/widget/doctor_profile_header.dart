@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../data/doctor_model.dart'; // Import the DoctorModel
 
 class DoctorProfileHeader extends StatelessWidget {
@@ -31,12 +32,12 @@ class DoctorProfileHeader extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.star, color: Colors.blue, size: 16),
-                const Text(
-                  '4.8',
-                  style: TextStyle(color: Colors.blue),
+                Text(
+                  S.of(context).ratingValue,
+                  style: const TextStyle(color: Colors.blue),
                 ),
                 Text(
-                  ' (1172 Reviews)',
+                  S.of(context).totalReviews,
                   style: TextStyle(color: Colors.grey[600]),
                 ),
               ],

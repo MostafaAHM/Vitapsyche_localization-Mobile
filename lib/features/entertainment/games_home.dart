@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'games/color_sorting_game.dart';
 import 'games/breathing_game.dart';
 import 'games/memory_game.dart';
@@ -11,6 +12,8 @@ class GamesHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
@@ -21,7 +24,7 @@ class GamesHome extends StatelessWidget {
             children: [
               const SizedBox(height: 20),
               Text(
-                'ألعاب نفسية',
+                localizations.psychologicalGames,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: primaryColor,
@@ -29,7 +32,7 @@ class GamesHome extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'اختر لعبة للبدء',
+                localizations.chooseGameToStart,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.grey[600],
                     ),
@@ -43,24 +46,24 @@ class GamesHome extends StatelessWidget {
                   children: [
                     _buildGameCard(
                       context,
-                      'ترتيب الألوان',
-                      'تحسين التركيز',
+                      localizations.colorSorting,
+                      localizations.improveFocus,
                       Icons.palette,
                       primaryColor,
                       const ColorSortingGame(),
                     ),
                     _buildGameCard(
                       context,
-                      'التنفس المتزامن',
-                      'الاسترخاء والهدوء',
+                      localizations.synchronizedBreathing,
+                      localizations.relaxationAndCalm,
                       Icons.air,
                       primaryColor,
                       const BreathingGame(),
                     ),
                     _buildGameCard(
                       context,
-                      'لعبة الذاكرة',
-                      'تنشيط الذاكرة',
+                      localizations.memoryGame,
+                      localizations.activateMemory,
                       Icons.memory,
                       primaryColor,
                       const MemoryGame(),

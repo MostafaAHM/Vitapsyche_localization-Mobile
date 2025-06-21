@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
 import 'package:flutter_mindmed_project/features/fqas/data/model_fqas.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_mindmed_project/main.dart'; // For LocaleProvider
 
 class FqasScreen extends StatefulWidget {
   const FqasScreen({super.key});
@@ -13,11 +16,17 @@ class FqasScreen extends StatefulWidget {
 }
 
 class _FqasScreenState extends State<FqasScreen> {
-  static const String _jsonPath = 'assets/json/FAQs.json';
+  // Paths for both English and Arabic FAQs
+  static const String _englishJsonPath = 'assets/json/FAQs.json';
+  static const String _arabicJsonPath = 'assets/json/FAQs_arabic_full.json';
 
-  Future<Fqas> _loadFqasData() async {
+  Future<Fqas> _loadFqasData(BuildContext context) async {
+    final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
+    final isArabic = localeProvider.locale.languageCode == 'ar';
+    final jsonPath = isArabic ? _arabicJsonPath : _englishJsonPath;
+
     try {
-      final String jsonString = await rootBundle.loadString(_jsonPath);
+      final String jsonString = await rootBundle.loadString(jsonPath);
       final Map<String, dynamic> jsonData = json.decode(jsonString);
       return Fqas.fromJson(jsonData);
     } catch (e) {
@@ -31,17 +40,18 @@ class _FqasScreenState extends State<FqasScreen> {
     return Scaffold(
       backgroundColor: secoundryColor,
       appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: _buildBody(context),
     );
   }
 
   AppBar _buildAppBar() {
+    final localizations = S.of(context);
     return AppBar(
       foregroundColor: primaryColor,
       backgroundColor: secoundryColor,
       centerTitle: true,
       title: Text(
-        'FQAs',
+        localizations.fqas,
         style: TextStyle(
           color: primaryColor,
           fontSize: 21.sp,
@@ -51,9 +61,9 @@ class _FqasScreenState extends State<FqasScreen> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return FutureBuilder<Fqas>(
-      future: _loadFqasData(),
+      future: _loadFqasData(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -87,7 +97,7 @@ class _FqasScreenState extends State<FqasScreen> {
                     itemCount: fqasData.fqas.length,
                     itemBuilder: (context, index) {
                       return AnimatedOpacity(
-                        opacity: 1.0, // This is for fade-in effect
+                        opacity: 1.0,
                         duration: Duration(milliseconds: 300),
                         child: _buildFaqItem(
                           question: fqasData.fqas[index].question,

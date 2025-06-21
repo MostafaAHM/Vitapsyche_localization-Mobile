@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -189,9 +190,10 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+     final localizations = S.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Service'),
+        title: Text(localizations.editService),
         backgroundColor: Colors.white, // Use primary color
         actions: [
           IconButton(
@@ -250,7 +252,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                     TextFormField(
                       controller: _nameController,
                       decoration: InputDecoration(
-                        labelText: 'Name',
+                        labelText:  localizations.name,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -261,7 +263,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a name';
+                          return localizations.pleaseEnterName;
                         }
                         return null;
                       },
@@ -271,7 +273,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                     TextFormField(
                       controller: _descriptionController,
                       decoration: InputDecoration(
-                        labelText: 'Description',
+                        labelText:  localizations.description,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -287,7 +289,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                     TextFormField(
                       controller: _priceController,
                       decoration: InputDecoration(
-                        labelText: 'Price',
+                        labelText: localizations.price,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -299,7 +301,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a price';
+                          return localizations.pleaseEnterPrice;
                         }
                         return null;
                       },
@@ -309,7 +311,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                     TextFormField(
                       controller: _durationController,
                       decoration: InputDecoration(
-                        labelText: 'Duration (in min)',
+                        labelText: localizations.duration,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -321,7 +323,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a duration';
+                          return  localizations.pleaseEnterDuration;
                         }
                         return null;
                       },
@@ -331,7 +333,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                     TextFormField(
                       controller: _categoryController,
                       decoration: InputDecoration(
-                        labelText: 'Category',
+                        labelText: localizations.category,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -343,7 +345,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a category';
+                          return localizations.pleaseEnterCategory;
                         }
                         return null;
                       },
@@ -358,7 +360,7 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                       ),
                       child: SwitchListTile(
                         title: Text(
-                          'Is Active',
+                         localizations.isActive,
                           style: TextStyle(color: primaryColor),
                         ),
                         value: _isActive,
@@ -385,8 +387,8 @@ class _EditServiceDetailScreenState extends State<EditServiceDetailScreen> {
                         ),
                         backgroundColor: primaryColor,
                       ),
-                      child: const Text(
-                        'Update Service',
+                      child:  Text(
+                        localizations.updateService,
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),

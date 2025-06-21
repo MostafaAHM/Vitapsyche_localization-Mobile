@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/core/routes/app_routes.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'service_details_screen.dart'; // Import the new screen
+import 'service_details_screen.dart';
 
 class CategoryServicesScreen extends StatefulWidget {
   final int categoryId;
@@ -23,12 +25,27 @@ class _CategoryServicesScreenState extends State<CategoryServicesScreen> {
   List<dynamic> services = [];
   List<dynamic> filteredServices = [];
   bool isLoading = true;
+  bool isLoggedIn = false;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _fetchServices();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoggedIn = prefs.getString('access_token') != null;
+    });
+    if (isLoggedIn) {
+      _fetchServices();
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future<void> _fetchServices() async {
@@ -36,12 +53,18 @@ class _CategoryServicesScreenState extends State<CategoryServicesScreen> {
     String? accessToken = prefs.getString('access_token');
 
     if (accessToken == null) {
-      print('Access token not found. Please log in again.');
+      setState(() {
+        isLoggedIn = false;
+        isLoading = false;
+      });
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
+
     try {
-      // Fetch all categories
       final categoriesResponse = await http.get(
         Uri.parse('https://abdokh.pythonanywhere.com/api/categories/'),
         headers: {
@@ -50,20 +73,14 @@ class _CategoryServicesScreenState extends State<CategoryServicesScreen> {
         },
       );
 
-      print('Categories Status Code: ${categoriesResponse.statusCode}');
-      print('Categories Response Body: ${categoriesResponse.body}');
-
       if (categoriesResponse.statusCode == 200) {
         final List<dynamic> categories = json.decode(categoriesResponse.body);
-
-        // Find the selected category by ID
         final selectedCategory = categories.firstWhere(
           (category) => category['id'] == widget.categoryId,
           orElse: () => null,
         );
 
         if (selectedCategory == null) {
-          print('Category not found.');
           setState(() {
             isLoading = false;
           });
@@ -73,7 +90,6 @@ class _CategoryServicesScreenState extends State<CategoryServicesScreen> {
         final List<int> serviceIds =
             List<int>.from(selectedCategory['service_ids'] ?? []);
 
-        // Fetch details for each service in parallel
         List<Future<dynamic>> serviceFutures =
             serviceIds.map((serviceId) async {
           final serviceResponse = await http.get(
@@ -87,17 +103,11 @@ class _CategoryServicesScreenState extends State<CategoryServicesScreen> {
 
           if (serviceResponse.statusCode == 200) {
             return json.decode(serviceResponse.body);
-          } else {
-            print(
-                'Failed to load service $serviceId. Status Code: ${serviceResponse.statusCode}');
-            return null;
           }
+          return null;
         }).toList();
 
-        // Wait for all service futures to complete
         List<dynamic> serviceDetails = await Future.wait(serviceFutures);
-
-        // Filter out any null values (failed requests)
         serviceDetails =
             serviceDetails.where((service) => service != null).toList();
 
@@ -107,14 +117,11 @@ class _CategoryServicesScreenState extends State<CategoryServicesScreen> {
           isLoading = false;
         });
       } else {
-        print(
-            'Failed to load categories. Status Code: ${categoriesResponse.statusCode}');
         setState(() {
           isLoading = false;
         });
       }
     } catch (e) {
-      print('Error fetching services: $e');
       setState(() {
         isLoading = false;
       });
@@ -132,74 +139,112 @@ class _CategoryServicesScreenState extends State<CategoryServicesScreen> {
     });
   }
 
+  Widget _buildSignInButton() {
+    final localizations = S.of(context);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            localizations.pleaseSignInToViewServices,
+            style: TextStyle(fontSize: 18, color: Colors.grey),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () =>
+                Navigator.of(context).pushNamed(AppRoutes.signinScreen),
+            child: Text(
+              localizations.signIn,
+              style: TextStyle(fontSize: 12, color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: mainBlueColor,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.categoryName),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(56),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                hintText: 'Search by name or price...',
-                prefixIcon: const Icon(Icons.search, color: Colors.teal),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: primaryColor),
+        bottom: isLoggedIn
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(56),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: localizations.searchHere,
+                      prefixIcon: const Icon(Icons.search, color: Colors.teal),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: primaryColor),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: primaryColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide:
+                            const BorderSide(color: primaryColor, width: 2),
+                      ),
+                    ),
+                    onChanged: _filterServices,
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: primaryColor),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: primaryColor, width: 2),
-                ),
-              ),
-              onChanged: _filterServices,
-            ),
-          ),
-        ),
+              )
+            : null,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : filteredServices.isEmpty
-              ? const Center(
-                  child: Text('No services available for this category.'),
-                )
-              : GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 0.8,
-                  ),
-                  itemCount: filteredServices.length,
-                  itemBuilder: (context, index) {
-                    final service = filteredServices[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ServiceDetailsScreen(
-                              serviceId: service['id'],
-                            ),
+          : !isLoggedIn
+              ? _buildSignInButton()
+              : filteredServices.isEmpty
+                  ? const Center(
+                      child: Text('No services available for this category.'),
+                    )
+                  : GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.8,
+                      ),
+                      itemCount: filteredServices.length,
+                      itemBuilder: (context, index) {
+                        final service = filteredServices[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ServiceDetailsScreen(
+                                  serviceId: service['id'],
+                                ),
+                              ),
+                            );
+                          },
+                          child: ServiceCard(
+                            imageUrl: service['image'],
+                            name: service['name'],
+                            price: service['price'],
                           ),
                         );
                       },
-                      child: ServiceCard(
-                        imageUrl: service['image'],
-                        name: service['name'],
-                        price: service['price'],
-                      ),
-                    );
-                  },
-                ),
+                    ),
     );
   }
 }
@@ -227,7 +272,6 @@ class ServiceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Service Image
           Expanded(
             child: ClipRRect(
               borderRadius:
@@ -243,7 +287,6 @@ class ServiceCard extends StatelessWidget {
               ),
             ),
           ),
-          // Service Name and Price
           Padding(
             padding: const EdgeInsets.all(8),
             child: Column(

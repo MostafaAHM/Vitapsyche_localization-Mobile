@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 
 const Color primaryColor = Color.fromARGB(255, 32, 192, 172); // Teal
 const Color secondaryColor = Color.fromARGB(255, 255, 255, 255); // White
@@ -43,10 +44,12 @@ class ColorSortingGameState extends State<ColorSortingGame> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context);
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('ترتيب الألوان'),
+        title: Text(localizations.colorSorting),
         centerTitle: true,
         elevation: 0,
         flexibleSpace: Container(
@@ -83,8 +86,8 @@ class ColorSortingGameState extends State<ColorSortingGame> {
                   color: primaryColor,
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'رتب الألوان من الأغمق إلى الأفتح',
+                Text(
+                  localizations.sortColorsInstruction,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -94,7 +97,7 @@ class ColorSortingGameState extends State<ColorSortingGame> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'اسحب وأفلت البطاقات لترتيبها',
+                  localizations.dragAndDropInstruction,
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],
@@ -149,11 +152,11 @@ class ColorSortingGameState extends State<ColorSortingGame> {
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(Icons.check_circle, color: Colors.green),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
-                    'أحسنت! لقد رتبت الألوان بشكل صحيح',
+                    localizations.correctOrderMessage,
                     style: TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.bold,
@@ -172,7 +175,7 @@ class ColorSortingGameState extends State<ColorSortingGame> {
                 });
               },
               icon: const Icon(Icons.refresh),
-              label: const Text('إعادة اللعب'),
+              label: Text(localizations.playAgain),
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryColor,
                 minimumSize: const Size(double.infinity, 50),

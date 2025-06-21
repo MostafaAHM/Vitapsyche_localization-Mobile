@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1077055072964",
+    "project_id": "vitapsyche-30941",
+    "storage_bucket": "vitapsyche-30941.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077055072964:android:574b58f6342e217e11b791",
+        "android_client_info": {
+          "package_name": "com.example.vitapsyche"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcAxsiTM8h46n7ETQtwgRoqLerofuy4IY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

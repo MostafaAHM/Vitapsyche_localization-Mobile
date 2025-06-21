@@ -1,5 +1,7 @@
 {
   "testTitle": "Personality Disorders Test",
+  "testSlug": "personality-disorders-test",
+  "max": 117,
   "payment": true,
   "questions": [
     {
@@ -7,10 +9,12 @@
       "question": "I need to be alert to avoid being harmed by others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -21,10 +25,12 @@
       "question": "I doubt the loyalty of my friends.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -35,10 +41,12 @@
       "question": "I often understand hidden meanings in what people say or do.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -49,10 +57,12 @@
       "question": "It's not easy for me to forgive those who wrong me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -60,13 +70,15 @@
     },
     {
       "id": 5,
-      "question": "I don't confide in others to avoid being exploited.",
+      "question": "I don't share my secrets with others so they won't be used against me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -77,10 +89,12 @@
       "question": "It's better that others don't know too much about me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -91,10 +105,12 @@
       "question": "If someone insults me, I quickly get angry and retaliate.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -105,10 +121,12 @@
       "question": "I need to stay alert to avoid being taken advantage of by others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -119,10 +137,12 @@
       "question": "I often suspect that others are talking about me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -133,10 +153,12 @@
       "question": "I arrange things in a way that has a special meaning for me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -147,10 +169,12 @@
       "question": "Things happen just because I think about them.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -161,10 +185,12 @@
       "question": "I often see my face change in the mirror.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -175,10 +201,12 @@
       "question": "I feel uncomfortable in situations where there are people I don't know.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -189,10 +217,12 @@
       "question": "I rarely show my emotions to others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -203,10 +233,12 @@
       "question": "Others understand my feelings without me expressing them.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -217,10 +249,12 @@
       "question": "I can connect with others through thoughts or a sixth sense.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -231,10 +265,12 @@
       "question": "I don't like forming close relationships with others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -245,10 +281,12 @@
       "question": "I don't feel a sense of belonging to anything.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -259,10 +297,12 @@
       "question": "I don't enjoy any social relationships with others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -273,10 +313,12 @@
       "question": "I don't feel pleasure from engaging in any activities.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -287,10 +329,12 @@
       "question": "I have no close friends.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -301,10 +345,12 @@
       "question": "I don't care if others praise me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -315,10 +361,12 @@
       "question": "I appear emotionally cold to others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -329,10 +377,12 @@
       "question": "I don't care if others criticize me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -343,10 +393,12 @@
       "question": "I rarely plan for the future.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -357,10 +409,12 @@
       "question": "I fail to meet my financial obligations.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -371,10 +425,12 @@
       "question": "I always find excuses for my aggressive behavior towards others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -385,10 +441,12 @@
       "question": "I don't mind lying to achieve personal gain.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -399,10 +457,12 @@
       "question": "I often get into fights with others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -413,10 +473,12 @@
       "question": "I find it difficult to follow rules.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -427,10 +489,12 @@
       "question": "I rarely feel regret.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -441,10 +505,12 @@
       "question": "I consistently face failure at work.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -455,10 +521,12 @@
       "question": "I am moody.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -469,10 +537,12 @@
       "question": "When I get angry, I lose control of myself.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -483,10 +553,12 @@
       "question": "I feel bored and empty.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -497,10 +569,12 @@
       "question": "I panic just thinking about someone I care about leaving me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -511,10 +585,12 @@
       "question": "I often act impulsively.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -525,10 +601,12 @@
       "question": "My relationships with others are unstable.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -539,10 +617,12 @@
       "question": "I often threaten to hurt myself.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -553,10 +633,12 @@
       "question": "My personality changes from situation to situation.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -567,10 +649,12 @@
       "question": "I don't feel comfortable unless I am the center of attention.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -581,10 +665,12 @@
       "question": "My emotions are shallow and change quickly.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -595,10 +681,12 @@
       "question": "I enjoy talking about generalities rather than details.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -609,10 +697,12 @@
       "question": "I often exaggerate when talking about myself.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -623,10 +713,12 @@
       "question": "I always make sure my appearance attracts attention.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -637,10 +729,12 @@
       "question": "I am often influenced by the opinions and ideas of others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -651,10 +745,12 @@
       "question": "I tend to overreact emotionally.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -665,10 +761,12 @@
       "question": "I can't wait to get what I want.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -679,10 +777,12 @@
       "question": "I am very sensitive to the opinions of others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -693,10 +793,12 @@
       "question": "I sometimes flatter others to get what I want.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -707,10 +809,12 @@
       "question": "I believe others are envious of me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -721,10 +825,12 @@
       "question": "I only associate with important or well-known people.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -735,10 +841,12 @@
       "question": "I often envy others for their talents.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -749,10 +857,12 @@
       "question": "I tend to exaggerate my accomplishments and talents.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -763,10 +873,12 @@
       "question": "I always expect to be treated in a special way by others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -777,10 +889,12 @@
       "question": "I am always preoccupied with dreams of unlimited success.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -791,10 +905,12 @@
       "question": "I focus a lot on small details during discussions.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -805,10 +921,12 @@
       "question": "I strive for perfection in all of my work.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -819,10 +937,12 @@
       "question": "I am not interested in social activities or hobbies.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -833,10 +953,12 @@
       "question": "I don't compromise when it comes to moral principles.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -847,10 +969,12 @@
       "question": "I find it difficult to get rid of clutter or items with little value.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -861,10 +985,12 @@
       "question": "I find it difficult to delegate tasks to others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -875,10 +1001,12 @@
       "question": "It is important to save money for future uncertainties.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -889,10 +1017,12 @@
       "question": "I am preoccupied only with perfecting my work.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -903,10 +1033,12 @@
       "question": "Any criticism or disapproval hurts my feelings deeply.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -917,10 +1049,12 @@
       "question": "I don't have close people I can trust with my secrets.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -931,10 +1065,12 @@
       "question": "If I am sure that others will like me, I form relationships with them.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -945,10 +1081,12 @@
       "question": "I avoid social activities that require interacting with others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -959,10 +1097,12 @@
       "question": "I don't take on tasks that involve dealing with the public.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -973,10 +1113,12 @@
       "question": "I fear that others will notice my emotions.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -987,10 +1129,12 @@
       "question": "I may exaggerate future dangers in my work.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1001,10 +1145,12 @@
       "question": "I am reserved in my relationships with others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1015,10 +1161,12 @@
       "question": "I find it difficult to make decisions.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1029,10 +1177,12 @@
       "question": "I rely on others for advice and guidance.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1043,10 +1193,12 @@
       "question": "I often depend on others to handle my personal affairs.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1054,13 +1206,15 @@
     },
     {
       "id": 76,
-      "question": "I don't openly disagree with others to avoid upsetting them.",
+      "question": "I do not disagree with others openly for fear of arousing their anger ",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1071,10 +1225,12 @@
       "question": "I feel helpless when I am alone.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1085,10 +1241,12 @@
       "question": "I always seek a close relationship with someone to support me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1099,10 +1257,12 @@
       "question": "I find it difficult to start something new on my own.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1113,10 +1273,12 @@
       "question": "I constantly worry about being abandoned by those I trust.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1127,10 +1289,12 @@
       "question": "I often procrastinate in completing tasks others ask me to do.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1141,10 +1305,12 @@
       "question": "I intentionally work slowly if I don't want to do a task.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1155,10 +1321,12 @@
       "question": "I rarely respect authority figures (e.g., bosses).",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1169,10 +1337,12 @@
       "question": "I do my tasks better than others think I can.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1183,10 +1353,12 @@
       "question": "I don't accept suggestions from others to improve my performance.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1197,10 +1369,12 @@
       "question": "I often pretend to forget to avoid doing certain tasks.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1211,10 +1385,12 @@
       "question": "I argue when asked to do something I don't want to do.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1225,10 +1401,12 @@
       "question": "I am constantly resentful and discontented.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1239,10 +1417,12 @@
       "question": "I feel extremely sad and hopeless.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1250,13 +1430,31 @@
     },
     {
       "id": 90,
-      "question": "I feel worthless and insignificant.",
+      "question": "I feel hopeless and hopeless about the future",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
+          "text": "No",
+          "score": 0
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "question": " I feel so worthless and bad.",
+      "choices": [
+        {
+          "id": 1,
+          "text": "Yes",
+          "score": 1
+        },
+        {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1267,10 +1465,12 @@
       "question": "I have a poor appetite.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1281,10 +1481,12 @@
       "question": "I wake up feeling exhausted in the morning.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1295,10 +1497,12 @@
       "question": "I have thoughts of ending my life.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1309,10 +1513,12 @@
       "question": "I feel like something bad is going to happen to me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1323,10 +1529,12 @@
       "question": "I have lost interest in others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1337,10 +1545,12 @@
       "question": "Most of the people I care about have abandoned me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1351,10 +1561,12 @@
       "question": "I often put myself in situations where I get taken advantage of.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1365,10 +1577,12 @@
       "question": "I refuse help from others to avoid bothering them.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1379,10 +1593,12 @@
       "question": "I don't feel happy even when I achieve success.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1393,10 +1609,12 @@
       "question": "I often say or do things that make others angry at me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1407,10 +1625,12 @@
       "question": "I get bored with people who are nice to me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1421,10 +1641,12 @@
       "question": "I sacrifice myself for others even if they don't ask for it.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1435,10 +1657,12 @@
       "question": "I often fail to achieve personal goals I set for myself.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1449,10 +1673,12 @@
       "question": "I enjoy watching others suffer physically or emotionally.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1463,10 +1689,12 @@
       "question": "I enjoy watching violent sports (e.g., boxing, wrestling).",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1477,10 +1705,12 @@
       "question": "I tend to hurt others just to control them.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1491,10 +1721,12 @@
       "question": "I punish people in front of others when they do something wrong.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1505,10 +1737,12 @@
       "question": "I often force others to obey my orders, even with violence.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1519,10 +1753,12 @@
       "question": "I often belittle others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1533,10 +1769,12 @@
       "question": "I don't care about the feelings of others.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1547,10 +1785,12 @@
       "question": "I am harsh in punishing anyone I am responsible for (e.g., child, spouse, student).",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1561,10 +1801,12 @@
       "question": "I don't mind when others direct their aggression towards me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1575,10 +1817,12 @@
       "question": "I don't care if others mock me.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1589,10 +1833,12 @@
       "question": "I don't object when others delay my interests.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1603,10 +1849,12 @@
       "question": "I endure the mistreatment and neglect of someone I love.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1617,10 +1865,12 @@
       "question": "I don't get upset when others order me to fulfill their demands.",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
           "text": "No",
           "score": 0
         }
@@ -1628,56 +1878,90 @@
     },
     {
       "id": 117,
-      "question": "I don't mind being a victim, as the saying goes 'better to be oppressed than to be an oppressor.'",
+      "question": "I don't mind being a victim.'",
       "choices": [
         {
+          "id": 1,
           "text": "Yes",
           "score": 1
         },
         {
+          "id": 2,
+          "text": "No",
+          "score": 0
+        }
+      ]
+    },
+    {
+      "id": 118,
+      "question": " As the saying goes 'better to be oppressed than to be an oppressor.'",
+      "choices": [
+        {
+          "id": 1,
+          "text": "Yes",
+          "score": 1
+        },
+        {
+          "id": 2,
+          "text": "No",
+          "score": 0
+        }
+      ]
+    },
+    {
+      "id": 119,
+      "question": " The beloved’s blow feels as sweet as eating raisins'",
+      "choices": [
+        {
+          "id": 1,
+          "text": "Yes",
+          "score": 1
+        },
+        {
+          "id": 2,
           "text": "No",
           "score": 0
         }
       ]
     }
   ],
-  "scoringRanges": [
+  "instruction": "Answer each question with Yes (1 point) or No (0 points). Add up your total score to assess personality patterns.",
+  "scoreRanges": [
     {
       "range": [
         0,
-        20
+        29
       ],
-      "description": "Low Risk",
-      "color": "green",
-      "info": "You exhibit few traits associated with personality disorders. Maintain healthy relationships and self-awareness."
+      "description": "Minimal personality disorder traits",
+      "color": "bg-green-600",
+      "info": "Your responses suggest minimal presence of personality disorder traits. Continue maintaining healthy relationships and coping strategies."
     },
     {
       "range": [
-        21,
-        40
+        30,
+        58
       ],
-      "description": "Moderate Risk",
-      "color": "yellow",
-      "info": "You may show some traits of personality disorders. Consider reflecting on your relationships and behaviors."
+      "description": "Moderate personality disorder traits",
+      "color": "bg-yellow-500",
+      "info": "Your responses indicate some presence of personality disorder traits. Consider consulting with a mental health professional for evaluation."
     },
     {
       "range": [
-        41,
-        60
+        59,
+        87
       ],
-      "description": "High Risk",
-      "color": "orange",
-      "info": "You exhibit several traits associated with personality disorders. It may be beneficial to seek professional guidance."
+      "description": "Significant personality disorder traits",
+      "color": "bg-orange-500",
+      "info": "Your responses suggest significant presence of personality disorder traits. Professional intervention is recommended."
     },
     {
       "range": [
-        61,
-        100
+        88,
+        117
       ],
-      "description": "Very High Risk",
-      "color": "red",
-      "info": "You show significant traits of personality disorders. It is strongly recommended to seek professional help."
+      "description": "Severe personality disorder traits",
+      "color": "bg-red-600",
+      "info": "Your responses indicate severe presence of personality disorder traits. Immediate professional intervention is strongly recommended."
     }
-  ],
-  "MAX": 100
+  ]
 }

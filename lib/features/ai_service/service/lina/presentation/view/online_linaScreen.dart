@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For Clipboard
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:share_plus/share_plus.dart'; // Updated share package
 import 'package:flutter_tts/flutter_tts.dart';
@@ -232,7 +233,7 @@ class _OnlineLynaModelState extends State<OnlineLynaModel>
     final headers = {
       'Content-Type': 'application/json',
       'Authorization':
-          'Bearer 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',
+          'Bearer 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',
     };
     final body = jsonEncode({
       "model": "deepseek/deepseek-r1:free",
@@ -570,10 +571,11 @@ class _OnlineLynaModelState extends State<OnlineLynaModel>
   }
 
   Widget _buildLanguageSelector() {
+    final localizations = S.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Language: "),
+        Text("${localizations.languages}: "),
         DropdownButton<String>(
           value: _selectedLanguage,
           items: const [
@@ -594,6 +596,7 @@ class _OnlineLynaModelState extends State<OnlineLynaModel>
   }
 
   Widget _buildTextInputField() {
+    final localizations = S.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -613,7 +616,7 @@ class _OnlineLynaModelState extends State<OnlineLynaModel>
           _userInput = value;
         },
         decoration: InputDecoration(
-          hintText: "Type your input or use the mic...",
+          hintText: localizations.typeYourMessage,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
               vertical: 20, horizontal: 20), // Increased vertical padding
@@ -668,7 +671,7 @@ class _OnlineLynaModelState extends State<OnlineLynaModel>
                         _startScaling(); // Trigger scaling effect
                         _generateResponse();
                       } else {
-                        _showSnackBar("Please enter some text or use the mic.");
+                        _showSnackBar(localizations.pleaseEnterSomeText);
                       }
                     },
                     padding: EdgeInsets.zero, // Remove default padding

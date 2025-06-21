@@ -1,39 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mindmed_project/core/routes/app_routes.dart';
 import 'package:flutter_mindmed_project/core/theme/colors.dart';
-import '../../../../core/routes/app_routes.dart';
+import 'package:flutter_mindmed_project/generated/l10n.dart';
 import '../../data/cart_item_data.dart';
 
 class CartItem extends StatelessWidget {
   final CartItemData data;
   final Function(int count) onUpdateCount;
   final VoidCallback onToggleFavorite;
-  final VoidCallback onDelete; // إضافة onDelete كـ بارامتر
+  final VoidCallback onDelete;
 
   const CartItem({
     super.key,
     required this.data,
     required this.onUpdateCount,
     required this.onToggleFavorite,
-    required this.onDelete, // تمرير onDelete هنا
+    required this.onDelete,
   });
 
   void _confirmDelete(BuildContext context) {
+    final localizations = S.of(context)!;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Product'),
-        content: const Text('Are you sure you need delete product?'),
+        title: Text(localizations.deleteProduct),
+        content: Text(localizations.deleteProductConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cencel'),
+            child: Text(localizations.cancel),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(ctx).pop(); // إغلاق نافذة التأكيد
-              onDelete(); // استدعاء دالة الحذف
+              Navigator.of(ctx).pop();
+              onDelete();
             },
-            child: const Text('delete'),
+            child: Text(localizations.delete),
           ),
         ],
       ),
@@ -42,6 +44,8 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = S.of(context)!;
+    
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed(
@@ -86,7 +90,7 @@ class CartItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '£${data.value.toStringAsFixed(2)}',
+                      '${localizations.currencySymbol}${data.value.toStringAsFixed(2)}',
                       style: const TextStyle(fontSize: 16, color: Colors.green),
                     ),
                   ],
@@ -111,7 +115,7 @@ class CartItem extends StatelessWidget {
                           if (data.count > 1) {
                             onUpdateCount(data.count - 1);
                           } else {
-                            _confirmDelete(context); // عرض نافذة التأكيد للحذف
+                            _confirmDelete(context);
                           }
                         },
                       ),
