@@ -26,12 +26,12 @@ class AiServiceScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+        margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.r),
           side: const BorderSide(color: primaryColor),
         ),
-        elevation: 5,
+        elevation: 7,
         color: secoundryColor,
         child: Row(
           mainAxisAlignment: MainAxisAlignment
@@ -82,7 +82,7 @@ class AiServiceScreen extends StatelessWidget {
                   : Image.asset(
                       imagePath,
                       fit: BoxFit.cover,
-                      height: 100.h, // Consistent image size
+                      height: 120.h, // Consistent image size
                       width: 100.w,
                     ),
             ),

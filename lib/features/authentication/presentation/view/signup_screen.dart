@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_mindmed_project/core/const/user_type_selection.dart';
 import 'package:flutter_mindmed_project/generated/l10n.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -240,7 +241,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void _onTapDown(TapDownDetails details) {
     setState(() {
-      _containerColor = Color.fromARGB(255, 91, 255, 219);
+      _containerColor = const Color.fromARGB(255, 91, 255, 219);
     });
   }
 
@@ -262,7 +263,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
           elevation: 16,
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -276,22 +277,22 @@ class _SignupScreenState extends State<SignupScreen> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 20),
-                Text(
+                const SizedBox(height: 20),
+                const Text(
                   "Success!",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 0, 255, 8),
+                    color: Color.fromARGB(255, 0, 255, 8),
                   ),
                 ),
-                SizedBox(height: 10),
-                Text(
+                const SizedBox(height: 10),
+                const Text(
                   "You have successfully signed up.",
                   style: TextStyle(fontSize: 16, color: Colors.green),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushReplacementNamed(
@@ -303,7 +304,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'OK',
                     style: TextStyle(color: secoundryColor),
                   ),
@@ -333,12 +334,12 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: primaryColor),
+          icon: const Icon(Icons.arrow_back, color: primaryColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.white,
-        title:
-            Text(localizations.signUp, style: TextStyle(color: primaryColor)),
+        title: Text(localizations.signUp,
+            style: const TextStyle(color: primaryColor)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -358,7 +359,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               UserTypeSelection(
                 isPatientSelected: isPatientSelected,
                 isDoctorSelected: isDoctorSelected,
@@ -380,7 +381,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       context, AppRoutes.DoctorRegistration);
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Text(
                 localizations.signUp,
                 style: TextStyle(
@@ -388,87 +389,85 @@ class _SignupScreenState extends State<SignupScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Container(
-                height: 500,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 10),
-                      _buildTextField(_nameController, _nameFocusNode,
-                          localizations.username, Icons.person),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _customTextField(
-                            controller: _firstNameController,
-                            focusNode: _firstNameFocusNode,
-                            labelText: localizations.firstName,
-                            icon: Icons.person_outline,
-                          ),
-                          SizedBox(width: 10),
-                          _customTextField(
-                            controller: _lastNameController,
-                            focusNode: _lastNameFocusNode,
-                            labelText: localizations.lastName,
-                            icon: Icons.person_outline,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      _buildTextField(_emailController, _emailFocusNode,
-                          localizations.email, Icons.email),
-                      SizedBox(height: 20),
-                      _buildTextField(_phoneController, _phoneFocusNode,
-                          localizations.phone, Icons.phone),
-                      SizedBox(height: 20),
-                      _buildBirthDateSelection(),
-                      SizedBox(height: 20),
-                      _buildPasswordField(),
-                      SizedBox(height: 20),
-                      _buildTextField(
-                          _confirmPasswordController,
-                          _confirmPasswordFocusNode,
-                          localizations.confirmPassword,
-                          Icons.lock),
-                      SizedBox(height: 20),
-                      _buildGenderSelection(),
-                      SizedBox(height: 20),
-                      _newCustomTextField(
-                        controller: _nationalityController,
-                        focusNode: _nationalityFocusNode,
-                        labelText: localizations.nationality,
-                        icon: Icons.flag,
-                      ),
-                      SizedBox(height: 20),
-                      _newCustomTextField(
-                        controller: _fluentLanguageController,
-                        focusNode: _fluentLanguageFocusNode,
-                        labelText: localizations.fluentLanguage,
-                        icon: Icons.language,
-                      ),
-                      SizedBox(height: 20),
-                      _newCustomTextField(
-                        controller: _currentResidenceController,
-                        focusNode: _currentResidenceFocusNode,
-                        labelText: localizations.currentResidence,
-                        icon: Icons.home,
-                      ),
-                      SizedBox(height: 20),
-                      _isLoading
-                          ? CircularProgressIndicator(color: primaryColor)
-                          : ElevatedButton(
-                              onPressed: _validateAndSubmit,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: primaryColor,
-                              ),
-                              child: Text(
-                                localizations.submit,
-                                style: TextStyle(color: Colors.white),
-                              ),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(height: 10.h),
+                    _buildTextField(_nameController, _nameFocusNode,
+                        localizations.username, Icons.person),
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _customTextField(
+                          controller: _firstNameController,
+                          focusNode: _firstNameFocusNode,
+                          labelText: localizations.firstName,
+                          icon: Icons.person_outline,
+                        ),
+                        SizedBox(width: 10.w),
+                        _customTextField(
+                          controller: _lastNameController,
+                          focusNode: _lastNameFocusNode,
+                          labelText: localizations.lastName,
+                          icon: Icons.person_outline,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.h),
+                    _buildTextField(_emailController, _emailFocusNode,
+                        localizations.email, Icons.email),
+                    SizedBox(height: 20.h),
+                    _buildTextField(_phoneController, _phoneFocusNode,
+                        localizations.phone, Icons.phone),
+                    SizedBox(height: 20.h),
+                    _buildBirthDateSelection(),
+                    SizedBox(height: 20.h),
+                    _buildPasswordField(),
+                    SizedBox(height: 20.h),
+                    _buildTextField(
+                        _confirmPasswordController,
+                        _confirmPasswordFocusNode,
+                        localizations.confirmPassword,
+                        Icons.lock),
+                    SizedBox(height: 20.h),
+                    _buildGenderSelection(),
+                    SizedBox(height: 20.h),
+                    _newCustomTextField(
+                      controller: _nationalityController,
+                      focusNode: _nationalityFocusNode,
+                      labelText: localizations.nationality,
+                      icon: Icons.flag,
+                    ),
+                    SizedBox(height: 20.h),
+                    _newCustomTextField(
+                      controller: _fluentLanguageController,
+                      focusNode: _fluentLanguageFocusNode,
+                      labelText: localizations.fluentLanguage,
+                      icon: Icons.language,
+                    ),
+                    SizedBox(height: 20.h),
+                    _newCustomTextField(
+                      controller: _currentResidenceController,
+                      focusNode: _currentResidenceFocusNode,
+                      labelText: localizations.currentResidence,
+                      icon: Icons.home,
+                    ),
+                    SizedBox(height: 20.h),
+                    _isLoading
+                        ? const CircularProgressIndicator(color: primaryColor)
+                        : ElevatedButton(
+                            onPressed: _validateAndSubmit,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
                             ),
-                    ],
-                  ),
+                            child: Text(
+                              localizations.submit,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                    SizedBox(height: 20.h),
+                  ],
                 ),
               ),
             ],
@@ -480,7 +479,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   Widget _buildTextField(TextEditingController controller, FocusNode focusNode,
       String label, IconData icon) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
       child: Theme(
         data: Theme.of(context).copyWith(
@@ -504,7 +503,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: primaryColor, width: 2.0),
+              borderSide: const BorderSide(color: primaryColor, width: 2.0),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -538,7 +537,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: primaryColor, width: 2.0),
+            borderSide: const BorderSide(color: primaryColor, width: 2.0),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -575,7 +574,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: primaryColor, width: 2.0),
+              borderSide: const BorderSide(color: primaryColor, width: 2.0),
             ),
             suffixIcon: IconButton(
               icon: Icon(
@@ -619,13 +618,13 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.black,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: primaryColor,
                   width: 2.0,
                 ),
@@ -675,7 +674,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: primaryColor,
               width: 2.0,
             ),
@@ -694,7 +693,7 @@ class _SignupScreenState extends State<SignupScreen> {
               return Theme(
                 data: ThemeData(
                   primaryColor: primaryColor,
-                  colorScheme: ColorScheme.light(
+                  colorScheme: const ColorScheme.light(
                     primary: primaryColor,
                     onPrimary: Colors.white,
                     onSurface: primaryColor,
@@ -740,14 +739,14 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: primaryColor,
               width: 2.0,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Colors.grey,
             ),
           ),

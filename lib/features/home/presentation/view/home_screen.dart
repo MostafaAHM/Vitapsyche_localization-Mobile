@@ -216,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _compunetService(localizations.test, AnimationGif.test,
                       onTap: () => Navigator.of(context)
                           .pushNamed(AppRoutes.testScreen)),
-                  _compunetService(localizations.blog, AnimationGif.blog,
+                  _compunetService(localizations.articles, AnimationGif.blog,
                       onTap: () => Navigator.of(context)
                           .pushNamed(AppRoutes.blogScreen)),
                   _compunetService(
@@ -226,9 +226,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   _compunetService(localizations.fqas, AnimationGif.fqas,
                       onTap: () => Navigator.of(context)
                           .pushNamed(AppRoutes.fqasScreen)),
-                  // _compunetService('Ask Doctor', AnimationGif.askDoctor,
-                  //     onTap: () =>
-                  //         Navigator.of(context).pushNamed(AppRoutes.askDoctor)),
                   _compunetService(
                       localizations.entertainment, AnimationGif.soundAnimation,
                       onTap: () => Navigator.of(context)
@@ -275,9 +272,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 _getHelpCard(
                     Icons.support_agent_sharp, localizations.talkToSupport),
                 // if (accessToken != null) ...[
-                _getHelpcall(Icons.question_answer, localizations.askDoctor,
-                    onTap: () =>
-                        Navigator.of(context).pushNamed(AppRoutes.askDoctor)),
+                // _getHelpcall(Icons.question_answer, localizations.askDoctor,
+                //     onTap: () =>
+                //         Navigator.of(context).pushNamed(AppRoutes.askDoctor)),
                 // ],
                 // if (accessToken != null) ...[
                 _getHelpcall(Icons.phone, localizations.callSupport,
