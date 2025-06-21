@@ -22,26 +22,28 @@
         }
     },
     {
-        "title": "Alzheimer's Disease",
-        "image": "assets/articles/Alzheimer_Disease.jpg",
+        "title": "psychosis",
+        "image": "assets/articles/psychosis.jpg",
         "content": {
-            "description": "Alzheimer's disease is a progressive neurodegenerative disorder that leads to memory loss, cognitive decline, and behavioral changes. It is the most common form of dementia, affecting millions of people worldwide. Alzheimer's begins with mild memory loss and eventually affects the ability to carry out simple tasks.",
+            "description": "Psychosis is a serious mental condition in which a person loses touch with reality. It affects how a person thinks, perceives, and interprets the world around them. People experiencing psychosis may see, hear, or believe things that are not real. It can be frightening and confusing, both for the individual and those close to them. Psychosis is a symptom, not a disease itself, and it can occur as part of many mental or physical conditions.",
             "symptoms": [
-                "Memory loss that disrupts daily life",
-                "Challenges in planning or solving problems",
-                "Difficulty completing familiar tasks at home or work",
-                "Confusion with time or place",
-                "Trouble understanding visual images and spatial relationships",
-                "New problems with words in speaking or writing",
-                "Decreased or poor judgment",
-                "Withdrawal from work or social activities"
+                "Hallucinations (hearing, seeing, or feeling things that aren’t there)",
+                "Delusions (strongly held false beliefs, such as thinking someone is watching or controlling them)",
+                "Disorganized thinking and speech (jumping from one idea to another, making no sense)",
+                "Abnormal behavior (agitation, confusion, or acting in strange ways)",
+                "Lack of insight (not realizing their experiences are not real)",
+                "Social withdrawal",
+                "Difficulty concentrating or completing tasks"
             ],
             "causes": [
-                "Age: The biggest risk factor is increasing age, especially after 65",
-                "Genetics: A family history of Alzheimer’s may increase the risk",
-                "Lifestyle and heart health: Poor cardiovascular health and lifestyle factors such as smoking and lack of exercise"
+                "Mental health disorders such as schizophrenia, bipolar disorder, or severe depression",
+                "Substance use (drugs like LSD, cannabis, cocaine, or alcohol withdrawal)",
+                "Medical conditions (brain tumors, epilepsy, dementia, or infections affecting the brain)",
+                "Trauma or extreme stress",
+                "Genetic factors (family history of psychosis or related conditions)",
+                "Chemical imbalances in the brain (especially involving dopamine)"
             ],
-            "treatment": "There is currently no cure for Alzheimer’s disease, but treatments can slow the progression and manage symptoms. Medications such as cholinesterase inhibitors (e.g., donepezil) and NMDA receptor antagonists (e.g., memantine) can help with cognitive symptoms. Supportive care includes occupational therapy, counseling, and creating a safe environment."
+            "treatment": "Psychosis is treatable, especially when addressed early. Treatment typically includes: \nAntipsychotic medications to reduce or eliminate hallucinations and delusions\nPsychotherapy, especially Cognitive Behavioral Therapy (CBT), to help individuals recognize distorted thoughts and develop coping strategies\nHospital care in severe cases to ensure safety and stabilization\nOngoing support from mental health professionals, family, and community services\nLifestyle changes and avoiding substance use can also help prevent relapses"
         }
     },
     {
@@ -133,25 +135,6 @@
             ],
             "treatment": "Treatment includes lifestyle changes, such as improving sleep hygiene, regular exercise, and avoiding caffeine and alcohol before bedtime. Cognitive behavioral therapy for insomnia (CBT-I) is a highly effective non-pharmacological treatment. In some cases, sleep medications or melatonin supplements may be prescribed, but they should be used with caution in older adults."
         }
-    },
-    {
-        "title": "Lewy Body Dementia",
-        "image": "assets/articles/Lewy_Body_Dementia.jpg",
-        "content": {
-            "description": "Lewy Body Dementia (LBD) is a progressive neurological disorder caused by abnormal protein deposits called Lewy bodies in the brain. These deposits affect chemicals in the brain, leading to problems with thinking, movement, behavior, and mood. LBD is one of the most common types of dementia, often sharing characteristics with both Alzheimer’s and Parkinson’s diseases.",
-            "symptoms": [
-                "Visual hallucinations",
-                "Difficulty with concentration and attention",
-                "Sleep disturbances (e.g., acting out dreams)",
-                "Slowed movement, tremors, and stiffness",
-                "Memory problems and confusion"
-            ],
-            "causes": [
-                "Age: People over 60 are at higher risk",
-                "Genetics: A family history of dementia or Parkinson's disease",
-                "Brain changes: Abnormal protein deposits (Lewy bodies)"
-            ],
-            "treatment": "There is no cure for Lewy Body Dementia, but treatment focuses on managing symptoms. Medications such as cholinesterase inhibitors (used for Alzheimer’s) can help with cognitive symptoms. Parkinson’s medications like levodopa can be prescribed to improve movement issues. Supportive care from a team of specialists, including physical and occupational therapy, is essential."
-        }
     }
+   
 ]
