@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mindmed_project/generated/l10n.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -141,7 +142,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                                                   height: 160,
                                                 )
                                               : Icon(Icons.person_2_sharp,
-                                                  size: 140,
+                                                  size: 140.w,
                                                   color: secoundryColor),
                                         ),
                                       ),
@@ -240,8 +241,8 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                           color: primaryColor,
                           fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      height: 380,
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.58,
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
