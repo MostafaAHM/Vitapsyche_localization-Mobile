@@ -94,7 +94,7 @@ class AppRoutes {
   static const String mood_tracker = '/mood_tracker';
   static const String daily_challenge = '/daily_challenge';
   static const String games = '/games';
-  static const String heartRateMonitor = '/heartRateMonitor';
+  // static const String heartRateMonitor = '/heartRateMonitor';
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {

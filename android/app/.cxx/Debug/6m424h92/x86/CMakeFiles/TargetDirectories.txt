@@ -1,0 +1,2 @@
+E:/un/G/Vitapsyche_localization-Mobile/android/app/.cxx/Debug/6m424h92/x86/CMakeFiles/edit_cache.dir
+E:/un/G/Vitapsyche_localization-Mobile/android/app/.cxx/Debug/6m424h92/x86/CMakeFiles/rebuild_cache.dir
